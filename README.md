@@ -20,7 +20,7 @@ To do
 Contact me
 ===============
 
-If you have any issues or want to drop a line, you can use miguel.castillo@borland.com or my personal email at manchagnu@gmail.com
+If you have any issues or want to just drop in a line, you can use miguel.castillo@borland.com or my personal email at manchagnu@gmail.com
 
 License
 ===============
