@@ -82,7 +82,7 @@ define(function (require, exports, module) {
 		this.settings = settings;
 
 		// Create the command id used by the menu
-		var COMMAND_ID = "editor." + settings.value;
+		var COMMAND_ID = "theme." + settings.value;
 
 		// Register menu event...
 		CommandManager.register(settings.name, COMMAND_ID, function (){
