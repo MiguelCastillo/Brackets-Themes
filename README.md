@@ -17,6 +17,11 @@ To do
 * I would like to have the themes menu under something like settings, but brackets currently does not seem to support submenus where I can drop in all the themes.
 
 
+Contact me
+===============
+
+If you have any issues or want to drop a line, you can use miguel.castillo@borland.com or my personal email at manchagnu@gmail.com
+
 License
 ===============
 
