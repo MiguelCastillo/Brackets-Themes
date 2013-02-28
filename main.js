@@ -102,9 +102,8 @@ define(function (require, exports, module) {
 
 		// Make sure we update the preferences when a new theme is selected.
 		// Css is set to false so that when we reload brackets, we can reload
-		// the css file for the theme
-		var theme = $.extend({}, this, {css: false});
-		preferences.setValue("theme", theme);
+		// the css file for the theme.
+		preferences.setValue("theme", $.extend({}, this, {css: false}));
 
 		// Change the current editor...
 		updateEditorTheme();
@@ -147,9 +146,12 @@ define(function (require, exports, module) {
 	// updating all the documents for every change of theme
 	$(DocumentManager).on("currentDocumentChange", updateEditorTheme);
 
+	// I am doing this extra saving step here so that the preferences are
+	// persisted when brackets is closed and opened again... It appears that
+	// brackets deletes preferences if they are not saved when brackets is closed.
+	preferences.setValue("theme", $.extend({}, themes._currentTheme, {css: false}));
 
 	// From the get go, make sure that the theme is applied to brackets
 	updateEditorTheme();
-
 });
 
