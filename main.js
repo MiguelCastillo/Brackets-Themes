@@ -46,7 +46,7 @@ define(function (require, exports, module) {
 
 
 	// Look for the menu where we will be inserting our theme menu
-	var menu = Menus.addMenu("Editor Theme", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
+	var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
 
 
 	// Load up reset.css to override brackground settings from brackets because
