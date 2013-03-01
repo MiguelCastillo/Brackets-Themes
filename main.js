@@ -96,8 +96,7 @@ define(function (require, exports, module) {
 	*  Handles updating of the current them, updating the preferences and
 	*  updating the editor so that the new theme is set.
 	*/
-	theme.prototype.update = function()
-	{
+	theme.prototype.update = function() {
 		themes._selected = this;
 
 		// Make sure we update the preferences when a new theme is selected.
@@ -117,8 +116,8 @@ define(function (require, exports, module) {
 		var theme = themes._selected;
 
 		// Only apply themes when there is one to be applied.
-		if ( !theme.name ) {
-			return;	
+		if ( !theme || !theme.name ) {
+			theme = themes._selected = themes['Default'];
 		}
 
 		// Setup further documents to get the new theme...
@@ -156,16 +155,16 @@ define(function (require, exports, module) {
 
 			fs.root.createReader().readEntries(
 				function (entries) {
-					var i, themes = [];
+					var i, _themes = [];
 
 					for (i = 0; i < entries.length; i++) {
 						if (entries[i].isFile) {
-							themes.push(entries[i].name);
+							_themes.push(entries[i].name);
 						}
 					}
 
 					result.resolve({
-						files: themes,
+						files: _themes,
 						path: path
 					});
 				},
@@ -204,11 +203,11 @@ define(function (require, exports, module) {
 	/**
 	/*  Iterate through the array of themes and build theme objects.
 	*/
-	function buildThemes(themes){
+	function buildThemes(_themes){
 		//
 		// Iterate through each name in the themes and make them theme objects
 		//
-		$.each(themes.files, function(index, themeFile) {
+		$.each(_themes.files, function(index, themeFile) {
 			var themeDisplayName = toDisplayname(themeFile);
 			var themeName = themeFile.substring(0, themeFile.lastIndexOf('.'));
 
@@ -216,7 +215,7 @@ define(function (require, exports, module) {
 				name: themeName,
 				displayName: themeDisplayName,
 				fileName: themeFile,
-				path: themes.path
+				path: _themes.path
 			});
 			
 		});
@@ -224,30 +223,32 @@ define(function (require, exports, module) {
 
 
 	// Load up custom and default themes
-	loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes);
+	loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes).done(function(_themes){
+		if (_themes.length !== 0){
+			// Add a little divider to break up custom from what's shipped? We'll see...
+			menu.addMenuDivider();
+		}
+	});
 	
-	// Maybe add a little divider to break up custom from what's shipped? We'll see...
-	//menu.addMenuDivider();
 
 	// Load up all the theme files from code mirror's directory
-	loadThemeFiles(themes._path).done(buildThemes);
+	loadThemeFiles( themes._path ).done(buildThemes).always(function(){
+		// Apply the theme to any document that maybe not have the theme yet.
+		// This happens when you have documents already loaded that are not
+		// in focus... You switch the theme and those documents will not get
+		// the theme until they get focus... I don't want to waste cycles
+		// updating all the documents for every change of theme
+		$(DocumentManager).on("currentDocumentChange", updateEditorTheme);
+	
+		// I am doing this extra saving step here so that the preferences are
+		// persisted when brackets is closed and opened again... It appears that
+		// brackets deletes preferences if they are not saved when brackets is closed.
+		preferences.setValue("theme", $.extend({}, {css: false}));
+	
+		// From the get go, make sure that the theme is applied to brackets
+		updateEditorTheme();
+	});
 
-
-
-	// Apply the theme to any document that maybe not have the theme yet.
-	// This happens when you have documents already loaded that are not
-	// in focus... You switch the theme and those documents will not get
-	// the theme until they get focus... I don't want to waste cycles
-	// updating all the documents for every change of theme
-	$(DocumentManager).on("currentDocumentChange", updateEditorTheme);
-
-	// I am doing this extra saving step here so that the preferences are
-	// persisted when brackets is closed and opened again... It appears that
-	// brackets deletes preferences if they are not saved when brackets is closed.
-	preferences.setValue("theme", $.extend({}, themes._selected, {css: false}));
-
-	// From the get go, make sure that the theme is applied to brackets
-	updateEditorTheme();
 
 	// Once the app is fully loaded, we will proceed to check the theme that
 	// was last set
