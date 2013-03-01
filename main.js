@@ -45,13 +45,11 @@ define(function (require, exports, module) {
 	// Hash for themes loaded and ready to be used.
 	// Our default theme will be whatever we save in the preferences
 	var themes = {
-		_currentTheme: preferences.getValue("theme") || {}
-	};
+		_currentTheme: preferences.getValue("theme") || {},
 
-	// Root directory for themes
-	// I would like to use the code mirror directory in brackets... still trying to
-	// figure stuff out.
-	var themesDirectory = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme";
+		// Root directory for themes
+		_directory: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme"
+	};
 
 	// Look for the menu where we will be inserting our theme menu
 	var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
@@ -126,7 +124,7 @@ define(function (require, exports, module) {
 			// If the css has not yet been loaded, then we load it so that
 			// code mirror properly renders the theme
 			if ( !theme.css ) {
-				theme.css = ExtensionUtils.addLinkedStyleSheet(themesDirectory + "/" + theme.fileName);
+				theme.css = ExtensionUtils.addLinkedStyleSheet(themes._directory + "/" + theme.fileName);
 			}
 
 			editor._codeMirror.setOption("theme", theme.name);
@@ -142,7 +140,7 @@ define(function (require, exports, module) {
         var result = $.Deferred();
 
 		// Get directory reader handle		
-		NativeFileSystem.requestNativeFileSystem(themesDirectory, loadDirectoryContent);
+		NativeFileSystem.requestNativeFileSystem(themes._directory, loadDirectoryContent);
 
 		// Load up the content of the directory
 		function loadDirectoryContent( fs ){
