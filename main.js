@@ -33,7 +33,9 @@ define(function (require, exports, module) {
 		DocumentManager     = brackets.getModule("document/DocumentManager"),
 		EditorManager       = brackets.getModule("editor/EditorManager"),
         ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
-		AppInit             = brackets.getModule('utils/AppInit');
+		AppInit             = brackets.getModule("utils/AppInit"),
+		FileUtils           = brackets.getModule("file/FileUtils"),
+		NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
 
 
 	var PREFERENCES_KEY = "extensions.brackets-editorthemes";
@@ -46,6 +48,11 @@ define(function (require, exports, module) {
 		_currentTheme: preferences.getValue("theme") || {}
 	};
 
+	// Root directory for themes
+	// I would like to use the code mirror directory in brackets... still trying to
+	// figure stuff out.
+	//FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme";
+	var themesDirectory = require.toUrl("./theme/");
 
 	// Look for the menu where we will be inserting our theme menu
 	var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
@@ -54,48 +61,28 @@ define(function (require, exports, module) {
 	// Load up reset.css to override brackground settings from brackets because
 	// they make the themes look really bad.
 	ExtensionUtils.loadStyleSheet(module, "reset.css");
-
-
-	// Load up all the available themes
-	ExtensionUtils.loadFile(module, "themes.json").done(function(data){
-		data = data || {};
-
-		// LoadFile will return the data as a string, so we have to convert it
-		// to a JSON object for easier data access
-		data = $.parseJSON(data);
-		
-		// Go through all the themes and create a menu entry for it... Also
-		// wire up a callback for menu selections to switch themes accordingly.
-		for( var themeName in data.themes ) {
-
-			// Setup a sync for syncing up the theme with the menu
-			themes[themeName] = new theme({
-				name: themeName,
-				value: data.themes[themeName]
-			});
-		}
-
-	});
-
+	
 
 	// Theme object to encasulate all the logic in one pretty bundle
 	function theme(options) {
-		var _self = this, settings = $.extend({}, options);
-		this.settings = settings;
+		var _self = this;
+		$.extend(this, options);
 
 		// Create the command id used by the menu
-		var COMMAND_ID = "theme." + settings.value;
+		var COMMAND_ID = "theme." + this.name;
 
 		// Register menu event...
-		CommandManager.register(settings.name, COMMAND_ID, function (){
+		CommandManager.register(this.displayName, COMMAND_ID, function (){
 			// Uncheck the previous selection...
-			var command = CommandManager.get("theme." + themes._currentTheme.settings.value);
+			var command = CommandManager.get("theme." + themes._currentTheme.name);
 			if (command){
 				command.setChecked(false);
 			}
 
 			// Check the new selection
 			this.setChecked(true);
+
+			// Update the theme
 			_self.update();
 		});
 
@@ -107,7 +94,6 @@ define(function (require, exports, module) {
 	// Theme update function
 	theme.prototype.update = function()
 	{
-		var settings = this.settings;
 		themes._currentTheme = this;
 
 		// Make sure we update the preferences when a new theme is selected.
@@ -125,12 +111,12 @@ define(function (require, exports, module) {
 		var theme = themes._currentTheme;
 
 		// Only apply themes when there is one to be applied.
-		if ( !theme.settings.value ) {
+		if ( !theme.name ) {
 			return;	
 		}
 
 		// Setup further documents to get the new theme...
-		CodeMirror.defaults.themes = theme.settings.value;
+		CodeMirror.defaults.themes = theme.name;
 
 		// Change the current editor in view
         var editor = EditorManager.getCurrentFullEditor();
@@ -141,12 +127,84 @@ define(function (require, exports, module) {
 			// If the css has not yet been loaded, then we load it so that
 			// code mirror properly renders the theme
 			if ( !theme.css ) {
-				theme.css = ExtensionUtils.loadStyleSheet(module, "theme/" + theme.settings.value + ".css");
+				theme.css = ExtensionUtils.loadStyleSheet(module, 'theme/' + theme.fileName);
 			}
 
-			editor._codeMirror.setOption("theme", theme.settings.value);
+			editor._codeMirror.setOption("theme", theme.name);
 		}
 	}
+
+
+	//
+	// This will go through all the files in the themes directory so that I can
+	// build my table of themes to be loaded for the editor
+	//
+	function loadCodeMirrorThemes() {
+        var result = $.Deferred();
+
+		// Get directory reader handle		
+		NativeFileSystem.requestNativeFileSystem(themesDirectory, loadDirectoryContent);
+
+		// Load up the content of the directory
+		function loadDirectoryContent( fs ){
+			fs.root.createReader().readEntries(
+				function (entries) {
+					var i, themes = [];
+
+					for (i = 0; i < entries.length; i++) {
+						if (entries[i].isFile) {
+							themes.push(entries[i].name);
+						}
+					}
+
+					result.resolve(themes);
+				},
+				function (error) {
+					result.reject();
+				}
+			);
+		}
+
+		return result.promise();
+	}
+
+
+	// Load up all the theme files from code mirror's directory
+	loadCodeMirrorThemes().done(function( themes ){
+
+		//
+		// Takes all dashes and converts them to white spaces...
+		// Then takes all first letters and capitalizes them.
+		//
+		function fixName(name){
+			name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
+			var parts = name.split(" ");
+
+			$.each(parts.slice(0), function(index, part){
+				parts[index] = part[0].toUpperCase() + part.substring(1);
+			});
+
+			return parts.join(" ");
+		}
+
+
+		//
+		// Iterate through each name in the themes and make them theme objects
+		//
+		$.each(themes, function(index, themeFile) {
+			var themeDisplayName = fixName(themeFile);
+			var themeName = themeFile.substring(0, themeFile.lastIndexOf('.'));
+
+			themes[themeDisplayName] = new theme({
+				name: themeName,
+				displayName: themeDisplayName,
+				fileName: themeFile
+			});
+			
+		});
+
+	});
+
 
 
 	// Apply the theme to any document that maybe not have the theme yet.
@@ -167,7 +225,7 @@ define(function (require, exports, module) {
 	// Once the app is fully loaded, we will proceed to check the theme that
 	// was last set
 	AppInit.appReady(function () {
-		var command = CommandManager.get("theme." + themes._currentTheme.settings.value);
+		var command = CommandManager.get("theme." + themes._currentTheme.name);
 		if (command){
 			command.setChecked(true);
 		}	
