@@ -12,7 +12,7 @@ How to
 
 Links
 ===============
-Brackets? Right here... http://brackets.io/
+Brackets? Right here... http://brackets.io/ <br>
 Brackets github? Right here... https://github.com/adobe/brackets
 
 
