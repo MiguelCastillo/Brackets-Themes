@@ -243,7 +243,7 @@ define(function (require, exports, module) {
 		// I am doing this extra saving step here so that the preferences are
 		// persisted when brackets is closed and opened again... It appears that
 		// brackets deletes preferences if they are not saved when brackets is closed.
-		preferences.setValue("theme", $.extend({}, {css: false}));
+		preferences.setValue("theme", $.extend({}, themes._selected, {css: false}));
 	
 		// From the get go, make sure that the theme is applied to brackets
 		updateEditorTheme();
