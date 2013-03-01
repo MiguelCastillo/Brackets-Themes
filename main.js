@@ -51,8 +51,7 @@ define(function (require, exports, module) {
 	// Root directory for themes
 	// I would like to use the code mirror directory in brackets... still trying to
 	// figure stuff out.
-	//FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme";
-	var themesDirectory = require.toUrl("./theme/");
+	var themesDirectory = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme";
 
 	// Look for the menu where we will be inserting our theme menu
 	var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
@@ -127,7 +126,7 @@ define(function (require, exports, module) {
 			// If the css has not yet been loaded, then we load it so that
 			// code mirror properly renders the theme
 			if ( !theme.css ) {
-				theme.css = ExtensionUtils.loadStyleSheet(module, 'theme/' + theme.fileName);
+				theme.css = ExtensionUtils.addLinkedStyleSheet(themesDirectory + "/" + theme.fileName);
 			}
 
 			editor._codeMirror.setOption("theme", theme.name);
