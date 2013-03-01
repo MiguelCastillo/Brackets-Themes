@@ -32,7 +32,9 @@ define(function (require, exports, module) {
 		PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
 		DocumentManager     = brackets.getModule("document/DocumentManager"),
 		EditorManager       = brackets.getModule("editor/EditorManager"),
-        ExtensionUtils      = brackets.getModule("utils/ExtensionUtils");
+        ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
+		AppInit             = brackets.getModule('utils/AppInit');
+
 
 	var PREFERENCES_KEY = "extensions.brackets-editorthemes";
 	var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
@@ -86,6 +88,14 @@ define(function (require, exports, module) {
 
 		// Register menu event...
 		CommandManager.register(settings.name, COMMAND_ID, function (){
+			// Uncheck the previous selection...
+			var command = CommandManager.get("theme." + themes._currentTheme.settings.value);
+			if (command){
+				command.setChecked(false);
+			}
+
+			// Check the new selection
+			this.setChecked(true);
 			_self.update();
 		});
 
@@ -153,5 +163,15 @@ define(function (require, exports, module) {
 
 	// From the get go, make sure that the theme is applied to brackets
 	updateEditorTheme();
+
+	// Once the app is fully loaded, we will proceed to check the theme that
+	// was last set
+	AppInit.appReady(function () {
+		var command = CommandManager.get("theme." + themes._currentTheme.settings.value);
+		if (command){
+			command.setChecked(true);
+		}	
+	});
+
 });
 
