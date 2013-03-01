@@ -25,14 +25,14 @@
 
 /** Simple extension that adds a "File > Hello World" menu item */
 define(function (require, exports, module) {
-    "use strict";
+	"use strict";
 
-    var CommandManager      = brackets.getModule("command/CommandManager"),
-        Menus               = brackets.getModule("command/Menus"),
+	var CommandManager      = brackets.getModule("command/CommandManager"),
+		Menus               = brackets.getModule("command/Menus"),
 		PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
 		DocumentManager     = brackets.getModule("document/DocumentManager"),
 		EditorManager       = brackets.getModule("editor/EditorManager"),
-        ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
+		ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
 		AppInit             = brackets.getModule("utils/AppInit"),
 		FileUtils           = brackets.getModule("file/FileUtils"),
 		NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
@@ -45,10 +45,10 @@ define(function (require, exports, module) {
 	// Hash for themes loaded and ready to be used.
 	// Our default theme will be whatever we save in the preferences
 	var themes = {
-		_currentTheme: preferences.getValue("theme") || {},
+		_selected: preferences.getValue("theme") || {},
 
 		// Root directory for themes
-		_directory: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme"
+		_path: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme"
 	};
 
 	// Look for the menu where we will be inserting our theme menu
@@ -60,7 +60,11 @@ define(function (require, exports, module) {
 	ExtensionUtils.loadStyleSheet(module, "reset.css");
 	
 
-	// Theme object to encasulate all the logic in one pretty bundle
+	/**
+	*  Theme object to encasulate all the logic in one pretty bundle
+	*
+	* @constructor
+	*/
 	function theme(options) {
 		var _self = this;
 		$.extend(this, options);
@@ -71,7 +75,7 @@ define(function (require, exports, module) {
 		// Register menu event...
 		CommandManager.register(this.displayName, COMMAND_ID, function (){
 			// Uncheck the previous selection...
-			var command = CommandManager.get("theme." + themes._currentTheme.name);
+			var command = CommandManager.get("theme." + themes._selected.name);
 			if (command){
 				command.setChecked(false);
 			}
@@ -88,10 +92,13 @@ define(function (require, exports, module) {
 	}
 
 
-	// Theme update function
+	/**
+	*  Handles updating of the current them, updating the preferences and
+	*  updating the editor so that the new theme is set.
+	*/
 	theme.prototype.update = function()
 	{
-		themes._currentTheme = this;
+		themes._selected = this;
 
 		// Make sure we update the preferences when a new theme is selected.
 		// Css is set to false so that when we reload brackets, we can reload
@@ -103,9 +110,11 @@ define(function (require, exports, module) {
 	}
 
 
-	// Change up the theme of the editor on the fly	
+	/**
+	*  Change up the theme of the editor on the fly
+	*/
 	function updateEditorTheme(){
-		var theme = themes._currentTheme;
+		var theme = themes._selected;
 
 		// Only apply themes when there is one to be applied.
 		if ( !theme.name ) {
@@ -116,7 +125,7 @@ define(function (require, exports, module) {
 		CodeMirror.defaults.themes = theme.name;
 
 		// Change the current editor in view
-        var editor = EditorManager.getCurrentFullEditor();
+		var editor = EditorManager.getCurrentFullEditor();
 
 		// Make sure we have a valid editor
 		if (editor && editor._codeMirror) {
@@ -124,7 +133,7 @@ define(function (require, exports, module) {
 			// If the css has not yet been loaded, then we load it so that
 			// code mirror properly renders the theme
 			if ( !theme.css ) {
-				theme.css = ExtensionUtils.addLinkedStyleSheet(themes._directory + "/" + theme.fileName);
+				theme.css = ExtensionUtils.addLinkedStyleSheet(theme.path + "/" + theme.fileName);
 			}
 
 			editor._codeMirror.setOption("theme", theme.name);
@@ -132,18 +141,19 @@ define(function (require, exports, module) {
 	}
 
 
-	//
-	// This will go through all the files in the themes directory so that I can
-	// build my table of themes to be loaded for the editor
-	//
-	function loadCodeMirrorThemes() {
-        var result = $.Deferred();
+	/**
+	*  This will go through all the files in the themes directory so that I can
+	*  build my table of themes to be loaded for the editor
+	*/
+	function loadThemeFiles( path ) {
+		var result = $.Deferred();
 
-		// Get directory reader handle		
-		NativeFileSystem.requestNativeFileSystem(themes._directory, loadDirectoryContent);
+		// Get directory reader handle
+		NativeFileSystem.requestNativeFileSystem( path, loadDirectoryContent, handleError );
 
 		// Load up the content of the directory
 		function loadDirectoryContent( fs ){
+
 			fs.root.createReader().readEntries(
 				function (entries) {
 					var i, themes = [];
@@ -154,7 +164,10 @@ define(function (require, exports, module) {
 						}
 					}
 
-					result.resolve(themes);
+					result.resolve({
+						files: themes,
+						path: path
+					});
 				},
 				function (error) {
 					result.reject();
@@ -162,45 +175,62 @@ define(function (require, exports, module) {
 			);
 		}
 
+
+		function handleError(){
+			result.reject();
+		}
+
+
 		return result.promise();
 	}
 
 
-	// Load up all the theme files from code mirror's directory
-	loadCodeMirrorThemes().done(function( themes ){
+	/**
+	*  Takes all dashes and converts them to white spaces...
+	*  Then takes all first letters and capitalizes them.
+	*/
+	function toDisplayname(name){
+		name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
+		var parts = name.split(" ");
 
-		//
-		// Takes all dashes and converts them to white spaces...
-		// Then takes all first letters and capitalizes them.
-		//
-		function fixName(name){
-			name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
-			var parts = name.split(" ");
+		$.each(parts.slice(0), function(index, part){
+			parts[index] = part[0].toUpperCase() + part.substring(1);
+		});
 
-			$.each(parts.slice(0), function(index, part){
-				parts[index] = part[0].toUpperCase() + part.substring(1);
-			});
-
-			return parts.join(" ");
-		}
+		return parts.join(" ");
+	}
 
 
+	/**
+	/*  Iterate through the array of themes and build theme objects.
+	*/
+	function buildThemes(themes){
 		//
 		// Iterate through each name in the themes and make them theme objects
 		//
-		$.each(themes, function(index, themeFile) {
-			var themeDisplayName = fixName(themeFile);
+		$.each(themes.files, function(index, themeFile) {
+			var themeDisplayName = toDisplayname(themeFile);
 			var themeName = themeFile.substring(0, themeFile.lastIndexOf('.'));
 
 			themes[themeDisplayName] = new theme({
 				name: themeName,
 				displayName: themeDisplayName,
-				fileName: themeFile
+				fileName: themeFile,
+				path: themes.path
 			});
 			
 		});
+	}
 
-	});
+
+	// Load up custom and default themes
+	loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes);
+	
+	// Maybe add a little divider to break up custom from what's shipped? We'll see...
+	//menu.addMenuDivider();
+
+	// Load up all the theme files from code mirror's directory
+	loadThemeFiles(themes._path).done(buildThemes);
 
 
 
@@ -214,7 +244,7 @@ define(function (require, exports, module) {
 	// I am doing this extra saving step here so that the preferences are
 	// persisted when brackets is closed and opened again... It appears that
 	// brackets deletes preferences if they are not saved when brackets is closed.
-	preferences.setValue("theme", $.extend({}, themes._currentTheme, {css: false}));
+	preferences.setValue("theme", $.extend({}, themes._selected, {css: false}));
 
 	// From the get go, make sure that the theme is applied to brackets
 	updateEditorTheme();
@@ -222,7 +252,7 @@ define(function (require, exports, module) {
 	// Once the app is fully loaded, we will proceed to check the theme that
 	// was last set
 	AppInit.appReady(function () {
-		var command = CommandManager.get("theme." + themes._currentTheme.name);
+		var command = CommandManager.get("theme." + themes._selected.name);
 		if (command){
 			command.setChecked(true);
 		}	
