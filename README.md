@@ -27,7 +27,7 @@ To get you started, you could use the already existing custom theme "default.css
 - In "my-theme.css", change "background-color: #F8F8F8;" to "backgound-color: red;".
 - Relaunch brackets, open a JavaScript file and you should see the document with a red background.
 <br><br>
-Unfortunately, codemirror does not provide documentation for all the different css classes you can change to customize your theme. But, what I do is that I look at the themes that codemirror ships with to get an idea of what can be customized and how to do it.  Give it a try, it is pretty straight forward.
+For details on what can be customized, please navigate to codemirror's <a href="http://codemirror.net/doc/manual.html">manual</a> and search for "Customized Styling".  As you will notice, the documentation isn't exhautive but they suggest you use "codemirror.css" as a reference.  Give it a try, it is pretty straight forward.
 <br><br>
 If you have a cool theme you created and want to share, please send it my way and I will gladly add it to the custom themes.
 
