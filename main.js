@@ -228,10 +228,10 @@ define(function (require, exports, module) {
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
 
 		// Load up all the theme files from custom themes directory
-		loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes).promise(),
+		loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes),
 
 		// Load up all the theme files from codemirror themes directory
-		loadThemeFiles( themes._path ).done(buildThemes).promise()
+		loadThemeFiles( themes._path ).done(buildThemes)
 	];
 
 
