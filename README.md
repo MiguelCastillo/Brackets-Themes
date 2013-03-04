@@ -15,7 +15,7 @@ Features
 Custom themes 101 guide
 ===============
 
-Custom themes are codemirror's themes, so you will need to be familiar with codemirror's theme guidelines.  I provide a set of steps to get you started below, but to get to codemirror's manual for more details please open <a hreh="http://codemirror.net/doc/manual.html">codemirror's manual</a> and search for "theme".
+Custom themes are codemirror's themes, so you will need to be familiar with codemirror's theme guidelines.  I provide a set of steps to get you started below, but for more details please navigate to <a hreh="http://codemirror.net/doc/manual.html">codemirror's manual</a> and search for "theme".
 <br><br>
 Codemirror's themes are css files.  Important requirement is that the file name has to match your css class definition.  E.g. If your theme file is called "default", then your primary css class name needs to be "default".  Codemirror's guidelines require that the actual css class name starts with ".cm-s-", so your fully qualified css class name will be ".cm-s-default".
 <br><br>
@@ -27,7 +27,7 @@ To get you started, you could use the already existing custom theme "default.css
 - In "my-theme.css", change "background-color: #F8F8F8;" to "backgound-color: red;".
 - Relaunch brackets, open a JavaScript file and you should see the document with a red background.
 <br><br>
-For details on what can be customized, please navigate to codemirror's <a href="http://codemirror.net/doc/manual.html">manual</a> and search for "Customized Styling".  As you will notice, the documentation isn't exhautive but they suggest you use "codemirror.css" as a reference.  Give it a try, it is pretty straight forward.
+For details on what can be customized, please navigate to <a hreh="http://codemirror.net/doc/manual.html">codemirror's manual</a> and search for "Customized Styling".  As you will notice, the documentation isn't exhautive but they suggest you use "codemirror.css" as a reference.  Give it a try, it is pretty straight forward.
 <br><br>
 If you have a cool theme you created and want to share, please send it my way and I will gladly add it to the custom themes.
 
