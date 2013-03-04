@@ -9,7 +9,7 @@ Features
 
 - Dynamic loading of codemirror's css theme files from the theme directory.
 - Dynamic loading of custom themes.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
-- Custom themes are 100% codemirror standard. Please be sure to follow codemirror's theme guidelines.
+- Custom themes are 100% codemirror standard.
 
 
 Custom themes 101 guide
