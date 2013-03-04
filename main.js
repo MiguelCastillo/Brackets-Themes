@@ -2,17 +2,17 @@
  * Copyright (c) 2013 Miguel Castillo.
  *
  * Licensed under MIT
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,7 +37,6 @@ define(function (require, exports, module) {
 		FileUtils           = brackets.getModule("file/FileUtils"),
 		NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
 
-
 	var PREFERENCES_KEY = "extensions.brackets-editorthemes";
 	var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
 
@@ -58,7 +57,7 @@ define(function (require, exports, module) {
 	// Load up reset.css to override brackground settings from brackets because
 	// they make the themes look really bad.
 	ExtensionUtils.loadStyleSheet(module, "reset.css");
-	
+
 
 	/**
 	*  Theme object to encasulate all the logic in one pretty bundle
@@ -112,7 +111,7 @@ define(function (require, exports, module) {
 	/**
 	*  Change up the theme of the editor on the fly
 	*/
-	function updateEditorTheme(){
+	function updateEditorTheme() {
 		var theme = themes._selected;
 
 		// Only apply themes when there is one to be applied.
@@ -122,6 +121,7 @@ define(function (require, exports, module) {
 
 		// Setup further documents to get the new theme...
 		CodeMirror.defaults.themes = theme.name;
+		CodeMirror.defaults.styleActiveLine = true;
 
 		// Change the current editor in view
 		var editor = EditorManager.getCurrentFullEditor();
@@ -136,6 +136,7 @@ define(function (require, exports, module) {
 			}
 
 			editor._codeMirror.setOption("theme", theme.name);
+			editor._codeMirror.setOption("styleActiveLine", true);
 		}
 	}
 
@@ -188,7 +189,7 @@ define(function (require, exports, module) {
 	*  Takes all dashes and converts them to white spaces...
 	*  Then takes all first letters and capitalizes them.
 	*/
-	function toDisplayname(name){
+	function toDisplayname(name) {
 		name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
 		var parts = name.split(" ");
 
@@ -203,7 +204,7 @@ define(function (require, exports, module) {
 	/**
 	/*  Iterate through the array of themes and build theme objects.
 	*/
-	function buildThemes(_themes){
+	function buildThemes(_themes) {
 		//
 		// Iterate through each name in the themes and make them theme objects
 		//
@@ -217,46 +218,54 @@ define(function (require, exports, module) {
 				fileName: themeFile,
 				path: _themes.path
 			});
-			
+
 		});
 	}
 
 
-	// Load up custom and default themes
-	loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes).done(function(_themes){
-		if (_themes.length !== 0){
+	var promises = [
+		// Load up codemirror addon for active lines
+		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
+
+		// Load up all the theme files from custom themes directory
+		loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes).promise(),
+
+		// Load up all the theme files from codemirror themes directory
+		loadThemeFiles( themes._path ).done(buildThemes).promise()
+	];
+
+
+	$.when(promises[0], promises[1], promises[2]).done( function(activeLine, customThemes, codeMirrorThemes ) {
+
+		if (customThemes.files.length !== 0){
 			// Add a little divider to break up custom from what's shipped? We'll see...
 			menu.addMenuDivider();
 		}
-	});
-	
 
-	// Load up all the theme files from code mirror's directory
-	loadThemeFiles( themes._path ).done(buildThemes).always(function(){
 		// Apply the theme to any document that maybe not have the theme yet.
 		// This happens when you have documents already loaded that are not
 		// in focus... You switch the theme and those documents will not get
 		// the theme until they get focus... I don't want to waste cycles
 		// updating all the documents for every change of theme
 		$(DocumentManager).on("currentDocumentChange", updateEditorTheme);
-	
+
 		// I am doing this extra saving step here so that the preferences are
 		// persisted when brackets is closed and opened again... It appears that
 		// brackets deletes preferences if they are not saved when brackets is closed.
 		preferences.setValue("theme", $.extend({}, themes._selected, {css: false}));
-	
-		// From the get go, make sure that the theme is applied to brackets
-		updateEditorTheme();
-	});
 
+		// Once the app is fully loaded, we will proceed to check the theme that
+		// was last set
+		AppInit.appReady(function () {
+			// From the get go, make sure that the theme is applied to brackets
+			updateEditorTheme();
 
-	// Once the app is fully loaded, we will proceed to check the theme that
-	// was last set
-	AppInit.appReady(function () {
-		var command = CommandManager.get("theme." + themes._selected.name);
-		if (command){
-			command.setChecked(true);
-		}	
+			var command = CommandManager.get("theme." + themes._selected.name);
+			if (command){
+				command.setChecked(true);
+			}
+		});
+
 	});
 
 });

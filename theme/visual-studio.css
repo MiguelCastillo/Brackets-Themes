@@ -4,6 +4,22 @@
 	color:black;
 }
 
+.cm-s-visual-studio.CodeMirror pre
+{
+	line-height: 1em;
+	padding: 0px;
+}
+
+.cm-s-visual-studio.CodeMirror .CodeMirror-lines pre
+{
+	border: 2px solid transparent;
+}
+
+.cm-s-visual-studio.CodeMirror .CodeMirror-gutters
+{
+	background-color: #fefefe;
+}
+
 .cm-s-visual-studio.CodeMirror .CodeMirror-linenumber
 {
 	color: #0E97A1;
@@ -16,6 +32,12 @@
 	/*border: 1px #dddddd solid;*/
 	background-color: #dedede;
 }
+
+.cm-s-visual-studio.CodeMirror .CodeMirror-activeline-background
+{
+	border: 2px solid #dddddd;
+}
+
 
 .cm-s-visual-studio.CodeMirror .cm-atom { color: blue; }
 .cm-s-visual-studio.CodeMirror .cm-qualifier { color: brown; }
