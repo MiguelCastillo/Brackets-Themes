@@ -21,9 +21,9 @@ Features
 Custom themes 101 guide
 ===============
 
-- Custom themes are actually codemirror's themes, so you will need to be familiar with codemirror's theme guidelines.  You can read about in their manual for details, which I will outline below.  Open <a hreh="http://codemirror.net/doc/manual.html">codemirror's manual</a> and search for "theme".
-<br>
-- Codemirror's themes are based on css files.  Important requirements are that the file name has to match your css class definition in your css theme file.  E.g. If your theme file is called "default", then your primary css class name needs to have "default" in it.  Codemirror's guidelines require that the actual css class name start with ".cm-s-", so your fully qualified css class name will be ".cm-s-default".
+- Custom themes are actually codemirror's themes, so you will need to be familiar with codemirror's theme guidelines.  I provide a set of steps to get you started below, but to get to codemirror's manual for more details, open <a hreh="http://codemirror.net/doc/manual.html">codemirror's manual</a> and search for "theme".
+<br><br>
+- Codemirror's themes are css files.  Important requirements are that the file name has to match your css class definition in your css theme file.  E.g. If your theme file is called "default", then your primary css class name needs to have "default" in it.  Codemirror's guidelines require that the actual css class name start with ".cm-s-", so your fully qualified css class name will be ".cm-s-default".
 <br><br>
 To get you started, you could use the already existing custom theme "default.css".  Let's do the following.
 <br>
