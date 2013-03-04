@@ -29,10 +29,10 @@ To get you started, you could use the already existing custom theme "default.css
 <br>
 1. Open the custom theme directory.  Navigate to your themes manager directory (extensions directory/themes) and you will find custom themes in the "theme" directory.  Brackets provides a quick way of accessing your extensions directory... Help > Show Extensions Folder.
 2. Copy and paste the file "default.css" and rename it to "my-theme.css".
-3. Open "my-theme.css" and replace "default" with "my-theme", which should end up ".cm-s-my-theme".  You will also have a second class ".CodeMirror", just leave it there and the net result will look like ".cm-s-my-theme.CodeMirror".
+3. Open "my-theme.css" and replace "default" with "my-theme", which should end up looking like ".cm-s-my-theme".  You will also have a second class ".CodeMirror", just leave it there and the net result will look like ".cm-s-my-theme.CodeMirror".
 4. In "my-theme.css", change "background-color: #F8F8F8;" to "backgound-color: red;".
 5. Relaunch brackets, open a JavaScript file and you should see the document with a red background.
-<br>
+<br><br>
 Unfortunately, codemirror does not provide documentation for all the different css classes you can change to customize your theme so I would suggest you take a look at the themes that codemirror ships with in order to get more details about what you are able to customize.
 
 
