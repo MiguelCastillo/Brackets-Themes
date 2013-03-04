@@ -1,7 +1,7 @@
 Brackets-Themes
 ===============
 
-Easy and accessible way of loading code mirror themes into brackets.
+Easy and accessible way of loading codemirror themes into brackets.
 
 
 Features
