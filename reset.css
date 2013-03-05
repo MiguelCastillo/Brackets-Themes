@@ -1,3 +1,9 @@
-.CodeMirror-scroll {
-	background-color: transparent !important;
+.CodeMirror pre
+{
+	padding: 0 2px;
+}	
+
+.CodeMirror-scroll
+{
+	background-color: transparent;
 }
