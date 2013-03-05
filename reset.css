@@ -7,3 +7,13 @@
 {
 	background-color: transparent;
 }
+
+/*
+* z-index override to make sure the cursor is visible when different addons,
+* such as matchbracket block the cursor's visiblity when settings a background
+* color as I do in the Visual Studio theme.
+*/
+.CodeMirror-cursor
+{
+	z-index: 1000;
+}

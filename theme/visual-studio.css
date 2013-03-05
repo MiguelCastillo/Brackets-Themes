@@ -4,11 +4,6 @@
 	color:black;
 }
 
-.cm-s-visual-studio.CodeMirror .CodeMirror-cursor
-{
-	z-index: 5;
-}
-
 .cm-s-visual-studio.CodeMirror .CodeMirror-lines pre
 {
 }
