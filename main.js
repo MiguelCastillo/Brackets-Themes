@@ -44,10 +44,10 @@ define(function (require, exports, module) {
 	// Hash for themes loaded and ready to be used.
 	// Our default theme will be whatever we save in the preferences
 	var themes = {
-		_selected: {},
+		_selected: preferences.getValue("theme") || "default",
 
 		// Root directory for themes
-		_path: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme"
+		_cm_path: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2"
 	};
 
 	// Look for the menu where we will be inserting our theme menu
@@ -74,7 +74,7 @@ define(function (require, exports, module) {
 		// Register menu event...
 		CommandManager.register(this.displayName, COMMAND_ID, function (){
 			// Uncheck the previous selection...
-			var command = CommandManager.get("theme." + themes._selected.name);
+			var command = CommandManager.get("theme." + themes._selected);
 			if (command){
 				command.setChecked(false);
 			}
@@ -96,12 +96,12 @@ define(function (require, exports, module) {
 	*  updating the editor so that the new theme is set.
 	*/
 	theme.prototype.update = function() {
-		themes._selected = this;
+		themes._selected = this.name;
 
 		// Make sure we update the preferences when a new theme is selected.
 		// Css is set to false so that when we reload brackets, we can reload
 		// the css file for the theme.
-		preferences.setValue("theme", $.extend({}, this, {css: false}));
+		preferences.setValue("theme", this.name);
 
 		// Setup further documents to get the new theme...
 		CodeMirror.defaults.themes = this.name;
@@ -219,7 +219,7 @@ define(function (require, exports, module) {
 		loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes),
 
 		// Load up all the theme files from codemirror themes directory
-		loadThemeFiles( themes._path ).done(buildThemes)
+		loadThemeFiles( themes._cm_path + '/theme' ).done(buildThemes)
 	];
 
 
@@ -227,8 +227,7 @@ define(function (require, exports, module) {
 		// Once the app is fully loaded, we will proceed to check the theme that
 		// was last set
 		AppInit.appReady(function () {
-			var themeName = (preferences.getValue("theme") || { name: "default" }).name;
-			var _theme = themes[themeName];
+			var _theme = themes[themes._selected];
 
 			if ( _theme ) {
 				_theme.update();
@@ -240,12 +239,12 @@ define(function (require, exports, module) {
 			// the theme until they get focus... I don't want to waste cycles
 			// updating all the documents for every change of theme
 			$(DocumentManager).on("currentDocumentChange", function() {
-				if ( themes._selected && typeof themes._selected.update === "function") {
-					themes._selected.update();
+				if ( themes[themes._selected] ) {
+					themes[themes._selected].update();
 				}
 			});
 
-			var command = CommandManager.get("theme." + themes._selected.name);
+			var command = CommandManager.get("theme." + themes._selected);
 			if (command){
 				command.setChecked(true);
 			}

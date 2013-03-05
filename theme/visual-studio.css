@@ -10,6 +10,11 @@
 	padding: 0px;
 }
 
+.cm-s-visual-studio.CodeMirror .CodeMirror-cursor
+{
+	z-index: 5;
+}
+
 .cm-s-visual-studio.CodeMirror .CodeMirror-lines pre
 {
 	border: 2px solid transparent;
