@@ -44,7 +44,7 @@ define(function (require, exports, module) {
 	// Hash for themes loaded and ready to be used.
 	// Our default theme will be whatever we save in the preferences
 	var themes = {
-		_selected: preferences.getValue("theme") || {},
+		_selected: {},
 
 		// Root directory for themes
 		_path: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme"
@@ -53,14 +53,14 @@ define(function (require, exports, module) {
 	// Look for the menu where we will be inserting our theme menu
 	var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
 
-
 	// Load up reset.css to override brackground settings from brackets because
 	// they make the themes look really bad.
 	ExtensionUtils.loadStyleSheet(module, "reset.css");
 
 
 	/**
-	*  Theme object to encasulate all the logic in one pretty bundle
+	*  Theme object to encasulate all the logic in one pretty bundle.
+	*  The theme will self register when it is created
 	*
 	* @constructor
 	*/
@@ -103,24 +103,8 @@ define(function (require, exports, module) {
 		// the css file for the theme.
 		preferences.setValue("theme", $.extend({}, this, {css: false}));
 
-		// Change the current editor...
-		updateEditorTheme();
-	}
-
-
-	/**
-	*  Change up the theme of the editor on the fly
-	*/
-	function updateEditorTheme() {
-		var theme = themes._selected;
-
-		// Only apply themes when there is one to be applied.
-		if ( !theme || !theme.name ) {
-			theme = themes._selected = themes['Default'];
-		}
-
 		// Setup further documents to get the new theme...
-		CodeMirror.defaults.themes = theme.name;
+		CodeMirror.defaults.themes = this.name;
 		CodeMirror.defaults.styleActiveLine = true;
 
 		// Change the current editor in view
@@ -131,13 +115,15 @@ define(function (require, exports, module) {
 
 			// If the css has not yet been loaded, then we load it so that
 			// code mirror properly renders the theme
-			if ( !theme.css ) {
-				theme.css = ExtensionUtils.addLinkedStyleSheet(theme.path + "/" + theme.fileName);
+			if ( !this.css ) {
+				this.css = ExtensionUtils.addLinkedStyleSheet(this.path + "/" + this.fileName);
 			}
 
-			editor._codeMirror.setOption("theme", theme.name);
+			editor._codeMirror.setOption("theme", this.name);
 			editor._codeMirror.setOption("styleActiveLine", true);
 		}
+
+		return this;
 	}
 
 
@@ -153,7 +139,6 @@ define(function (require, exports, module) {
 
 		// Load up the content of the directory
 		function loadDirectoryContent( fs ){
-
 			fs.root.createReader().readEntries(
 				function (entries) {
 					var i, _themes = [];
@@ -175,11 +160,9 @@ define(function (require, exports, module) {
 			);
 		}
 
-
 		function handleError(){
 			result.reject();
 		}
-
 
 		return result.promise();
 	}
@@ -212,14 +195,19 @@ define(function (require, exports, module) {
 			var themeDisplayName = toDisplayname(themeFile);
 			var themeName = themeFile.substring(0, themeFile.lastIndexOf('.'));
 
-			themes[themeDisplayName] = new theme({
+			themes[themeName] = new theme({
 				name: themeName,
 				displayName: themeDisplayName,
 				fileName: themeFile,
 				path: _themes.path
 			});
-
 		});
+
+		if ( _themes.files.length !== 0 ){
+			menu.addMenuDivider();
+		}
+
+		return _themes;
 	}
 
 
@@ -236,29 +224,26 @@ define(function (require, exports, module) {
 
 
 	$.when(promises[0], promises[1], promises[2]).done( function(activeLine, customThemes, codeMirrorThemes ) {
-
-		if (customThemes.files.length !== 0){
-			// Add a little divider to break up custom from what's shipped? We'll see...
-			menu.addMenuDivider();
-		}
-
-		// Apply the theme to any document that maybe not have the theme yet.
-		// This happens when you have documents already loaded that are not
-		// in focus... You switch the theme and those documents will not get
-		// the theme until they get focus... I don't want to waste cycles
-		// updating all the documents for every change of theme
-		$(DocumentManager).on("currentDocumentChange", updateEditorTheme);
-
-		// I am doing this extra saving step here so that the preferences are
-		// persisted when brackets is closed and opened again... It appears that
-		// brackets deletes preferences if they are not saved when brackets is closed.
-		preferences.setValue("theme", $.extend({}, themes._selected, {css: false}));
-
 		// Once the app is fully loaded, we will proceed to check the theme that
 		// was last set
 		AppInit.appReady(function () {
-			// From the get go, make sure that the theme is applied to brackets
-			updateEditorTheme();
+			var themeName = (preferences.getValue("theme") || { name: "default" }).name;
+			var _theme = themes[themeName];
+
+			if ( _theme ) {
+				_theme.update();
+			}
+
+			// Apply the theme to any document that maybe not have the theme yet.
+			// This happens when you have documents already loaded that are not
+			// in focus... You switch the theme and those documents will not get
+			// the theme until they get focus... I don't want to waste cycles
+			// updating all the documents for every change of theme
+			$(DocumentManager).on("currentDocumentChange", function() {
+				if ( themes._selected && typeof themes._selected.update === "function") {
+					themes._selected.update();
+				}
+			});
 
 			var command = CommandManager.get("theme." + themes._selected.name);
 			if (command){

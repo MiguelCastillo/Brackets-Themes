@@ -51,3 +51,6 @@
 .cm-s-visual-studio.CodeMirror .cm-string-2 {color: brown;}
 .cm-s-visual-studio.CodeMirror .cm-variable { color: black; }
 .cm-s-visual-studio.CodeMirror .cm-variable-2 { color: black; }
+.cm-s-visual-studio.CodeMirror .cm-tag { color: brown; }
+.cm-s-visual-studio.CodeMirror .cm-attribute { color: red; }
+
