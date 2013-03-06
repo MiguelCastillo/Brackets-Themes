@@ -15,15 +15,15 @@
 */
 .CodeMirror-cursor
 {
-	z-index: 1000;
+	z-index: 3;
 }
 
 /*
 * customize codemirror's scrollbars
 */
 .CodeMirror ::-webkit-scrollbar {
-	height: 7px;
-	width: 7px;
+	height: 9px;
+	width: 9px;
 }
 
 .CodeMirror ::-webkit-scrollbar-track {
