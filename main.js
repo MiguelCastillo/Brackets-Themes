@@ -122,6 +122,10 @@ define(function (require, exports, module) {
 			editor._codeMirror.setOption("theme", this.name);
 			editor._codeMirror.setOption("styleActiveLine", true);
 			editor._codeMirror.setOption("lineNavigator", true);
+
+			setTimeout(function(){
+				editor._codeMirror.refresh();
+			}, 100);
 		}
 
 		return this;
