@@ -221,9 +221,6 @@ define(function (require, exports, module) {
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
 
-		// Load line navigator
-		jQuery.getScript( require.toUrl("./") + "line-navigator.js").promise(),
-
 		// Load up all the theme files from custom themes directory
 		loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes),
 
@@ -232,7 +229,7 @@ define(function (require, exports, module) {
 	];
 
 
-	$.when(promises[0], promises[1], promises[2], promises[3], promises[4]).done( function(activeLine, closebrackets, lineNavigator, customThemes, codeMirrorThemes ) {
+	$.when(promises[0], promises[1], promises[2], promises[3]).done( function(activeLine, closebrackets, customThemes, codeMirrorThemes ) {
 		// Once the app is fully loaded, we will proceed to check the theme that
 		// was last set
 		AppInit.appReady(function () {
