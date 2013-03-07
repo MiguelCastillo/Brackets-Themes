@@ -222,7 +222,7 @@ define(function (require, exports, module) {
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
 
 		// Load line navigator
-		jQuery.getScript( require.toUrl("./") + "linenavigator.js").promise(),
+		jQuery.getScript( require.toUrl("./") + "line-navigator.js").promise(),
 
 		// Load up all the theme files from custom themes directory
 		loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes),
