@@ -68,19 +68,6 @@
   });
 
 
-  function navigateLineRight (cm) {
-      navigateLine(cm, "right");
-  }
-
-
-  function navigateLineLeft(cm) {
-    // We gotta move one character before any work is done so that
-    // we have the proper cursor position to navigate left.
-    cm.execCommand(navigateDirection["left"].charCmd);
-    navigateLine(cm, "left");
-  }
-
-
 
   var navigateDirection = {
     "left": {
@@ -98,9 +85,9 @@
   *  Line Navigation logic.  There are some parts that have been extracted out of
   *  the implementation to goWordLeft and goWordRight.
   */
-  function navigateLine(cm, dirName) {
+  function navigateLineRight(cm, dirName) {
+    var dir = navigateDirection.right;
     var currPos = { line: -1 }, line;
-    var dir = navigateDirection[dirName];
     var characters = new charHandlers();
 
     for (;;) {
@@ -118,7 +105,7 @@
       var _handler = characters.getHandler(_char);
 
       // If we have a white, we will simply go to the next character...
-      if ( _handler.type === "space" ) {
+      if ( _handler.type === "space" ){
       }
       else if (_handler.type === "empty" ) {
         // This empty handler is rather important because this is where
@@ -140,26 +127,65 @@
       else if ( _handler.type === "delimeter" ) {
         // We only exit if we have seen any characters...
         if ( characters.handlers.character.count || characters.handlers.space.count ) {
-
-          if ( dirName === "left" ){
-            cm.execCommand(navigateDirection.right.charCmd);
-          }
-
           break;
         }
       }
       else if ( _handler.type === "character" ) {
         // We exit if we have seen a delimeter or a whitespace
         if ( characters.handlers.delimeter.count || characters.handlers.space.count ) {
-          if ( dirName === "left" ){
-            cm.execCommand(navigateDirection.right.charCmd);
-          }
-
           break;
         }
       }
 
       cm.execCommand(dir.charCmd);
+    }
+  }
+
+
+
+  function navigateLineLeft(cm) {
+    var dir = navigateDirection.left;
+    var currPos = { line: -1 }, line;
+    var characters = new charHandlers();
+
+    for (;;) {
+      cm.execCommand(dir.charCmd);
+
+      var pos = cm.getCursor();
+
+      // We need to check if navigating to the next character has made the cursor
+      // go to the next line so that we can adjust our pos marker and get the new
+      // line for processing.
+      if ( currPos.line !== pos.line ){
+        line = cm.getLine(pos.line);
+        currPos = pos;
+      }
+
+      var _char = line[pos.ch];
+      var _handler = characters.getHandler(_char);
+
+      if ( _handler.type === "space" ) {
+        // We only exit if we have seen any characters...
+        if ( characters.handlers.character.count || characters.handlers.delimeter.count ) {
+          cm.execCommand(navigateDirection.right.charCmd);
+          break;
+        }
+      }
+      else if (_handler.type === "empty" ) {
+      }
+      else if ( _handler.type === "delimeter" ) {
+        // We only exit if we have seen any characters...
+        if ( characters.handlers.character.count ) {
+          cm.execCommand(navigateDirection.right.charCmd);
+          break;
+        }
+      }
+      else if ( _handler.type === "character" ) {
+        if ( characters.handlers.delimeter.count ) {
+          cm.execCommand(navigateDirection.right.charCmd);
+          break;
+        }
+      }
     }
   }
 
@@ -185,7 +211,7 @@
         count: 0,
         type: 'delimeter',
         test: function(str) {
-          return /[.:;(){}\"',+\-*&%=<>!?|~^]/.test(str);
+          return /[.:;(){}\/\"',+\-*&%=<>!?|~^]/.test(str);
         }
       },
       character: {
