@@ -227,7 +227,7 @@ define(function (require, exports, module) {
 		// Once the app is fully loaded, we will proceed to check the theme that
 		// was last set
 		AppInit.appReady(function () {
-			var _theme = themes[themes._selected];
+			var _theme = themes[themes._selected] || themes["default"];
 
 			if ( _theme ) {
 				_theme.update();
