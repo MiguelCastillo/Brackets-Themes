@@ -40,16 +40,6 @@ define(function (require, exports, module) {
 	var PREFERENCES_KEY = "extensions.brackets-editorthemes";
 	var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
 
-
-	// Hash for themes loaded and ready to be used.
-	// Our default theme will be whatever we save in the preferences
-	var themes = {
-		_selected: preferences.getValue("theme") || "default",
-
-		// Root directory for themes
-		_cm_path: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2"
-	};
-
 	// Look for the menu where we will be inserting our theme menu
 	var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
 
@@ -59,8 +49,142 @@ define(function (require, exports, module) {
 
 
 	/**
+	*  @constructor
+	*
+	* Controls the logic for selecting and deselecting themes
+	*/
+	var themeManager = (function( ) {
+
+		// This is to make sure we handle themes that were stored strings rather
+		// than an array of string, which is what the newer stuff does in order
+		// to support multiselect.
+		var selection = preferences.getValue("theme") || ["default"];
+		if ( typeof selection === "string" ) {
+			selection = [selection];
+		}
+
+
+		// Flag for whether or not multiselection is enabled when loading up
+		// the extension
+		var multiselect = preferences.getValue("multiselect") === true;
+
+
+		// These will soon be private data with accessor functions...
+		return {
+			_selection: selection,
+			_multiselect: multiselect,
+
+			// Hash for themes loaded and ready to be used.
+			_items: {},
+
+			// Root directory for themes
+			_cm_path: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2"
+		}
+
+	})();
+
+
+	/**
+	*  Handles updating codemirror with the current selection of themes.
+	*/
+	themeManager.applyThemes = function() {
+		var themesString = themeManager._selection.join(" ");
+
+		// If the css has not yet been loaded, then we load it so that
+		// styling is properly applied to codemirror
+		$.each(themeManager._selection.slice(0), function(index, item) {
+			var _theme = themeManager._items[item];
+
+			if ( !_theme.css ) {
+				_theme.css = ExtensionUtils.addLinkedStyleSheet(_theme.path + "/" + _theme.fileName);
+			}
+		});
+
+		// Make sure we update the preferences when a new theme is selected.
+		// Css is set to false so that when we reload brackets, we can reload
+		// the css file for the theme.
+		preferences.setValue("theme", themeManager._selection);
+
+		// Setup further documents to get the new theme...
+		CodeMirror.defaults.themes = themesString;
+		CodeMirror.defaults.styleActiveLine = true;
+
+		// Change the current editor in view
+		var editor = EditorManager.getCurrentFullEditor();
+
+		// Make sure we have a valid editor
+		if (editor && editor._codeMirror) {
+			editor._codeMirror.setOption("theme", themesString);
+			editor._codeMirror.setOption("styleActiveLine", true);
+		}
+
+		return themeManager;
+	}
+
+
+	/**
+	*  Iterate through the array of themes and build theme objects.
+	*/
+	themeManager.addThemes = function (options) {
+		var themes = {};
+
+		//
+		// Iterate through each name in the themes and make them theme objects
+		//
+		$.each(options.files, function(index, themeFile) {
+			var _theme = new theme({fileName: themeFile, path: options.path});
+			themes[_theme.name] = themeManager._items[_theme.name] = _theme;
+		});
+
+		if ( options.files.length !== 0 ){
+			menu.addMenuDivider();
+		}
+
+		return themes;
+	}
+
+
+	/**
+	*  This will go through all the files in the themes directory so that I can
+	*  build my table of themes to be loaded for the editor
+	*/
+	themeManager.loadFiles = function ( path ) {
+		var result = $.Deferred();
+
+		function handleError() {
+			result.reject();
+		}
+
+		// Get directory reader handle
+		NativeFileSystem.requestNativeFileSystem( path, loadDirectoryContent, handleError );
+
+		// Load up the content of the directory
+		function loadDirectoryContent( fs ){
+			fs.root.createReader().readEntries(function success(entries) {
+					var i, themes = [];
+
+					for (i = 0; i < entries.length; i++) {
+						if (entries[i].isFile) {
+							themes.push(entries[i].name);
+						}
+					}
+
+					result.resolve({
+						files: themes,
+						path: path
+					});
+				}, handleError);
+		}
+
+		return result.promise();
+	}
+
+
+	/**
 	*  Theme object to encasulate all the logic in one pretty bundle.
-	*  The theme will self register when it is created
+	*  The theme will self register when it is created.
+	*
+	*  * Required settings are fileName and path
 	*
 	* @constructor
 	*/
@@ -68,22 +192,16 @@ define(function (require, exports, module) {
 		var _self = this;
 		$.extend(this, options);
 
+		// Create a display and a theme name from the file name
+		this.displayName = theme.toDisplayName(this.fileName);
+		this.name = this.fileName.substring(0, this.fileName.lastIndexOf('.'));
+
 		// Create the command id used by the menu
 		var COMMAND_ID = "theme." + this.name;
 
 		// Register menu event...
-		CommandManager.register(this.displayName, COMMAND_ID, function (){
-			// Uncheck the previous selection...
-			var command = CommandManager.get("theme." + themes._selected);
-			if (command){
-				command.setChecked(false);
-			}
-
-			// Check the new selection
-			this.setChecked(true);
-
-			// Update the theme
-			_self.update();
+		CommandManager.register(this.displayName, COMMAND_ID, function( ) {
+			updateMenuSelection(this, _self);
 		});
 
 		// Add theme menu item
@@ -92,91 +210,10 @@ define(function (require, exports, module) {
 
 
 	/**
-	*  Handles updating of the current them, updating the preferences and
-	*  updating the editor so that the new theme is set.
-	*/
-	theme.prototype.update = function() {
-		themes._selected = this.name;
-
-		// Make sure we update the preferences when a new theme is selected.
-		// Css is set to false so that when we reload brackets, we can reload
-		// the css file for the theme.
-		preferences.setValue("theme", this.name);
-
-		// Setup further documents to get the new theme...
-		CodeMirror.defaults.themes = this.name;
-		CodeMirror.defaults.styleActiveLine = true;
-
-		// Change the current editor in view
-		var editor = EditorManager.getCurrentFullEditor();
-
-		// Make sure we have a valid editor
-		if (editor && editor._codeMirror) {
-
-			// If the css has not yet been loaded, then we load it so that
-			// code mirror properly renders the theme
-			if ( !this.css ) {
-				this.css = ExtensionUtils.addLinkedStyleSheet(this.path + "/" + this.fileName);
-			}
-
-			editor._codeMirror.setOption("theme", this.name);
-			editor._codeMirror.setOption("styleActiveLine", true);
-
-			setTimeout(function(){
-				editor._codeMirror.refresh();
-			}, 100);
-		}
-
-		return this;
-	}
-
-
-	/**
-	*  This will go through all the files in the themes directory so that I can
-	*  build my table of themes to be loaded for the editor
-	*/
-	function loadThemeFiles( path ) {
-		var result = $.Deferred();
-
-		// Get directory reader handle
-		NativeFileSystem.requestNativeFileSystem( path, loadDirectoryContent, handleError );
-
-		// Load up the content of the directory
-		function loadDirectoryContent( fs ){
-			fs.root.createReader().readEntries(
-				function (entries) {
-					var i, _themes = [];
-
-					for (i = 0; i < entries.length; i++) {
-						if (entries[i].isFile) {
-							_themes.push(entries[i].name);
-						}
-					}
-
-					result.resolve({
-						files: _themes,
-						path: path
-					});
-				},
-				function (error) {
-					result.reject();
-				}
-			);
-		}
-
-		function handleError(){
-			result.reject();
-		}
-
-		return result.promise();
-	}
-
-
-	/**
 	*  Takes all dashes and converts them to white spaces...
 	*  Then takes all first letters and capitalizes them.
 	*/
-	function toDisplayname(name) {
+	theme.toDisplayName = function (name) {
 		name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
 		var parts = name.split(" ");
 
@@ -189,54 +226,122 @@ define(function (require, exports, module) {
 
 
 	/**
-	/*  Iterate through the array of themes and build theme objects.
+	*  Updates the theme selection from the menu
 	*/
-	function buildThemes(_themes) {
-		//
-		// Iterate through each name in the themes and make them theme objects
-		//
-		$.each(_themes.files, function(index, themeFile) {
-			var themeDisplayName = toDisplayname(themeFile);
-			var themeName = themeFile.substring(0, themeFile.lastIndexOf('.'));
+	function updateMenuSelection(menuItem, _theme) {
+		if ( themeManager._multiselect ) {
+			// I am forcing one theme to be selected at all times.  So, if we are in
+			// multiselect mode and we are trying to set/unset the only theme that's
+			// already selected, we will return to stop the deselection process.
+			if ( themeManager._selection.length == 1 && themeManager._selection.indexOf(_theme.name) != -1 ) {
+				return;
+			}
 
-			themes[themeName] = new theme({
-				name: themeName,
-				displayName: themeDisplayName,
-				fileName: themeFile,
-				path: _themes.path
-			});
-		});
+			var checked = !menuItem.getChecked();
+			menuItem.setChecked( checked );
 
-		if ( _themes.files.length !== 0 ){
-			menu.addMenuDivider();
+			if ( checked ) {
+				themeManager._selection.push(_theme.name);
+			}
+			else {
+				var index = themeManager._selection.indexOf(_theme.name);
+				if( index != -1 ){
+					themeManager._selection.splice(index, 1);
+				}
+			}
+		}
+		else {
+			updateSelection(false);
+			menuItem.setChecked( true );
+			themeManager._selection = [_theme.name];
 		}
 
-		return _themes;
+		// Update the theme
+		themeManager.applyThemes();
 	}
 
 
+	/**
+	*  Register and handle multiselect
+	*/
+	function registerMultiselect() {
+		// Create the command id used by the menu
+		var COMMAND_ID = "theme.MixedMode";
+
+		// Register menu event...
+		CommandManager.register("Mixed Mode", COMMAND_ID, function () {
+			var multiselect = !this.getChecked();
+
+			if( !multiselect ) {
+				updateSelection(false);
+
+				// If we are going from multiselect to single select, then we
+				// need to unselect everything and keep only one.  I am thinking
+				// that keeping your first selection is as good as any.
+				if ( themeManager._selection.length != 0 ) {
+					themeManager._selection = [themeManager._selection[0]];
+					var command = CommandManager.get("theme." + themeManager._selection[0]);
+					if (command){
+						command.setChecked(true);
+					}
+				}
+			}
+
+			this.setChecked(multiselect);
+			preferences.setValue("multiselect", multiselect);
+			themeManager._multiselect = multiselect;
+			themeManager.applyThemes();
+		});
+
+		// Add theme menu item
+		menu.addMenuItem(COMMAND_ID);
+
+		var command = CommandManager.get(COMMAND_ID);
+		if (command){
+			command.setChecked(preferences.getValue("multiselect"));
+		}
+	}
+
+
+	function updateSelection( val ){
+		$.each(themeManager._selection, function(index, item){
+			var command = CommandManager.get("theme." + item);
+			if (command){
+				command.setChecked(val);
+			}
+		});
+	}
+
+
+
+	/**
+	*  This is where is all starts to load up...
+	*/
 	var promises = [
 		// Load up codemirror addon for active lines
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
 
 		// Load up all the theme files from custom themes directory
-		loadThemeFiles( require.toUrl('./theme/') ).done(buildThemes),
+		themeManager.loadFiles( require.toUrl('./theme/') ).done(themeManager.addThemes),
 
 		// Load up all the theme files from codemirror themes directory
-		loadThemeFiles( themes._cm_path + '/theme' ).done(buildThemes)
+		themeManager.loadFiles( themeManager._cm_path + '/theme' ).done(themeManager.addThemes)
 	];
 
 
+
+	//
+	// Synchronize all calls to load resources.
+	//
 	$.when(promises[0], promises[1], promises[2], promises[3]).done( function(activeLine, closebrackets, customThemes, codeMirrorThemes ) {
+
 		// Once the app is fully loaded, we will proceed to check the theme that
 		// was last set
 		AppInit.appReady(function () {
-			var _theme = themes[themes._selected] || themes["default"];
-
-			if ( _theme ) {
-				_theme.update();
-			}
+			registerMultiselect();
+			updateSelection(true);
+			themeManager.applyThemes();
 
 			// Apply the theme to any document that maybe not have the theme yet.
 			// This happens when you have documents already loaded that are not
@@ -244,17 +349,9 @@ define(function (require, exports, module) {
 			// the theme until they get focus... I don't want to waste cycles
 			// updating all the documents for every change of theme
 			$(DocumentManager).on("currentDocumentChange", function() {
-				if ( themes[themes._selected] ) {
-					themes[themes._selected].update();
-				}
+				themeManager.applyThemes();
 			});
-
-			var command = CommandManager.get("theme." + themes._selected);
-			if (command){
-				command.setChecked(true);
-			}
 		});
-
 	});
 
 });
