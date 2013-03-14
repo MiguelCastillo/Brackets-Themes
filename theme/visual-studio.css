@@ -47,3 +47,8 @@
 .cm-s-visual-studio.CodeMirror .cm-attribute { color: red; }
 .cm-s-visual-studio.CodeMirror .cm-property { color: black; }
 
+.cm-s-visual-studio.CodeMirror .cm-matchhighlight
+{
+  	background-color: #efefef;
+}
+

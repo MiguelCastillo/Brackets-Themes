@@ -116,6 +116,7 @@ define(function (require, exports, module) {
 		if (editor && editor._codeMirror) {
 			editor._codeMirror.setOption("theme", themesString);
 			editor._codeMirror.setOption("styleActiveLine", true);
+			editor._codeMirror.setOption("highlightSelectionMatches", true);
 		}
 
 		return themeManager;
@@ -321,6 +322,7 @@ define(function (require, exports, module) {
 		// Load up codemirror addon for active lines
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
+		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise(),
 
 		// Load up all the theme files from custom themes directory
 		themeManager.loadFiles( require.toUrl('./theme/') ).done(themeManager.addThemes),
@@ -334,7 +336,7 @@ define(function (require, exports, module) {
 	//
 	// Synchronize all calls to load resources.
 	//
-	$.when(promises[0], promises[1], promises[2], promises[3]).done( function(activeLine, closebrackets, customThemes, codeMirrorThemes ) {
+	$.when.apply($, promises).done( function( ) {
 
 		// Once the app is fully loaded, we will proceed to check the theme that
 		// was last set
