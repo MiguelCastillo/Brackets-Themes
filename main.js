@@ -117,6 +117,7 @@ define(function (require, exports, module) {
 			editor._codeMirror.setOption("theme", themesString);
 			editor._codeMirror.setOption("styleActiveLine", true);
 			editor._codeMirror.setOption("highlightSelectionMatches", true);
+			editor._codeMirror.setOption("styleSelectedText", true);
 		}
 
 		return themeManager;
@@ -321,6 +322,7 @@ define(function (require, exports, module) {
 	var promises = [
 		// Load up codemirror addon for active lines
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
+		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/mark-selection.js").promise(),
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
 		jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise(),
 
@@ -330,7 +332,6 @@ define(function (require, exports, module) {
 		// Load up all the theme files from codemirror themes directory
 		themeManager.loadFiles( themeManager._cm_path + '/theme' ).done(themeManager.addThemes)
 	];
-
 
 
 	//
@@ -350,9 +351,7 @@ define(function (require, exports, module) {
 			// in focus... You switch the theme and those documents will not get
 			// the theme until they get focus... I don't want to waste cycles
 			// updating all the documents for every change of theme
-			$(DocumentManager).on("currentDocumentChange", function() {
-				themeManager.applyThemes();
-			});
+			$(DocumentManager).on("currentDocumentChange", themeManager.applyThemes);
 		});
 	});
 

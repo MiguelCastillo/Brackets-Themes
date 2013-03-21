@@ -6,6 +6,7 @@
 
 .cm-s-visual-studio.CodeMirror .CodeMirror-lines pre
 {
+  	background-color: white;
 }
 
 .cm-s-visual-studio.CodeMirror .CodeMirror-gutters
@@ -49,6 +50,10 @@
 
 .cm-s-visual-studio.CodeMirror .cm-matchhighlight
 {
-  	background-color: #efefef;
+  	background-color: #F4F4F4;
 }
 
+.cm-s-visual-studio.CodeMirror .CodeMirror-selectedtext
+{
+  	background-color: #ADD6FF;
+}
