@@ -6,7 +6,6 @@
 
 .cm-s-visual-studio.CodeMirror .CodeMirror-lines pre
 {
-  	background-color: white;
 }
 
 .cm-s-visual-studio.CodeMirror .CodeMirror-gutters
@@ -26,9 +25,10 @@
 	background-color: #dedede;
 }
 
-.cm-s-visual-studio.CodeMirror .CodeMirror-activeline-background
+.cm-s-visual-studio.CodeMirror .CodeMirror-linebackground
 {
 	outline: 2px solid #dddddd;
+  	z-index: 3;
 }
 
 
@@ -57,3 +57,14 @@
 {
   	background-color: #ADD6FF;
 }
+
+.cm-s-visual-studio.CodeMirror .CodeMirror-selected
+{
+  	background: transparent;
+}
+
+.cm-s-visual-studio.CodeMirror-focused .CodeMirror-selected
+{
+  	background: transparent;
+}
+

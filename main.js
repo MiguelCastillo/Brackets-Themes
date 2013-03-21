@@ -43,6 +43,9 @@ define(function (require, exports, module) {
 	// Look for the menu where we will be inserting our theme menu
 	var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
 
+  	// Flag to keep track if the menu selection has changed.
+  	var changed = true;
+
 	// Load up reset.css to override brackground settings from brackets because
 	// they make the themes look really bad.
 	ExtensionUtils.loadStyleSheet(module, "reset.css");
@@ -87,37 +90,42 @@ define(function (require, exports, module) {
 	/**
 	*  Handles updating codemirror with the current selection of themes.
 	*/
-	themeManager.applyThemes = function() {
-		var themesString = themeManager._selection.join(" ");
+	themeManager.applyThemes = function( ) {
+		var editor = EditorManager.getActiveEditor();
+		if ( !editor || !editor._codeMirror ) {
+			return themeManager;
+		}
 
-		// If the css has not yet been loaded, then we load it so that
-		// styling is properly applied to codemirror
-		$.each(themeManager._selection.slice(0), function(index, item) {
-			var _theme = themeManager._items[item];
+	  	var cm = editor._codeMirror;
+	  	var themesString = themeManager._selection.join(" ");
 
-			if ( !_theme.css ) {
-				_theme.css = ExtensionUtils.addLinkedStyleSheet(_theme.path + "/" + _theme.fileName);
-			}
-		});
 
-		// Make sure we update the preferences when a new theme is selected.
-		// Css is set to false so that when we reload brackets, we can reload
-		// the css file for the theme.
-		preferences.setValue("theme", themeManager._selection);
+	  	// Change things if the
+	  	if ( changed ) {
+			// If the css has not yet been loaded, then we load it so that
+			// styling is properly applied to codemirror
+			$.each(themeManager._selection.slice(0), function(index, item) {
+				var _theme = themeManager._items[item];
 
-		// Setup further documents to get the new theme...
-		CodeMirror.defaults.themes = themesString;
-		CodeMirror.defaults.styleActiveLine = true;
+				if ( !_theme.css ) {
+					_theme.css = ExtensionUtils.addLinkedStyleSheet(_theme.path + "/" + _theme.fileName);
+				}
+			});
 
-		// Change the current editor in view
-		var editor = EditorManager.getCurrentFullEditor();
+		  	// Make sure we update the preferences when a new theme is selected.
+			// Css is set to false so that when we reload brackets, we can reload
+			// the css file for the theme.
+			preferences.setValue("theme", themeManager._selection);
+
+		  	// Setup further documents to get the new theme...
+			CodeMirror.defaults.theme = themesString;
+		  	changed = false;
+		}
+
 
 		// Make sure we have a valid editor
-		if (editor && editor._codeMirror) {
-			editor._codeMirror.setOption("theme", themesString);
-			editor._codeMirror.setOption("styleActiveLine", true);
-			editor._codeMirror.setOption("highlightSelectionMatches", true);
-			editor._codeMirror.setOption("styleSelectedText", true);
+		if ( cm.getOption("theme") != themesString ) {
+			cm.setOption("theme", themesString);
 		}
 
 		return themeManager;
@@ -231,7 +239,9 @@ define(function (require, exports, module) {
 	*  Updates the theme selection from the menu
 	*/
 	function updateMenuSelection(menuItem, _theme) {
-		if ( themeManager._multiselect ) {
+	  	console.log("menu selection");
+
+	  	if ( themeManager._multiselect ) {
 			// I am forcing one theme to be selected at all times.  So, if we are in
 			// multiselect mode and we are trying to set/unset the only theme that's
 			// already selected, we will return to stop the deselection process.
@@ -258,8 +268,8 @@ define(function (require, exports, module) {
 			themeManager._selection = [_theme.name];
 		}
 
-		// Update the theme
-		themeManager.applyThemes();
+	  	changed = true;
+		themeManager.applyThemes( );
 	}
 
 
@@ -274,6 +284,9 @@ define(function (require, exports, module) {
 		CommandManager.register("Mixed Mode", COMMAND_ID, function () {
 			var multiselect = !this.getChecked();
 
+		  	// Handle going from multi select to single select.  Special handling
+		  	// is required because we need to only keep one suitable theme and then
+		  	// re-apply it to undo all the other themes
 			if( !multiselect ) {
 				updateSelection(false);
 
@@ -286,13 +299,15 @@ define(function (require, exports, module) {
 					if (command){
 						command.setChecked(true);
 					}
+
+					changed = true;
+					themeManager.applyThemes( );
 				}
 			}
 
 			this.setChecked(multiselect);
 			preferences.setValue("multiselect", multiselect);
 			themeManager._multiselect = multiselect;
-			themeManager.applyThemes();
 		});
 
 		// Add theme menu item
@@ -339,19 +354,25 @@ define(function (require, exports, module) {
 	//
 	$.when.apply($, promises).done( function( ) {
 
-		// Once the app is fully loaded, we will proceed to check the theme that
+	  	// Set some default value for codemirror...
+		CodeMirror.defaults.styleActiveLine = true;
+		CodeMirror.defaults.highlightSelectionMatches = true;
+		CodeMirror.defaults.styleSelectedText = true;
+
+
+	  	// Once the app is fully loaded, we will proceed to check the theme that
 		// was last set
 		AppInit.appReady(function () {
 			registerMultiselect();
 			updateSelection(true);
-			themeManager.applyThemes();
 
-			// Apply the theme to any document that maybe not have the theme yet.
-			// This happens when you have documents already loaded that are not
-			// in focus... You switch the theme and those documents will not get
-			// the theme until they get focus... I don't want to waste cycles
-			// updating all the documents for every change of theme
-			$(DocumentManager).on("currentDocumentChange", themeManager.applyThemes);
+		  	// Make sure we apply the theme right off the start...
+		  	changed = true;
+			themeManager.applyThemes( );
+
+		  	$(EditorManager).on("activeEditorChange", function(event, current, old) {
+			  	themeManager.applyThemes();
+			});
 		});
 	});
 
