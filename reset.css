@@ -17,3 +17,8 @@
 {
 	z-index: 3;
 }
+
+.CodeMirror-activeline-background {
+  	background: transparent !important;
+}
+
