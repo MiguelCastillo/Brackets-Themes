@@ -18,7 +18,6 @@
 	z-index: 3;
 }
 
-.CodeMirror-activeline-background {
+.CodeMirror-focused .CodeMirror-activeline-background {
   	background: transparent !important;
 }
-
