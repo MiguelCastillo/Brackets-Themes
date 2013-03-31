@@ -274,7 +274,7 @@ define(function (require, exports, module) {
             // Handle going from multi select to single select.  Special handling
             // is required because we need to only keep one suitable theme and then
             // re-apply it to undo all the other themes
-            if( !multiselect ) {
+            if (!multiselect) {
                 updateSelection(false);
 
                 // If we are going from multiselect to single select, then we
