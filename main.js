@@ -23,7 +23,9 @@
  */
 
 
-/** Simple extension that adds a "File > Hello World" menu item */
+/*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
+/*global define, $, brackets, window, CodeMirror */
+
 define(function (require, exports, module) {
     "use strict";
 
@@ -53,13 +55,13 @@ define(function (require, exports, module) {
     *
     * Controls the logic for selecting and deselecting themes
     */
-    var themeManager = (function( ) {
+    var themeManager = (function () {
 
         // This is to make sure we handle themes that were stored strings rather
         // than an array of string, which is what the newer stuff does in order
         // to support multiselect.
         var selection = preferences.getValue("theme") || ["default"];
-        if ( typeof selection === "string" ) {
+        if (typeof selection === "string") {
             selection = [selection];
         }
 
@@ -79,7 +81,7 @@ define(function (require, exports, module) {
 
             // Root directory for themes
             _cm_path: FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2"
-        }
+        };
 
     })();
 
@@ -87,9 +89,9 @@ define(function (require, exports, module) {
     /**
     *  Handles updating codemirror with the current selection of themes.
     */
-    themeManager.applyThemes = function( ) {
+    themeManager.applyThemes = function () {
         var editor = EditorManager.getActiveEditor();
-        if ( !editor || !editor._codeMirror ) {
+        if (!editor || !editor._codeMirror) {
             return;
         }
 
@@ -97,7 +99,7 @@ define(function (require, exports, module) {
         var themesString = themeManager._selection.join(" ");
 
         // Check if the editor already has the theme applied...
-        if ( cm.getOption("theme") == themesString ) {
+        if (cm.getOption("theme") === themesString) {
             return;
         }
 
@@ -107,10 +109,10 @@ define(function (require, exports, module) {
 
         // If the css has not yet been loaded, then we load it so that
         // styling is properly applied to codemirror
-        $.each(themeManager._selection.slice(0), function(index, item) {
+        $.each(themeManager._selection.slice(0), function (index, item) {
             var _theme = themeManager._items[item];
 
-            if ( !_theme.css ) {
+            if (!_theme.css) {
                 _theme.css = ExtensionUtils.addLinkedStyleSheet(_theme.path + "/" + _theme.fileName);
             }
         });
@@ -119,7 +121,7 @@ define(function (require, exports, module) {
         // Css is set to false so that when we reload brackets, we can reload
         // the css file for the theme.
         preferences.setValue("theme", themeManager._selection);
-    }
+    };
 
 
     /**
@@ -131,23 +133,23 @@ define(function (require, exports, module) {
         //
         // Iterate through each name in the themes and make them theme objects
         //
-        $.each(_themes.files, function(index, themeFile) {
+        $.each(_themes.files, function (index, themeFile) {
             var _theme = new theme({fileName: themeFile, path: _themes.path});
             themes[_theme.name] = themeManager._items[_theme.name] = _theme;
         });
 
-        if ( _themes.files.length !== 0 ){
+        if (_themes.files.length !== 0) {
             menu.addMenuDivider();
         }
 
         return themes;
-    }
+    };
 
 
     /**
     *  Return all the files in the specified path
     */
-    themeManager.loadFiles = function ( path ) {
+    themeManager.loadFiles = function (path) {
         var result = $.Deferred();
 
         function handleError() {
@@ -156,7 +158,7 @@ define(function (require, exports, module) {
 
 
         // Load up the content of the directory
-        function loadDirectoryContent( fs ){
+        function loadDirectoryContent(fs) {
             fs.root.createReader().readEntries(function success(entries) {
                 var i, themes = [];
 
@@ -174,9 +176,9 @@ define(function (require, exports, module) {
         }
 
         // Get directory reader handle
-        NativeFileSystem.requestNativeFileSystem( path, loadDirectoryContent, handleError );
+        NativeFileSystem.requestNativeFileSystem(path, loadDirectoryContent, handleError);
         return result.promise();
-    }
+    };
 
 
     /**
@@ -189,17 +191,17 @@ define(function (require, exports, module) {
     */
     function theme(options) {
         var _self = this;
-        $.extend(this, options);
+        $.extend(_self, options);
 
         // Create a display and a theme name from the file name
-        this.displayName = theme.toDisplayName(this.fileName);
-        this.name = this.fileName.substring(0, this.fileName.lastIndexOf('.'));
+        _self.displayName = theme.toDisplayName(_self.fileName);
+        _self.name = _self.fileName.substring(0, _self.fileName.lastIndexOf('.'));
 
         // Create the command id used by the menu
-        var COMMAND_ID = "theme." + this.name;
+        var COMMAND_ID = "theme." + _self.name;
 
         // Register menu event...
-        CommandManager.register(this.displayName, COMMAND_ID, function( ) {
+        CommandManager.register(_self.displayName, COMMAND_ID, function () {
             updateMenuSelection(this, _self);
         });
 
@@ -216,12 +218,12 @@ define(function (require, exports, module) {
         name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
         var parts = name.split(" ");
 
-        $.each(parts.slice(0), function(index, part){
+        $.each(parts.slice(0), function (index, part) {
             parts[index] = part[0].toUpperCase() + part.substring(1);
         });
 
         return parts.join(" ");
-    }
+    };
 
 
     /**
@@ -229,34 +231,32 @@ define(function (require, exports, module) {
     */
     function updateMenuSelection(menuItem, _theme) {
 
-        if ( themeManager._multiselect ) {
+        if (themeManager._multiselect) {
             // I am forcing one theme to be selected at all times.  So, if we are in
             // multiselect mode and we are trying to set/unset the only theme that's
             // already selected, we will return to stop the deselection process.
-            if ( themeManager._selection.length == 1 && themeManager._selection.indexOf(_theme.name) != -1 ) {
+            if (themeManager._selection.length === 1 && themeManager._selection.indexOf(_theme.name) !== -1) {
                 return;
             }
 
             var checked = !menuItem.getChecked();
-            menuItem.setChecked( checked );
+            menuItem.setChecked(checked);
 
-            if ( checked ) {
+            if (checked) {
                 themeManager._selection.push(_theme.name);
-            }
-            else {
+            } else {
                 var index = themeManager._selection.indexOf(_theme.name);
-                if( index != -1 ){
+                if (index !== -1) {
                     themeManager._selection.splice(index, 1);
                 }
             }
-        }
-        else {
+        } else {
             updateSelection(false);
-            menuItem.setChecked( true );
+            menuItem.setChecked(true);
             themeManager._selection = [_theme.name];
         }
 
-        themeManager.applyThemes( );
+        themeManager.applyThemes();
     }
 
 
@@ -280,14 +280,14 @@ define(function (require, exports, module) {
                 // If we are going from multiselect to single select, then we
                 // need to unselect everything and keep only one.  I am thinking
                 // that keeping your first selection is as good as any.
-                if ( themeManager._selection.length != 0 ) {
+                if (themeManager._selection.length !== 0) {
                     themeManager._selection = [themeManager._selection[0]];
                     var command = CommandManager.get("theme." + themeManager._selection[0]);
-                    if (command){
+                    if (command) {
                         command.setChecked(true);
                     }
 
-                    themeManager.applyThemes( );
+                    themeManager.applyThemes();
                 }
             }
 
@@ -300,16 +300,16 @@ define(function (require, exports, module) {
         menu.addMenuItem(COMMAND_ID);
 
         var command = CommandManager.get(COMMAND_ID);
-        if (command){
+        if (command) {
             command.setChecked(preferences.getValue("multiselect"));
         }
     }
 
 
-    function updateSelection( val ){
-        $.each(themeManager._selection, function(index, item){
+    function updateSelection(val) {
+        $.each(themeManager._selection, function (index, item) {
             var command = CommandManager.get("theme." + item);
-            if (command){
+            if (command) {
                 command.setChecked(val);
             }
         });
@@ -322,23 +322,23 @@ define(function (require, exports, module) {
     */
     var promises = [
         // Load up codemirror addon for active lines
-        jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
-        jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/mark-selection.js").promise(),
-        jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
-        jQuery.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise(),
+        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
+        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/mark-selection.js").promise(),
+        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
+        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise(),
 
         // Load up all the theme files from custom themes directory
-        themeManager.loadFiles( require.toUrl('./theme/') ).done(themeManager.addThemes),
+        themeManager.loadFiles(require.toUrl('./theme/')).done(themeManager.addThemes),
 
         // Load up all the theme files from codemirror themes directory
-        themeManager.loadFiles( themeManager._cm_path + '/theme' ).done(themeManager.addThemes)
+        themeManager.loadFiles(themeManager._cm_path + '/theme').done(themeManager.addThemes)
     ];
 
 
     //
     // Synchronize all calls to load resources.
     //
-    $.when.apply($, promises).done( function( ) {
+    $.when.apply($, promises).done(function () {
 
         // Set some default value for codemirror...
         CodeMirror.defaults.styleActiveLine = true;
@@ -352,7 +352,7 @@ define(function (require, exports, module) {
             registerMultiselect();
             updateSelection(true);
 
-            themeManager.applyThemes( );
+            themeManager.applyThemes();
             $(EditorManager).on("activeEditorChange", themeManager.applyThemes);
         });
     });
