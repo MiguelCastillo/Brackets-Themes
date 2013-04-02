@@ -42,20 +42,64 @@ define(function (require, exports, module) {
     var PREFERENCES_KEY = "extensions.brackets-editorthemes";
     var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
 
-    // Look for the menu where we will be inserting our theme menu
-    var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
-
     // Load up reset.css to override brackground settings from brackets because
     // they make the themes look really bad.
     ExtensionUtils.loadStyleSheet(module, "reset.css");
 
 
+    // Forward declaration to avoid JSLint error
+    var menuHandler = null, themeManager = null;
+
+
     /**
-    *  @constructor
+    *  Theme object to encasulate all the logic in one pretty bundle.
+    *  The theme will self register when it is created.
     *
+    *  * Required settings are fileName and path
+    *
+    * @constructor
+    */
+    function theme(options) {
+        var _self = this;
+        $.extend(_self, options);
+
+        // Create a display and a theme name from the file name
+        _self.displayName = theme.toDisplayName(_self.fileName);
+        _self.name = _self.fileName.substring(0, _self.fileName.lastIndexOf('.'));
+
+        // Create the command id used by the menu
+        var COMMAND_ID = "theme." + _self.name;
+
+        // Register menu event...
+        CommandManager.register(_self.displayName, COMMAND_ID, function () {
+            menuHandler.updateSelection(this, _self);
+        });
+
+        // Add theme menu item
+        menuHandler.addItem(COMMAND_ID);
+    }
+
+
+    /**
+    *  Takes all dashes and converts them to white spaces...
+    *  Then takes all first letters and capitalizes them.
+    */
+    theme.toDisplayName = function (name) {
+        name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
+        var parts = name.split(" ");
+
+        $.each(parts.slice(0), function (index, part) {
+            parts[index] = part[0].toUpperCase() + part.substring(1);
+        });
+
+        return parts.join(" ");
+    };
+
+
+    /**
     * Controls the logic for selecting and deselecting themes
     */
-    var themeManager = (function () {
+    themeManager = (function () {
 
         // This is to make sure we handle themes that were stored strings rather
         // than an array of string, which is what the newer stuff does in order
@@ -127,7 +171,7 @@ define(function (require, exports, module) {
     /**
     *  Create theme objects and add them to the global themes container.
     */
-    themeManager.addThemes = function (_themes) {
+    themeManager.loadThemes = function (_themes) {
         var themes = {};
 
         //
@@ -139,9 +183,10 @@ define(function (require, exports, module) {
         });
 
         if (_themes.files.length !== 0) {
-            menu.addMenuDivider();
+            menuHandler.addDivider();
         }
 
+        // return the themes that were loaded
         return themes;
     };
 
@@ -181,140 +226,113 @@ define(function (require, exports, module) {
     };
 
 
-    /**
-    *  Theme object to encasulate all the logic in one pretty bundle.
-    *  The theme will self register when it is created.
-    *
-    *  * Required settings are fileName and path
-    *
-    * @constructor
-    */
-    function theme(options) {
-        var _self = this;
-        $.extend(_self, options);
+    menuHandler = (function () {
+        // Look for the menu where we will be inserting our theme menu
+        var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
 
-        // Create a display and a theme name from the file name
-        _self.displayName = theme.toDisplayName(_self.fileName);
-        _self.name = _self.fileName.substring(0, _self.fileName.lastIndexOf('.'));
-
-        // Create the command id used by the menu
-        var COMMAND_ID = "theme." + _self.name;
-
-        // Register menu event...
-        CommandManager.register(_self.displayName, COMMAND_ID, function () {
-            updateMenuSelection(this, _self);
-        });
-
-        // Add theme menu item
-        menu.addMenuItem(COMMAND_ID);
-    }
-
-
-    /**
-    *  Takes all dashes and converts them to white spaces...
-    *  Then takes all first letters and capitalizes them.
-    */
-    theme.toDisplayName = function (name) {
-        name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
-        var parts = name.split(" ");
-
-        $.each(parts.slice(0), function (index, part) {
-            parts[index] = part[0].toUpperCase() + part.substring(1);
-        });
-
-        return parts.join(" ");
-    };
-
-
-    /**
-    *  Updates the theme selection from the menu
-    */
-    function updateMenuSelection(menuItem, _theme) {
-
-        if (themeManager._multiselect) {
-            // I am forcing one theme to be selected at all times.  So, if we are in
-            // multiselect mode and we are trying to set/unset the only theme that's
-            // already selected, we will return to stop the deselection process.
-            if (themeManager._selection.length === 1 && themeManager._selection.indexOf(_theme.name) !== -1) {
-                return;
-            }
-
-            var checked = !menuItem.getChecked();
-            menuItem.setChecked(checked);
-
-            if (checked) {
-                themeManager._selection.push(_theme.name);
-            } else {
-                var index = themeManager._selection.indexOf(_theme.name);
-                if (index !== -1) {
-                    themeManager._selection.splice(index, 1);
+        function _updateSelectionChecks(val) {
+            $.each(themeManager._selection, function (index, item) {
+                var command = CommandManager.get("theme." + item);
+                if (command) {
+                    command.setChecked(val);
                 }
-            }
-        } else {
-            updateSelection(false);
-            menuItem.setChecked(true);
-            themeManager._selection = [_theme.name];
+            });
         }
 
-        themeManager.applyThemes();
-    }
 
+        /**
+        *  Updates the theme selection from the menu
+        */
+        function updateSelection(menuItem, _theme) {
 
-    /**
-    *  Register and handle multiselect
-    */
-    function registerMultiselect() {
-        // Create the command id used by the menu
-        var COMMAND_ID = "theme.MixedMode";
+            if (themeManager._multiselect) {
+                // I am forcing one theme to be selected at all times.  So, if we are in
+                // multiselect mode and we are trying to set/unset the only theme that's
+                // already selected, we will return to stop the deselection process.
+                if (themeManager._selection.length === 1 && themeManager._selection.indexOf(_theme.name) !== -1) {
+                    return;
+                }
 
-        // Register menu event...
-        CommandManager.register("Mixed Mode", COMMAND_ID, function () {
-            var multiselect = !this.getChecked();
+                var checked = !menuItem.getChecked();
+                menuItem.setChecked(checked);
 
-            // Handle going from multi select to single select.  Special handling
-            // is required because we need to only keep one suitable theme and then
-            // re-apply it to undo all the other themes
-            if (!multiselect) {
-                updateSelection(false);
-
-                // If we are going from multiselect to single select, then we
-                // need to unselect everything and keep only one.  I am thinking
-                // that keeping your first selection is as good as any.
-                if (themeManager._selection.length !== 0) {
-                    themeManager._selection = [themeManager._selection[0]];
-                    var command = CommandManager.get("theme." + themeManager._selection[0]);
-                    if (command) {
-                        command.setChecked(true);
+                if (checked) {
+                    themeManager._selection.push(_theme.name);
+                } else {
+                    var index = themeManager._selection.indexOf(_theme.name);
+                    if (index !== -1) {
+                        themeManager._selection.splice(index, 1);
                     }
-
-                    themeManager.applyThemes();
                 }
+            } else {
+                _updateSelectionChecks(false);
+                menuItem.setChecked(true);
+                themeManager._selection = [_theme.name];
             }
 
-            this.setChecked(multiselect);
-            preferences.setValue("multiselect", multiselect);
-            themeManager._multiselect = multiselect;
-        });
-
-        // Add theme menu item
-        menu.addMenuItem(COMMAND_ID);
-
-        var command = CommandManager.get(COMMAND_ID);
-        if (command) {
-            command.setChecked(preferences.getValue("multiselect"));
+            themeManager.applyThemes();
         }
-    }
 
 
-    function updateSelection(val) {
-        $.each(themeManager._selection, function (index, item) {
-            var command = CommandManager.get("theme." + item);
+        /**
+        *  Register and handle multiselect
+        */
+        function register() {
+            // Create the command id used by the menu
+            var COMMAND_ID = "theme.MixedMode";
+
+            // Register menu event...
+            CommandManager.register("Mixed Mode", COMMAND_ID, function () {
+                var multiselect = !this.getChecked();
+
+                // Handle going from multi select to single select.  Special handling
+                // is required because we need to only keep one suitable theme and then
+                // re-apply it to undo all the other themes
+                if (!multiselect) {
+                    _updateSelectionChecks(false);
+
+                    // If we are going from multiselect to single select, then we
+                    // need to unselect everything and keep only one.  I am thinking
+                    // that keeping your first selection is as good as any.
+                    if (themeManager._selection.length !== 0) {
+                        themeManager._selection = [themeManager._selection[0]];
+                        var command = CommandManager.get("theme." + themeManager._selection[0]);
+                        if (command) {
+                            command.setChecked(true);
+                        }
+
+                        themeManager.applyThemes();
+                    }
+                }
+
+                this.setChecked(multiselect);
+                preferences.setValue("multiselect", multiselect);
+                themeManager._multiselect = multiselect;
+            });
+
+            // Add theme menu item
+            menu.addMenuItem(COMMAND_ID);
+
+            var command = CommandManager.get(COMMAND_ID);
             if (command) {
-                command.setChecked(val);
+                command.setChecked(preferences.getValue("multiselect"));
             }
-        });
-    }
 
+            _updateSelectionChecks(true);
+        }
+
+        return {
+            register: register,
+            updateSelection: updateSelection,
+            addDivider: function () {
+                menu.addMenuDivider();
+            },
+            addItem: function (commandId) {
+                menu.addMenuItem(commandId);
+            }
+        };
+
+    })();
 
 
     /**
@@ -328,10 +346,10 @@ define(function (require, exports, module) {
         $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise(),
 
         // Load up all the theme files from custom themes directory
-        themeManager.loadFiles(require.toUrl('./theme/')).done(themeManager.addThemes),
+        themeManager.loadFiles(require.toUrl('./theme/')).done(themeManager.loadThemes),
 
         // Load up all the theme files from codemirror themes directory
-        themeManager.loadFiles(themeManager._cm_path + '/theme').done(themeManager.addThemes)
+        themeManager.loadFiles(themeManager._cm_path + '/theme').done(themeManager.loadThemes)
     ];
 
 
@@ -349,9 +367,7 @@ define(function (require, exports, module) {
         // Once the app is fully loaded, we will proceed to check the theme that
         // was last set
         AppInit.appReady(function () {
-            registerMultiselect();
-            updateSelection(true);
-
+            menuHandler.register();
             themeManager.applyThemes();
             $(EditorManager).on("activeEditorChange", themeManager.applyThemes);
         });
