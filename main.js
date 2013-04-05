@@ -165,6 +165,10 @@ define(function (require, exports, module) {
         // Css is set to false so that when we reload brackets, we can reload
         // the css file for the theme.
         preferences.setValue("theme", themeManager._selection);
+
+        setTimeout(function(){
+          cm.refresh();
+        }, 100);
     };
 
 
