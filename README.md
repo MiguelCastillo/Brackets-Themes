@@ -10,7 +10,6 @@ Features
 - Dynamic loading of codemirror's css theme files from the theme directory.
 - Dynamic loading of custom themes.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
 - Custom themes are 100% codemirror standard.
-- Give the editor document some nice webkit scrollbars
 
 Custom themes 101 guide
 ===============
@@ -35,7 +34,7 @@ If you have a cool theme you created and want to share, please send it my way an
 How to
 ===============
 
-* Install, please download the zip file and place it under the user directory.  Brackets makes this really simple by going to Help > Show Extensions Folder.  Drop in the uncompressed zip file, restart brackets and you should see Editor Theme in the main menu.
+* Install... Open Brackets then copy and paste https://github.com/MiguelCastillo/Brackets-Themes into File->Install Extension.  You don't need to restart Brackets.
 
 
 Links
