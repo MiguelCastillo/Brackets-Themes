@@ -1,11 +1,12 @@
 .cm-s-visual-studio.CodeMirror
 {
-	background-color: #fefefe;
-	color:black;
+    background-color: #fefefe;
+    color:black;
 }
 
 .cm-s-visual-studio.CodeMirror .CodeMirror-lines pre
 {
+    z-index: 3;
 }
 
 .cm-s-visual-studio.CodeMirror .CodeMirror-gutters
@@ -50,7 +51,7 @@
 
 .cm-s-visual-studio.CodeMirror .cm-matchhighlight
 {
-  	background-color: #F4F4F4;
+  	background-color: yellow;
 }
 
 .cm-s-visual-studio.CodeMirror .CodeMirror-selectedtext

@@ -32,7 +32,6 @@ define(function (require, exports, module) {
     var CommandManager      = brackets.getModule("command/CommandManager"),
         Menus               = brackets.getModule("command/Menus"),
         PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
-        DocumentManager     = brackets.getModule("document/DocumentManager"),
         EditorManager       = brackets.getModule("editor/EditorManager"),
         ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
         AppInit             = brackets.getModule("utils/AppInit"),
@@ -167,7 +166,7 @@ define(function (require, exports, module) {
         preferences.setValue("theme", themeManager._selection);
 
         setTimeout(function(){
-          cm.refresh();
+            cm.refresh();
         }, 100);
     };
 
@@ -339,14 +338,13 @@ define(function (require, exports, module) {
     })();
 
 
+
     /**
     *  This is where is all starts to load up...
     */
     var promises = [
         // Load up codemirror addon for active lines
-        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/active-line.js").promise(),
         $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/mark-selection.js").promise(),
-        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/edit/closebrackets.js").promise(),
         $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise(),
 
         // Load up all the theme files from custom themes directory
@@ -363,7 +361,6 @@ define(function (require, exports, module) {
     $.when.apply($, promises).done(function () {
 
         // Set some default value for codemirror...
-        CodeMirror.defaults.styleActiveLine = true;
         CodeMirror.defaults.highlightSelectionMatches = true;
         CodeMirror.defaults.styleSelectedText = true;
 
@@ -375,6 +372,11 @@ define(function (require, exports, module) {
             themeManager.applyThemes();
             $(EditorManager).on("activeEditorChange", themeManager.applyThemes);
         });
+    });
+
+
+    $('html').on('click', function(){
+        //console.log("close all");
     });
 
 });
