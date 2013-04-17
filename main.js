@@ -84,7 +84,7 @@ define(function (require, exports, module) {
     *  Then takes all first letters and capitalizes them.
     */
     theme.toDisplayName = function (name) {
-        name = name.substring(0, name.lastIndexOf('.')).replace('-', ' ');
+        name = name.substring(0, name.lastIndexOf('.')).replace(/-/g, ' ');
         var parts = name.split(" ");
 
         $.each(parts.slice(0), function (index, part) {
@@ -380,4 +380,3 @@ define(function (require, exports, module) {
     });
 
 });
-
