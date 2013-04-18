@@ -11,6 +11,15 @@ Features
 - Dynamic loading of custom themes.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
 - Custom themes are 100% codemirror standard.
 
+
+Screenshot
+===============
+<b>Visual Studio theme</b>
+![Visual Studio theme](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/VisualStudio.png)
+
+<b>Monokai Dark Soda custom theme by @simpleshadow.</b>
+![Monokai Dark Soda theme](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/MonokaiDarkSoda.png)
+
 Custom themes 101 guide
 ===============
 
