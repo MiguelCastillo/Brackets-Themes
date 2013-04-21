@@ -375,8 +375,20 @@ define(function (require, exports, module) {
     });
 
 
-    $('html').on('click', function(){
-        //console.log("close all");
+    //
+    // Hack to handle closing all menus when the mouse is down.
+    // Two issues seem to be around.
+    // 1. When having any theme that does not have cm-s-default click events do not
+    //    propagate, which is why I am doing mousedown instead
+    // 2. Brackets does not have a global click/mousedown listener that will close
+    //    all open menu when any mouse actions occur.
+    //
+    // So, in the absence of a more clear answer as to why clicks don't get propagated
+    // and why brackets does not have a global click/mousedown handler to close all
+    // menu, I am putting this little hack in place...
+    //
+    $('html').on('mousedown', function(event){
+        Menus.closeAll();
     });
 
 });
