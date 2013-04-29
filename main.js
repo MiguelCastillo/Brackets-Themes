@@ -146,6 +146,8 @@ define(function (require, exports, module) {
             return;
         }
 
+        var styleDeferred = [];
+
         // Setup current and further documents to get the new theme...
         CodeMirror.defaults.theme = themesString;
         cm.setOption("theme", themesString);
@@ -156,18 +158,21 @@ define(function (require, exports, module) {
             var _theme = themeManager._items[item];
 
             if (!_theme.css) {
-                _theme.css = ExtensionUtils.addLinkedStyleSheet(_theme.path + "/" + _theme.fileName);
+                var deferred = $.Deferred();
+                _theme.css = ExtensionUtils.addLinkedStyleSheet(_theme.path + "/" + _theme.fileName, deferred);
+                styleDeferred.push(deferred);
             }
         });
 
-        // Make sure we update the preferences when a new theme is selected.
-        // Css is set to false so that when we reload brackets, we can reload
-        // the css file for the theme.
-        preferences.setValue("theme", themeManager._selection);
-
-        setTimeout(function(){
-            cm.refresh();
-        }, 100);
+        $.when.apply($, styleDeferred).always(function() {
+            // Make sure we update the preferences when a new theme is selected.
+            // Css is set to false so that when we reload brackets, we can reload
+            // the css file for the theme.
+            setTimeout(function() {
+                preferences.setValue("theme", themeManager._selection);
+                cm.refresh();
+            }, 1);
+        });
     };
 
 
