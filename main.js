@@ -134,18 +134,25 @@ define(function (require, exports, module) {
     */
     themeManager.applyThemes = function () {
         var editor = EditorManager.getActiveEditor();
+        
         if (!editor || !editor._codeMirror) {
             return;
         }
-
+        
         var cm = editor._codeMirror;
         var themesString = themeManager._selection.join(" ");
-
+        
         // Check if the editor already has the theme applied...
         if (cm.getOption("theme") === themesString) {
+            var mainEditor = EditorManager.getCurrentFullEditor();
+            if (editor !== mainEditor) {
+                setTimeout(function(){
+                    EditorManager.resizeEditor(EditorManager.REFRESH_FORCE);
+                }, 100);
+            }
             return;
         }
-
+        
         // Setup current and further documents to get the new theme...
         CodeMirror.defaults.theme = themesString;
         cm.setOption("theme", themesString);
