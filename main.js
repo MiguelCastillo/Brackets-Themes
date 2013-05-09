@@ -205,24 +205,23 @@ define(function (require, exports, module) {
     themeManager.loadFiles = function (path) {
         var result = $.Deferred();
 
-        function handleError() {
-            result.reject();
+        function handleError(error) {
+            result.reject(error);
         }
-
 
         // Load up the content of the directory
         function loadDirectoryContent(fs) {
             fs.root.createReader().readEntries(function success(entries) {
-                var i, themes = [];
+                var i, files = [];
 
                 for (i = 0; i < entries.length; i++) {
                     if (entries[i].isFile) {
-                        themes.push(entries[i].name);
+                        files.push(entries[i].name);
                     }
                 }
 
                 result.resolve({
-                    files: themes,
+                    files: files,
                     path: path
                 });
             }, handleError);
