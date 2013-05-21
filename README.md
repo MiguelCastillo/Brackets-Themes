@@ -44,6 +44,8 @@ How to
 ===============
 
 * Install... Open Brackets then copy and paste https://github.com/MiguelCastillo/Brackets-Themes into File->Install Extension.  You don't need to restart Brackets.
+* Set a theme?  Find the Themes menu and make a selection.
+![Themes Menu](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/SetTheme.png)
 
 
 Links
