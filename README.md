@@ -1,7 +1,7 @@
 Brackets-Themes
 ===============
 
-Easy and accessible way of loading codemirror themes into brackets.
+Apply CodeMirror themes to Brackets' file editor via the Themes menu.
 
 
 Features
