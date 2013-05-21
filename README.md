@@ -7,9 +7,8 @@ Easy and accessible way of loading codemirror themes into brackets.
 Features
 ===============
 
-- Dynamic loading of codemirror's css theme files from the theme directory.
-- Dynamic loading of custom themes.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
-- Custom themes are 100% codemirror standard.
+* Automatic loading of CodeMirror's themes as shipped with Brackets.
+* Automatic loading of custom themes.  For custom themes 101 primer, please ready bolow.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
 
 
 Screenshot
@@ -38,6 +37,13 @@ To get you started, you could use the already existing custom theme "default.css
 For details on what can be customized, please navigate to http://codemirror.net/doc/manual.html and search for "Customized Styling".  As you will notice, the documentation isn't exhautive but they suggest you use "codemirror.css" as a reference.  Give it a try, it is pretty straight forward.
 <br><br>
 If you have a cool theme you created and want to share, please send it my way and I will gladly add it to the custom themes.
+
+
+FAQ
+===============
+
+* Why is only the editor getting themes?
+  - Themes are CodeMirror themes, which is only the editor part. So anything else like menus and tree will not get themed.  This extension only facilitates the integration with CodeMirror theming capabilities.
 
 
 How to
