@@ -63,7 +63,7 @@ Brackets github? Right here... https://github.com/adobe/brackets
 Contact me
 ===============
 
-If you have any issues or want to just drop in a line, you can use miguel.castillo@borland.com or my personal email at manchagnu@gmail.com
+If you have any issues or want to just drop in a line, you can use my personal email at manchagnu@gmail.com
 
 License
 ===============
