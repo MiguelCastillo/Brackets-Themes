@@ -43,7 +43,7 @@ FAQ
 ===============
 
 * Why is only the editor getting themes?
-  - Themes that are currently provided are from CodeMirror.  It is possible to theme Brackets beyond the editor, but it requires CSS to customize it.  You can take a look at themes/visual-studio-ex.css to see how https://github.com/Jacse/themes-for-brackets has accomplished this.
+  - Themes that are currently provided are from CodeMirror.  It is possible to theme Brackets beyond the editor, but it requires CSS to customize it.  You can take a look at theme/visual-studio-ex.css to see how @jacse has accomplished this.
 
 
 How to
