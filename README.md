@@ -43,7 +43,7 @@ FAQ
 ===============
 
 * Why is only the editor getting themes?
-  - Themes are CodeMirror themes, which is only the editor part. So anything else like menus and tree will not get themed.  This extension only facilitates the integration with CodeMirror theming capabilities.
+  - Themes that are currently provided are from CodeMirror.  It is possible to theme Brackets beyond the editor, but it requires CSS to customize it.  You can take a look at themes/visual-studio-ex.css to see how https://github.com/Jacse/themes-for-brackets has accomplished this.
 
 
 How to
