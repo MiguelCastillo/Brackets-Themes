@@ -140,6 +140,7 @@ define(function (require, exports, module) {
 
         var cm = editor._codeMirror;
         var themesString = themeManager._selection.join(" ");
+        var _themes = {};
 
         // Check if the editor already has the theme applied...
         if (cm.getOption("theme") === themesString) {
@@ -162,6 +163,7 @@ define(function (require, exports, module) {
         // styling is properly applied to codemirror
         $.each(themeManager._selection.slice(0), function (index, item) {
             var _theme = themeManager._items[item];
+            _themes[item] = _theme;
 
             if (!_theme.css) {
                 var deferred = $.Deferred();
@@ -177,6 +179,7 @@ define(function (require, exports, module) {
             setTimeout(function() {
                 preferences.setValue("theme", themeManager._selection);
                 cm.refresh();
+                $(ExtensionUtils).trigger("Themes.themeChanged", [_themes]);                
             }, 1);
         });
     };
