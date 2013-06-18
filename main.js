@@ -139,11 +139,12 @@ define(function (require, exports, module) {
         }
 
         var cm = editor._codeMirror;
-        var themesString = themeManager._selection.join(" ");
+        var themesString = themeManager._selection.join(" "),
+            currentThemes = cm.getOption("theme");
         var _themes = {};
 
         // Check if the editor already has the theme applied...
-        if (cm.getOption("theme") === themesString) {
+        if (currentThemes === themesString) {
             var mainEditor = EditorManager.getCurrentFullEditor();
             if (editor !== mainEditor) {
                 setTimeout(function(){
@@ -177,9 +178,10 @@ define(function (require, exports, module) {
             // Css is set to false so that when we reload brackets, we can reload
             // the css file for the theme.
             setTimeout(function() {
+                $('body').removeClass(currentThemes.replace(' ', ',')).addClass(themesString.replace(' ', ','));
                 preferences.setValue("theme", themeManager._selection);
                 cm.refresh();
-                $(ExtensionUtils).trigger("Themes.themeChanged", [_themes]);                
+                $(ExtensionUtils).trigger("Themes.themeChanged", [_themes]);
             }, 1);
         });
     };
