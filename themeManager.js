@@ -34,7 +34,6 @@ define(function (require, exports, module) {
         PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         EditorManager       = brackets.getModule("editor/EditorManager"),
         ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
-        FileUtils           = brackets.getModule("file/FileUtils"),
         NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
 
     var Theme = require("theme");
@@ -162,9 +161,9 @@ define(function (require, exports, module) {
 
             // Register menu event...
             CommandManager.register(_theme.displayName, COMMAND_ID, function () {
+                syncSelection(false);
                 themeManager._selected = [_theme.name];
                 themeManager.applyThemes();
-                syncSelection(false);
                 this.setChecked(true);
             });
 
