@@ -23,9 +23,6 @@
  */
 
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, brackets, window, CodeMirror */
-
 define(function (require, exports, module) {
     "use strict";
 
@@ -47,9 +44,50 @@ define(function (require, exports, module) {
         _selected: preferences.getValue("theme") || ["default"],
 
         // Hash for themes loaded and ready to be used.
-        _themes: {}
+        _themes: {},
+        _timers: preferences.getValue("timers") || [],
+        _timersEnabled: true
     };
 
+
+    //
+    // Schedule themes to be scheduled for automatic change
+    //
+    themeManager.scheduler = {
+        add: function( themes, hr, min ) {
+            var when = "Thu, 01 Jan 1970 " + hr + ":" + min;
+
+            if ( typeof themes === "string" ) {
+                themes = [themes];
+            }
+
+            // Handle scheduling with Date object formatting so that I can
+            // later add more advanced scheduling requirements other than
+            // only time based.
+            themeManager._timers.push({
+                when: when,
+                themes: themes
+            });
+
+            preferences.setValue("timers", themeManager._timers);
+        },
+        remove: function ( item ) {
+            var indexOf = themeManager._timers.indexOf(item);
+            if ( indexOf !== -1 ) {
+                themeManager._timers.splice(indexOf, 1);
+            }
+        },
+        clear: function() {
+            return themeManager._timers.splice(0, themeManager._timers.length);
+        },
+        init: function() {
+            if ( themeManager._timersEnabled ) {
+                $.each(themeManager._timers, function(index, timer) {
+                    schedule(timer);
+                });
+            }
+        }
+    };
 
 
     /**
@@ -75,6 +113,9 @@ define(function (require, exports, module) {
             }
             return;
         }
+
+
+        console.log("reset theme");
 
         var themes = {}, styleDeferred = [];
 
@@ -164,7 +205,6 @@ define(function (require, exports, module) {
                 syncSelection(false);
                 themeManager._selected = [_theme.name];
                 themeManager.applyThemes();
-                this.setChecked(true);
             });
 
             // Add theme menu item
@@ -187,6 +227,61 @@ define(function (require, exports, module) {
     }
 
 
+    //
+    // 1. Figure out time in milliseconds to execute the event the first time...
+    // 2. Execute every 24 hrs after that.
+    //
+    function schedule (theme) {
+        var currentDate = new Date();
+        var themeDate  = new Date(theme.when);
+
+        // Convert all to milliseconds to calculate when to start the cycle
+        var a = (themeDate.getHours() * 3600000)   + (themeDate.getMinutes() * 60000);
+        var b = (currentDate.getHours() * 3600000) + (currentDate.getMinutes() * 60000);
+        var c = a - b;
+
+        // If the selected hour has already gone by today, then
+        // push it til tomorrow.
+        if ( c < 0 ) {
+            c += 24 * 3600000;
+        }
+
+        // Leave this in for now... Good for debugging.
+        //console.log( a, b, c, new Date(c + currentDate.getTime()) );
+
+        function applyTheme() {
+            syncSelection(false);
+            themeManager._selected = theme.themes;
+            themeManager.applyThemes();
+        }
+
+        if ( theme.clearTimer ) {
+            theme.clearTimer();
+        }
+
+        var timerId = setTimeout(function() {
+            applyTheme();
+
+            // Clean up timer id...
+            theme.clearTimer();
+
+            // Set up reocurring scheduled events
+            timerId = setInterval( applyTheme, 24 * 3600000 );
+            theme.clearTimer = function() {
+                clearInterval(timerId);
+                timerId = 0;
+            };
+        }, c);
+
+        //
+        theme.clearTimer = function() {
+            clearTimeout(timerId);
+            timerId = 0;
+        };
+    }
+
+
+    themeManager.scheduler.init();
     return themeManager;
 
 });
