@@ -38,8 +38,8 @@ define(function (require, exports, module) {
     var PREFERENCES_KEY = "extensions.brackets-editorthemes";
     var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
     var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
-
-
+    
+    
     var themeManager = {
         _selected: preferences.getValue("theme") || ["default"],
 
@@ -48,7 +48,20 @@ define(function (require, exports, module) {
         _timers: preferences.getValue("timers") || [],
         _timersEnabled: true
     };
+       
+    //
+    // Launch panel for setting themes to luanch at certain times
+    //
+    function launchUI() {
+        console.log("hello");
+    }
 
+    //
+    // Bind UI launch to theme menu
+    //
+    var LAUNCH_UI = "brackets-themes.launchUI";
+    CommandManager.register("Settings", LAUNCH_UI, launchUI);
+    menu.addMenuItem(LAUNCH_UI);
 
     //
     // Schedule themes to be scheduled for automatic change
