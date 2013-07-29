@@ -31,6 +31,7 @@ define(function (require, exports, module) {
         PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         EditorManager       = brackets.getModule("editor/EditorManager"),
         ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
+        Dialogs             = brackets.getModule("widgets/Dialogs"),
         NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
 
     var Theme = require("theme");
@@ -38,6 +39,9 @@ define(function (require, exports, module) {
     var PREFERENCES_KEY = "extensions.brackets-editorthemes";
     var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
     var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
+    
+    // Load Dialog
+    var dialogHTML  = require("text!htmlContent/settings.html");
     
     
     var themeManager = {
@@ -53,7 +57,8 @@ define(function (require, exports, module) {
     // Launch panel for setting themes to luanch at certain times
     //
     function launchUI() {
-        console.log("hello");
+        //todo  - add cancel if opened
+        Dialogs.showModalDialogUsingTemplate(dialogHTML);
     }
 
     //
