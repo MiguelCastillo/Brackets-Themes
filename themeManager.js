@@ -57,7 +57,7 @@ define(function (require, exports, module) {
     // Launch panel for setting themes to luanch at certain times
     //
     function launchUI() {
-        //todo  - add cancel if opened
+        //todo  - add cancel if already opened
         Dialogs.showModalDialogUsingTemplate(dialogHTML);
     }
 
