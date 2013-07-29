@@ -54,19 +54,75 @@ define(function (require, exports, module) {
     };
        
     //
+    // Dialog Helper Functions
+    //
+
+    function remove_setting(target) {
+        $(target).parent().remove();
+    }
+       
+    function add_setting() {
+        var new_setting = $('#settings_template').clone();
+        new_setting.id="theme_setting";
+        new_setting.css('display','');
+        new_setting.find("#remove_button").click(function(e) {remove_setting(e.target);});
+        $("#current_settings").append(new_setting);
+    }
+       
+    //
     // Launch panel for setting themes to luanch at certain times
     //
     function launchUI() {
         //todo  - add cancel if already opened
         Dialogs.showModalDialogUsingTemplate(dialogHTML);
+        
+        //add click action
+        console.log("binding adding a setting");
+        $("#add_button").click(add_setting);
+        
+        //for each timer
+        console.log("on launch timers:",themeManager._timers);
+        
+        //add to settings dialog
+        themeManager._timers.map(function(timer) {
+            var timerSetting = $('#settings_template').clone();
+            timerSetting.id="#theme_setting";
+            timerSetting.find('#hour').val(timer.hour);
+            timerSetting.find('#minute').val(timer.minute);
+            timerSetting.find('#themes').val(timer.themes.join(" "));
+            timerSetting.css('display','');
+            $("#current_settings").append(timerSetting);
+        });
+        //on dialog close
+        $("#ok_button").click(function() {
+            //reset scheduler
+            themeManager.scheduler.clear();
+            //for each dialog setting
+            var settings = $('#current_settings').children();
+            for(var i=0; i<settings.length; i+=1) {
+                //add to scheduler
+                var setting = $(settings[i]);
+                var hr = setting.find('#hour').val();
+                var min = setting.find('#minute').val();
+                var themes = setting.find('#themes').val().split(" ");
+                themeManager.scheduler.add(themes, hr, min);
+            };
+            console.log("on close timers:",themeManager._timers);
+            $.each(themeManager._timers, function(index, timer) {
+                schedule(timer);
+            });
+        });
     }
 
+                                                
+    
     //
     // Bind UI launch to theme menu
     //
     var LAUNCH_UI = "brackets-themes.launchUI";
     CommandManager.register("Settings", LAUNCH_UI, launchUI);
     menu.addMenuItem(LAUNCH_UI);
+    menu.addMenuDivider();
 
     //
     // Schedule themes to be scheduled for automatic change
@@ -84,6 +140,8 @@ define(function (require, exports, module) {
             // only time based.
             themeManager._timers.push({
                 when: when,
+                hour: hr,
+                minute: min,
                 themes: themes
             });
 

@@ -1,11 +1,3 @@
-<script>
-    function add_setting() {
-        $("#current_settings").append('<div><span style="padding:20px"><input type=text id="time" value="2:45AM"></span><span style="padding:20px"><input type=text id="theme" value="Default"></span><a onclick="remove_setting(this)">- Remove</a></div>');
-    }
-    function remove_setting(target) {
-        $(target).parent().remove();
-    }
-</script>
 <div class="brackets-themes-settings-dialog modal">
     <div class="modal-header">
         <h1 class="dialog-title">Theme Settings</h1>
@@ -14,9 +6,19 @@
         Add times for themes to launch below. The themes extension will switch to the theme at the provided time.
         <div id="current_settings">
         </div>
-        <a onclick="add_setting()">+ Add Setting</a>
+        <a id="add_button">+ Add Setting</a>
     </div>
     <div class="modal-footer">
-        <a href="#" class="dialog-button btn primary" data-button-id="ok">Ok</a>
+        <a class="dialog-button btn primary" data-button-id="ok" id="ok_button">Ok</a>
     </div>
+    <div id="settings_template" style="display:none">
+    <span style="padding:20px">
+        <input type=number id="hour" min=0 max=23 value="22" style="width:35px">:
+        <input type=number id="minute" min=0 max=59 value="00" style="width:35px">(24hr)
+    </span>
+    <span style="padding:20px">
+        <input type=text id="themes" value="default">
+    </span>
+    <a id="remove_button">- Remove</a>
+</div>
 </div>
