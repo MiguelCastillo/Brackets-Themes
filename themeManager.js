@@ -67,6 +67,10 @@ define(function (require, exports, module) {
         new_setting.css('display','');
         new_setting.find("#remove_button").click(function(e) {remove_setting(e.target);});
         $("#current_settings").append(new_setting);
+        var options = new_setting.find("#themes");
+        $.each(themeManager._themes, function() {
+            options.append($("<option />").val(this.name).text(this.displayName));
+        });
     }
        
     //
@@ -77,21 +81,28 @@ define(function (require, exports, module) {
         Dialogs.showModalDialogUsingTemplate(dialogHTML);
         
         //add click action
-        console.log("binding adding a setting");
         $("#add_button").click(add_setting);
         
         //for each timer
-        console.log("on launch timers:",themeManager._timers);
-        
+        if(themeManager._timersEnabled) {
+            $('#enabled').prop('checked',true);
+        } else {
+            $('#disabled').prop('checked',true);
+        }
         //add to settings dialog
         themeManager._timers.map(function(timer) {
             var timerSetting = $('#settings_template').clone();
             timerSetting.id="#theme_setting";
+            var options = timerSetting.find("#themes");
+            $.each(themeManager._themes, function() {
+                options.append($("<option />").val(this.name).text(this.displayName));
+            });
             timerSetting.find('#hour').val(timer.hour);
             timerSetting.find('#minute').val(timer.minute);
             timerSetting.find('#themes').val(timer.themes.join(" "));
             timerSetting.css('display','');
             $("#current_settings").append(timerSetting);
+            
         });
         //on dialog close
         $("#ok_button").click(function() {
@@ -107,9 +118,11 @@ define(function (require, exports, module) {
                 var themes = setting.find('#themes').val().split(" ");
                 themeManager.scheduler.add(themes, hr, min);
             };
-            console.log("on close timers:",themeManager._timers);
+            themeManager._timersEnabled  = $('#enabled').prop('checked');
             $.each(themeManager._timers, function(index, timer) {
-                schedule(timer);
+                if(themeManager._timersEnabled) {
+                    schedule(timer);
+                }
             });
         });
     }
@@ -191,7 +204,7 @@ define(function (require, exports, module) {
         }
 
 
-        console.log("reset theme");
+        //console.log("reset theme");
 
         var themes = {}, styleDeferred = [];
 
