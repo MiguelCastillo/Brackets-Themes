@@ -4,8 +4,12 @@
     "description": "CodeMirror and custom themes in Brackets",
     "version": "0.1.1",
     "author": "Miguel Castillo <mahchagnu@gmail.com>",
+    "homepage": "https://github.com/MiguelCastillo/Brackets-Themes",
     "repository": {
         "type": "git",
         "url": "git://github.com/MiguelCastillo/Brackets-Themes.git"
-    }
+    },
+    "engines": {
+		"brackets": ">=0.22.0"
+	}
 }
