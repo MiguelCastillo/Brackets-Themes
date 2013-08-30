@@ -2,7 +2,7 @@
     "title": "Themes",
     "name": "themes",
     "description": "CodeMirror and custom themes in Brackets",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "author": "Miguel Castillo <mahchagnu@gmail.com>",
     "homepage": "https://github.com/MiguelCastillo/Brackets-Themes",
     "repository": {
