@@ -53,8 +53,8 @@
 
 .cm-s-obsidian.CodeMirror .cm-matchhighlight:not(.CodeMirror-selectedtext)
 {
-  	background-color: #0CF;
-    color: #232323;
+  	background-color: #616161;
+    color: white;
 }
 
 .cm-s-obsidian.CodeMirror .CodeMirror-selectedtext
