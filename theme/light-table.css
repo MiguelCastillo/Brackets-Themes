@@ -57,8 +57,9 @@
 	color: #99997a;
 	padding-left: 15px;
 }
-.cm-s-light-table.CodeMirror .CodeMirror-activeline{
-	background: rgba(255,255,255,.08);
+.cm-s-light-table.CodeMirror .CodeMirror-activeline,
+.cm-s-light-table.CodeMirror.CodeMirror-focused .CodeMirror-activeline .CodeMirror-gutter-elt{
+	background: rgba(255,255,255,.1);
 }
 .cm-s-light-table.CodeMirror pre{
 	/*padding between line number & content*/
@@ -69,7 +70,7 @@
 	border-left: 1px solid #ffffff;
 }
 .cm-s-light-table.CodeMirror .CodeMirror-selected {
-	background: #555555;
+	background: rgba(255,255,255,.2);
 }
 
 .cm-s-light-table.CodeMirror .CodeMirror-matchingbracket {
