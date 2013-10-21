@@ -64,21 +64,21 @@ define(function (require, exports, module) {
 
         var cm            = editor._codeMirror,
             newThemes     = themeManager._selected.join(" "),
-            currentThemes = cm.getOption("theme");
-            mode          = cm && cm.getDoc().getMode().name;
-      
+            currentThemes = cm.getOption("theme"),
+            mode          = cm.getDoc().getMode().name;
+
         // CodeMirror treats json as javascript, so we gotta do
         // an extra check just to make we are not feeding json
         // into jshint/jslint.  Let's leave that to json linters
         if ( cm.getDoc().getMode().jsonMode ) {
-            mode = "json";   
+            mode = "json";
         }
 
         // Add the document mode the the body so that we can actually
         // style based on document type
         $("body").removeClass("doctype-" + themeManager._mode).addClass("doctype-" + mode);
         themeManager._mode = mode;
-      
+
         // Check if the editor already has the theme applied...
         if (currentThemes === newThemes) {
             var mainEditor = EditorManager.getCurrentFullEditor();
