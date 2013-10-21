@@ -64,14 +64,14 @@ define(function (require, exports, module) {
 
         var cm            = editor._codeMirror,
             newThemes     = themeManager._selected.join(" "),
-            currentThemes = cm.getOption("theme");
+            currentThemes = cm.getOption("theme"),
             mode          = cm && cm.getDoc().getMode().name;
       
         // CodeMirror treats json as javascript, so we gotta do
         // an extra check just to make we are not feeding json
         // into jshint/jslint.  Let's leave that to json linters
-        if ( cm.getDoc().getMode().jsonMode ) {
-            mode = "json";   
+        if (cm.getDoc().getMode().jsonMode) {
+            mode = "json";
         }
 
         // Add the document mode the the body so that we can actually
@@ -83,7 +83,7 @@ define(function (require, exports, module) {
         if (currentThemes === newThemes) {
             var mainEditor = EditorManager.getCurrentFullEditor();
             if (editor !== mainEditor) {
-                setTimeout(function(){
+                setTimeout(function () {
                     EditorManager.resizeEditor(EditorManager.REFRESH_FORCE);
                 }, 100);
             }
@@ -114,7 +114,7 @@ define(function (require, exports, module) {
         });
 
 
-        return $.when.apply($, styleDeferred).always(function() {
+        return $.when.apply($, styleDeferred).always(function () {
             // Make sure we update the preferences when a new theme is selected.
             preferences.setValue("theme", themeManager._selected);
 
