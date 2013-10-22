@@ -79,6 +79,9 @@ define(function (require, exports, module) {
         $("body").removeClass("doctype-" + themeManager._mode).addClass("doctype-" + mode);
         themeManager._mode = mode;
 
+        // Make sure the menu is up to date
+        syncSelection(true);
+
         // Check if the editor already has the theme applied...
         if (currentThemes === newThemes) {
             var mainEditor = EditorManager.getCurrentFullEditor();
@@ -95,10 +98,6 @@ define(function (require, exports, module) {
         // Setup current and further documents to get the new theme...
         CodeMirror.defaults.theme = newThemes;
         cm.setOption("theme", newThemes);
-
-        // Make sure the menu is up to date
-        syncSelection(true);
-
 
         // If the css has not yet been loaded, then we load it so that
         // styling is properly applied to codemirror
