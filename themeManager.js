@@ -31,6 +31,7 @@ define(function (require, exports, module) {
         PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         EditorManager       = brackets.getModule("editor/EditorManager"),
         ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
+        Dialogs             = brackets.getModule("widgets/Dialogs"),
         NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
 
     var Theme = require("theme");
@@ -38,8 +39,11 @@ define(function (require, exports, module) {
     var PREFERENCES_KEY = "extensions.brackets-editorthemes";
     var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
     var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
-
-
+    
+    // Load Dialog
+    var dialogHTML  = require("text!htmlContent/settings.html");
+    
+    
     var themeManager = {
         _selected: preferences.getValue("theme") || ["default"],
 
@@ -48,7 +52,90 @@ define(function (require, exports, module) {
         _timers: preferences.getValue("timers") || [],
         _timersEnabled: true
     };
+       
+    //
+    // Dialog Helper Functions
+    //
 
+    function remove_setting(target) {
+        $(target).parent().remove();
+    }
+       
+    function add_setting() {
+        var new_setting = $('#settings_template').clone();
+        new_setting.id="theme_setting";
+        new_setting.css('display','');
+        new_setting.find("#remove_button").click(function(e) {remove_setting(e.target);});
+        $("#current_settings").append(new_setting);
+        var options = new_setting.find("#themes");
+        $.each(themeManager._themes, function() {
+            options.append($("<option />").val(this.name).text(this.displayName));
+        });
+    }
+       
+    //
+    // Launch panel for setting themes to luanch at certain times
+    //
+    function launchUI() {
+        //todo  - add cancel if already opened
+        Dialogs.showModalDialogUsingTemplate(dialogHTML);
+        
+        //add click action
+        $("#add_button").click(add_setting);
+        
+        //for each timer
+        if(themeManager._timersEnabled) {
+            $('#enabled').prop('checked',true);
+        } else {
+            $('#disabled').prop('checked',true);
+        }
+        //add to settings dialog
+        themeManager._timers.map(function(timer) {
+            var timerSetting = $('#settings_template').clone();
+            timerSetting.id="#theme_setting";
+            var options = timerSetting.find("#themes");
+            $.each(themeManager._themes, function() {
+                options.append($("<option />").val(this.name).text(this.displayName));
+            });
+            timerSetting.find('#hour').val(timer.hour);
+            timerSetting.find('#minute').val(timer.minute);
+            timerSetting.find('#themes').val(timer.themes.join(" "));
+            timerSetting.css('display','');
+            $("#current_settings").append(timerSetting);
+            
+        });
+        //on dialog close
+        $("#ok_button").click(function() {
+            //reset scheduler
+            themeManager.scheduler.clear();
+            //for each dialog setting
+            var settings = $('#current_settings').children();
+            for(var i=0; i<settings.length; i+=1) {
+                //add to scheduler
+                var setting = $(settings[i]);
+                var hr = setting.find('#hour').val();
+                var min = setting.find('#minute').val();
+                var themes = setting.find('#themes').val().split(" ");
+                themeManager.scheduler.add(themes, hr, min);
+            };
+            themeManager._timersEnabled  = $('#enabled').prop('checked');
+            $.each(themeManager._timers, function(index, timer) {
+                if(themeManager._timersEnabled) {
+                    schedule(timer);
+                }
+            });
+        });
+    }
+
+                                                
+    
+    //
+    // Bind UI launch to theme menu
+    //
+    var LAUNCH_UI = "brackets-themes.launchUI";
+    CommandManager.register("Settings", LAUNCH_UI, launchUI);
+    menu.addMenuItem(LAUNCH_UI);
+    menu.addMenuDivider();
 
     //
     // Schedule themes to be scheduled for automatic change
@@ -66,6 +153,8 @@ define(function (require, exports, module) {
             // only time based.
             themeManager._timers.push({
                 when: when,
+                hour: hr,
+                minute: min,
                 themes: themes
             });
 
@@ -115,7 +204,7 @@ define(function (require, exports, module) {
         }
 
 
-        console.log("reset theme");
+        //console.log("reset theme");
 
         var themes = {}, styleDeferred = [];
 

@@ -1,0 +1,34 @@
+<div class="brackets-themes-settings-dialog modal">
+    <div class="modal-header">
+        <h1 class="dialog-title">Theme Settings</h1>
+    </div>
+    <div class="modal-body">
+        <h4>Time Based Themes</h4>
+        
+        <div id="#enable">
+            Select to Enable/Disable:<br/>
+            <input type="radio" name="enable" id="enabled" value="true" style="display:inline">
+            <label for="enabled" style="display:inline;padding: 2px 1em 0 0;">Enabled</label>
+            <input type="radio" name="enable" id="disabled" value="true" style="display:inline">
+            <label for="disabled" style="display:inline;padding: 2px 1em 0 0;">Disabled</label>
+            <br/>
+        </div>
+        <p>Add times for themes to launch below. The themes extension will switch to the theme at the provided time.</p>
+        <div id="current_settings">
+        </div>
+        <a id="add_button">+ Add Setting</a>
+    </div>
+    <div class="modal-footer">
+        <a class="dialog-button btn primary" data-button-id="ok" id="ok_button">Ok</a>
+    </div>
+    <div id="settings_template" style="display:none">
+    <span style="padding:20px">
+        <input type=number id="hour" min=0 max=23 value="22" style="width:35px">:
+        <input type=number id="minute" min=0 max=59 value="00" style="width:35px">(24hr)
+    </span>
+    <span style="padding:20px">
+        <select id="themes" value="default">
+    </span>
+    <a id="remove_button">- Remove</a>
+</div>
+</div>
