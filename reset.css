@@ -5,12 +5,12 @@
 */
 .CodeMirror-cursor
 {
-	z-index: 3;
+    z-index: 3;
 }
 
 .CodeMirror:not(.cm-s-default) .CodeMirror-scroll
 {
-  background-color: transparent;
+    background-color: transparent;
 }
 
 .CodeMirror:not(.cm-s-default) .CodeMirror-activeline-background,
@@ -22,6 +22,16 @@
 .CodeMirror:not(.cm-s-default) .CodeMirror-activeline-background
 {
     outline: 1px solid #dddddd;
+}
+
+.CodeMirror:not(.cm-s-default) .CodeMirror-linebackground
+{
+    z-index: 5;
+}
+
+.CodeMirror:not(.cm-s-default) .CodeMirror-matchingtag
+{
+    background: transparent;/*rgba(49, 49, 49, 0.9);*/
 }
 
 .CodeMirror:not(.cm-s-default) .CodeMirror-activeline .CodeMirror-gutter-elt
