@@ -38,3 +38,13 @@
 {
     z-index: 5;
 }
+
+
+/**
+* Overrides for CodeMirror themes.
+*/
+
+.CodeMirror.cm-s-the-matrix .CodeMirror-matchingtag
+{
+   background: rgba(0,255,0,0.3);
+}
