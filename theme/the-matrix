@@ -1,0 +1,40 @@
+/*
+* z-index override to make sure the cursor is visible when different addons,
+* such as matchbracket block the cursor's visiblity when settings a background
+* color as I do in the Visual Studio theme.
+*/
+.CodeMirror-cursor
+{
+    z-index: 3;
+}
+
+.CodeMirror:not(.cm-s-the-matrix) .CodeMirror-scroll
+{
+    background-color: transparent;
+}
+
+.CodeMirror:not(.cm-s-the-matrix) .CodeMirror-activeline-background,
+.CodeMirror:not(.cm-s-the-matrix) .CodeMirror-activeline .CodeMirror-gutter-elt
+{
+    background-color: transparent !important;
+}
+
+.CodeMirror:not(.cm-s-the-matrix) .CodeMirror-activeline-background
+{
+    outline: 1px solid #dddddd;
+}
+
+.CodeMirror:not(.cm-s-the-matrix) .CodeMirror-linebackground
+{
+    z-index: 5;
+}
+
+.CodeMirror.cm-s-the-matrix .CodeMirror-matchingtag
+{
+   background: rgba(0,255,0,0.3);
+}
+
+.CodeMirror:not(.cm-s-the-matrix) .CodeMirror-activeline .CodeMirror-gutter-elt
+{
+    z-index: 5;
+}
