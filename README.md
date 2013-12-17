@@ -8,7 +8,7 @@ Features
 ===============
 
 * Automatic loading of CodeMirror's themes as shipped with Brackets.
-* Automatic loading of custom themes.  For custom themes 101 primer, please ready bolow.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
+* Automatic loading of custom themes.  For custom themes 101 primer, please ready below.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
 
 
 Screenshot
