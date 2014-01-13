@@ -1,6 +1,6 @@
 .cm-s-monokai-dark-soda.CodeMirror {
-	background-color: #242424;
-	color: #fff;
+  background-color: #242424;
+  color: #fff;
 }
 
 .CodeMirror div.CodeMirror-cursor {
@@ -8,9 +8,9 @@
   z-index: 3;
 }
 
-.CodeMirror-selected { 
+.CodeMirror-selected {
     background: #3d3d3d;
-    opacity: .23; 
+    opacity: .23;
 }
 
 .cm-s-monokai-dark-soda .cm-keyword {color: #ff007f;}
@@ -30,7 +30,10 @@
 .cm-s-monokai-dark-soda .cm-tag {color: #ff007f;}
 .cm-s-monokai-dark-soda .cm-attribute {color: #a7ec21;}
 
-.cm-s-monokai-dark-soda .cm-matchhighlight {background-color: rgba(61,61,61.23);}
+.cm-s-monokai-dark-soda .cm-matchhighlight {
+  background-color: rgba(61,61,61,.23) !important;
+  color: white !important;
+}
 
 div.CodeMirror span.CodeMirror-matchingbracket {
     color: #a7ec21;
@@ -41,7 +44,7 @@ div.CodeMirror span.CodeMirror-matchingbracket {
 div.CodeMirror span.CodeMirror-searching {
   background-color: none;
   background: none;
-  box-shadow: 0 0 0 1px #fff;
+  outline: 1px solid #fff;
 }
 
 
