@@ -34,7 +34,8 @@ define(function (require, exports, module) {
         PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         EditorManager       = brackets.getModule("editor/EditorManager"),
         ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
-        NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem;
+        FileSystem          = brackets.getModule("filesystem/FileSystem");
+
 
     var Theme = require("theme");
 
@@ -130,30 +131,29 @@ define(function (require, exports, module) {
     themeManager.loadFiles = function (path) {
         var result = $.Deferred();
 
-        function handleError(error) {
-            result.reject(error);
+        function endsWith(_string, suffix) {
+            return _string.indexOf(suffix, _string.length - suffix.length) !== -1;
         }
 
-        // Load up the content of the directory
-        function loadDirectoryContent(fs) {
-            fs.root.createReader().readEntries(function success(entries) {
-                var i, files = [];
+        FileSystem.getDirectoryForPath(path).getContents(function(err, entries) {
+            if ( err ) {
+                result.reject(err);
+            }
 
-                for (i = 0; i < entries.length; i++) {
-                    if (entries[i].isFile) {
-                        files.push(entries[i].name);
-                    }
+            var i, files = [];
+
+            for (i = 0; i < entries.length; i++) {
+                if (entries[i].isFile && endsWith(entries[i].name, ".css")) {
+                    files.push(entries[i].name);
                 }
+            }
 
-                result.resolve({
-                    files: files,
-                    path: path
-                });
-            }, handleError);
-        }
+            result.resolve({
+                files: files,
+                path: path
+            });
+        });
 
-        // Get directory reader handle
-        NativeFileSystem.requestNativeFileSystem(path, loadDirectoryContent, handleError);
         return result.done(loadThemes).promise();
     };
 
