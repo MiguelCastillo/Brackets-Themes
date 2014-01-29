@@ -19,19 +19,19 @@
   background:#565A5D;
 }
 
-.zamiere .jstree-brackets li.jstree-closed > a, 
+.zamiere .jstree-brackets li.jstree-closed > a,
 .zamiere .jstree-brackets li.jstree-open > a {
   color:#ccc;
 }
 
 .zamiere #open-files-container .extension,
 .zamiere .jstree-brackets li .extension {
-  color:#aaa; 
+  color:#aaa;
 }
 
 .cm-s-zamiere.CodeMirror {
-	background-color:#202020;
-	color:#fff;
+  background-color:#202020;
+  color:#fff;
 }
 
 .cm-s-zamiere.CodeMirror div.CodeMirror-cursor {
@@ -41,7 +41,7 @@
 
 .cm-s-zamiere .CodeMirror-selected {
   background:#3d3d3d;
-  opacity:.5; 
+  opacity:.5;
 }
 
 .cm-s-zamiere .cm-keyword    {color:#FFCC33;}
@@ -61,30 +61,26 @@
 .cm-s-zamiere .cm-tag        {color:#FFCC33;}
 .cm-s-zamiere .cm-attribute  {color:#FFCC33;}
 
-.cm-s-zamiere .cm-matchhighlight {
-  background:#00CCFF;
-  box-shadow:0 0 5px #00CCFF;
-  color:#000;
-  border-radius:2px;
-}
-
 .cm-s-zamiere.CodeMirror span.CodeMirror-matchingbracket {
   color:#00CCFF;
   text-shadow:0 0 3px #00CCFF;
 }
 
-.cm-s-zamiere.CodeMirror span.cm-matchhighlight.CodeMirror-searching.CodeMirror-selectedtext {
-  background-color:#00CCFF;
-  color:#000;
-  border:0;
+.cm-s-zamiere .cm-matchhighlight {
   box-shadow:0 0 5px #00CCFF;
+  background-color: #00CCFF;
+  color: black;
   border-radius:2px;
 }
 
-.cm-s-zamiere.CodeMirror span.CodeMirror-searching {
-  background-color:#00CCFF;
-  box-shadow:0 0 5px #00CCFF;
+.cm-s-zamiere .CodeMirror-searching {
   color:#000;
+}
+
+.cm-s-zamiere .cm-matchhighlight:not(.CodeMirror-selectedtext) {
+  background-color: rgba(0, 204, 255, 0.4);
+  box-shadow:0 0 5px #00CCFF;
+  color:#ccc;
   border-radius:2px;
 }
 
@@ -94,7 +90,7 @@
 }
 
 .cm-s-zamiere div.CodeMirror-gutter {
-  color:#ccc; 
+  color:#ccc;
 }
 
 .cm-s-zamiere div.CodeMirror-gutters {

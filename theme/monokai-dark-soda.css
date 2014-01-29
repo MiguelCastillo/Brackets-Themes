@@ -30,24 +30,22 @@
 .cm-s-monokai-dark-soda .cm-tag {color: #ff007f;}
 .cm-s-monokai-dark-soda .cm-attribute {color: #a7ec21;}
 
+.cm-s-monokai-dark-soda .cm-matchhighlight:not(.CodeMirror-selectedtext) {
+    background-color: #616161;
+    color: white;
+}
+
 .cm-s-monokai-dark-soda .cm-matchhighlight {
   background-color: #00CCFF;
   color: #242424;
 }
 
-div.CodeMirror span.CodeMirror-matchingbracket {
+.CodeMirror .CodeMirror-matchingbracket {
     color: #a7ec21;
     font-weight: bold;
 }
 
-
-div.CodeMirror span.CodeMirror-searching {
-  outline: 1px solid #fff;
-  color: black;
-}
-
-
-div.CodeMirror span.cm-matchhighlight.CodeMirror-searching.CodeMirror-selectedtext {
-    background-color: #ffe69d;
-    color: #242424;
+.CodeMirror .CodeMirror-searching {
+  color: #242424;
+  background-color: #ffe69d !important;
 }
