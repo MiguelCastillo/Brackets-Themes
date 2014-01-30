@@ -129,18 +129,21 @@ define(function (require, exports, module) {
     *  Return all the files in the specified path
     */
     themeManager.loadFiles = function (path) {
+
+        console.log(path);
         var result = $.Deferred();
 
         function endsWith(_string, suffix) {
             return _string.indexOf(suffix, _string.length - suffix.length) !== -1;
         }
 
-        FileSystem.getDirectoryForPath(path).getContents(function(err, entries) {
-            if ( err ) {
+        function readContent(err, entries) {
+            if ( err && err !== "NotFound" ) {
                 result.reject(err);
             }
 
             var i, files = [];
+            entries = entries || [];
 
             for (i = 0; i < entries.length; i++) {
                 if (entries[i].isFile && endsWith(entries[i].name, ".css")) {
@@ -152,8 +155,9 @@ define(function (require, exports, module) {
                 files: files,
                 path: path
             });
-        });
+        }
 
+        FileSystem.getDirectoryForPath(path).getContents(readContent);
         return result.done(loadThemes).promise();
     };
 
