@@ -60,6 +60,7 @@ Kulcsár Kázmér: Zamiere<br>
 Diego Alvarez: Aquaman<br>
 Felipe K. de Mello: Dracula<br>
 Fernando Hurtado: Nando<br>
+Jordan Hess: Pixie<br>
 Christopher Kelly (scriptmunkee) for additions to reset.cs<br>
 
 
