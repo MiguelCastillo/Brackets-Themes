@@ -53,6 +53,16 @@ How to
 * Set a theme?  Find the Themes menu and make a selection.
 ![Themes Menu](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/SetTheme.png)
 
+Credit
+==============
+Corey Gwin: Monokai Dark Soda<br>
+Kulcsár Kázmér: Zamiere<br>
+Diego Alvarez: Aquaman<br>
+Felipe K. de Mello: Dracula<br>
+Fernando Hurtado: Nando<br>
+Christopher Kelly (scriptmunkee) for additions to reset.cs<br>
+
+
 
 Links
 ===============
