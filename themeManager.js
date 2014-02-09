@@ -1,151 +1,37 @@
-/*
+/**
  * Brackets Themse Copyright (c) 2014 Miguel Castillo.
  *
  * Licensed under MIT
  */
 
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, brackets, window, CodeMirror */
-
-define(function (require, exports, module) {
+define(function (require) {
     "use strict";
 
-    var CommandManager      = brackets.getModule("command/CommandManager"),
-        Menus               = brackets.getModule("command/Menus"),
-        PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
-        EditorManager       = brackets.getModule("editor/EditorManager"),
-        ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
-        FileSystem          = brackets.getModule("filesystem/FileSystem");
+    var CommandManager = brackets.getModule("command/CommandManager");
 
-
-    var Theme = require("theme");
-
-    var PREFERENCES_KEY = "extensions.brackets-editorthemes";
-    var preferences = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
-    var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
-
+    var preferences = require("preferences"),
+        Theme       = require("theme"),
+        themeFiles  = require("themeFiles"),
+        themeApply  = require("themeApply"),
+        menu        = require("menu");
 
     var themeManager = {
         _selected: preferences.getValue("theme") || ["default"],
         _mode: "",
-
-        // Hash for themes loaded and ready to be used.
         _themes: {}
     };
 
 
-
-    /**
-    *  Handles updating codemirror with the current selection of themes.
-    */
-    themeManager.applyThemes = function () {
-        var editor = EditorManager.getActiveEditor();
-        if (!editor || !editor._codeMirror) {
-            return;
-        }
-
-        var cm            = editor._codeMirror,
-            newThemes     = themeManager._selected.join(" "),
-            currentThemes = cm.getOption("theme"),
-            mode          = cm.getDoc().getMode().name;
-
-        // CodeMirror treats json as javascript, so we gotta do
-        // an extra check just to make we are not feeding json
-        // into jshint/jslint.  Let's leave that to json linters
-        if ( cm.getDoc().getMode().jsonMode ) {
-            mode = "json";
-        }
-
-        // Add the document mode the the body so that we can actually
-        // style based on document type
-        $("body").removeClass("doctype-" + themeManager._mode).addClass("doctype-" + mode);
-        themeManager._mode = mode;
-
-        // Make sure the menu is up to date
-        syncSelection(true);
-
-        // Check if the editor already has the theme applied...
-        if (currentThemes === newThemes) {
-            var mainEditor = EditorManager.getCurrentFullEditor();
-            if (editor !== mainEditor) {
-                setTimeout(function(){
-                    EditorManager.resizeEditor(EditorManager.REFRESH_FORCE);
-                }, 100);
-            }
-            return;
-        }
-
-        var themes = {}, styleDeferred = [];
-
-        // Setup current and further documents to get the new theme...
-        CodeMirror.defaults.theme = newThemes;
-        cm.setOption("theme", newThemes);
-
-        // If the css has not yet been loaded, then we load it so that
-        // styling is properly applied to codemirror
-        $.each(themeManager._selected.slice(0), function (index, item) {
-            var _theme = themeManager._themes[item];
-            themes[item] = _theme;
-
-            if (!_theme.css) {
-                var deferred = $.Deferred();
-                _theme.css = ExtensionUtils.addLinkedStyleSheet(_theme.path + "/" + _theme.fileName, deferred);
-                styleDeferred.push(deferred);
-            }
-        });
-
-
-        return $.when.apply($, styleDeferred).always(function() {
-            // Make sure we update the preferences when a new theme is selected.
-            preferences.setValue("theme", themeManager._selected);
-
-            $('body').removeClass(currentThemes.replace(' ', ',')).addClass(newThemes.replace(' ', ','));
-            cm.refresh();
-            $(ExtensionUtils).trigger("Themes.themeChanged", [themes]);
-        });
-    };
-
-
-    /**
-    *  Return all the files in the specified path
-    */
-    themeManager.loadFiles = function (path) {
-        var result = $.Deferred();
-
-        function endsWith(_string, suffix) {
-            return _string.indexOf(suffix, _string.length - suffix.length) !== -1;
-        }
-
-        function readContent(err, entries) {
-            if ( err && err !== "NotFound" ) {
-                result.reject(err);
-            }
-
-            var i, files = [];
-            entries = entries || [];
-
-            for (i = 0; i < entries.length; i++) {
-                if (entries[i].isFile && endsWith(entries[i].name, ".css")) {
-                    files.push(entries[i].name);
-                }
-            }
-
-            result.resolve({
-                files: files,
-                path: path
-            });
-        }
-
-        FileSystem.getDirectoryForPath(path).getContents(readContent);
-        return result.done(loadThemes).promise();
-    };
+    function applyThemes() {
+        themeApply(themeManager);
+    }
 
 
     /**
     *  Create theme objects and add them to the global themes container.
     */
-    function loadThemes(themes) {
+    function loadThemesMenu(themes, lastItem) {
         //
         // Iterate through each name in the themes and make them theme objects
         //
@@ -158,9 +44,12 @@ define(function (require, exports, module) {
 
             // Register menu event...
             CommandManager.register(_theme.displayName, COMMAND_ID, function () {
-                syncSelection(false);
+                syncSelection(false); // Clear selection
                 themeManager._selected = [_theme.name];
-                themeManager.applyThemes();
+                //syncSelection(true);  // Set selection
+
+                // Load the theme is needed
+                themeApply(themeManager);
                 this.setChecked(true);
             });
 
@@ -168,9 +57,22 @@ define(function (require, exports, module) {
             menu.addMenuItem(COMMAND_ID);
         });
 
-        if (themes.files.length !== 0) {
+        if (themes.files.length !== 0 && !lastItem) {
             menu.addMenuDivider();
         }
+    }
+
+
+    function loadPreferencesMenu() {
+        // Create the command id used by the menu
+        var COMMAND_ID = "theme.preferences";
+
+        // Register menu event...
+        CommandManager.register("Preferences", COMMAND_ID, preferences.open);
+
+        // Add theme menu item
+        menu.addMenuItem(COMMAND_ID);
+        menu.addMenuDivider();
     }
 
 
@@ -184,7 +86,22 @@ define(function (require, exports, module) {
     }
 
 
-    return themeManager;
+    themeFiles.ready(function() {
+        loadPreferencesMenu();
 
+        var i, length;
+        var args = Array.prototype.slice.call(arguments);
+        for ( i = 0, length = args.length; i < length; i++ ) {
+            loadThemesMenu(args[i], i + 1 === length);
+        }
+
+        // Let's just make sure we have the theme selected right from the get go.
+        syncSelection(true);
+        applyThemes();
+    });
+
+
+    themeManager.applyThemes = applyThemes;
+    return themeManager;
 });
 

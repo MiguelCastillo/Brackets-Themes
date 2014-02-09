@@ -16,14 +16,13 @@ define(function (require, exports, module) {
         AppInit             = brackets.getModule("utils/AppInit"),
         FileUtils           = brackets.getModule("file/FileUtils");
 
+    require("string");
+
 
     // Load up reset.css to override brackground settings from brackets because
     // they make the themes look really bad.
     ExtensionUtils.loadStyleSheet(module, "reset.css");
     var themeManager = require("themeManager");
-
-    // Root directory for CodeMirror themes
-    var cm_path = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2";
 
 
     /**
@@ -32,16 +31,7 @@ define(function (require, exports, module) {
     var promises = [
         // Load up codemirror addon for active lines
         $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/selection/mark-selection.js").promise(),
-        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise(),
-
-        // Load up all the theme files from custom themes directory
-        themeManager.loadFiles(require.toUrl("./") + "../../themes"),
-
-        // Load up all the theme files from custom themes directory
-        themeManager.loadFiles(require.toUrl("./theme/")),
-
-        // Load up all the theme files from codemirror themes directory
-        themeManager.loadFiles(cm_path + "/theme")
+        $.getScript(FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/search/match-highlighter.js").promise()
     ];
 
 
