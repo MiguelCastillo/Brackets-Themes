@@ -9,7 +9,7 @@ define(function(require) {
 
     var EditorManager  = brackets.getModule("editor/EditorManager"),
         ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
-        preferences    = require("preferences");
+        settings       = require("settings");
 
     /**
     *  Handles updating codemirror with the current selection of themes.
@@ -69,8 +69,8 @@ define(function(require) {
 
 
         return $.when.apply($, styleDeferred).always(function() {
-            // Make sure we update the preferences when a new theme is selected.
-            preferences.setValue("theme", themeManager._selected);
+            // Make sure we update the settings when a new theme is selected.
+            settings.setValue("theme", themeManager._selected);
 
             $("body").removeClass(currentThemes.replace(' ', ',')).addClass(newThemes.replace(' ', ','));
             cm.refresh();

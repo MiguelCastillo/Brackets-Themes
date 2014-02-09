@@ -70,12 +70,12 @@
     background: rgba(207, 234, 214, 0.3);
 }
 
-.CodeMirror.cm-s-visual-studio-ex .CodeMirror-matchingtag 
+.CodeMirror.cm-s-visual-studio-ex .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 1);
 }
 
-.CodeMirror.cm-s-visual-studio .CodeMirror-matchingtag 
+.CodeMirror.cm-s-visual-studio .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 1);
 }
@@ -95,7 +95,7 @@
     background: rgba(207, 234, 214, 0.3);
 }
 
-.CodeMirror.cm-s-ambiance .CodeMirror-matchingtag 
+.CodeMirror.cm-s-ambiance .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
@@ -110,7 +110,7 @@
     background: rgba(207, 234, 214, 0.7);
 }
 
-.CodeMirror.cm-s-blackboard .CodeMirror-matchingtag 
+.CodeMirror.cm-s-blackboard .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
@@ -130,7 +130,7 @@
     background: rgba(207, 234, 214, 1);
 }
 
-.CodeMirror.cm-s-erlang-dark .CodeMirror-matchingtag 
+.CodeMirror.cm-s-erlang-dark .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
@@ -150,17 +150,17 @@
     background: rgba(207, 234, 214, 0.1);
 }
 
-.CodeMirror.cm-s-monokai .CodeMirror-matchingtag 
+.CodeMirror.cm-s-monokai .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.1);
 }
 
-.CodeMirror.cm-s-neat .CodeMirror-matchingtag 
+.CodeMirror.cm-s-neat .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 1);
 }
 
-.CodeMirror.cm-s-night .CodeMirror-matchingtag 
+.CodeMirror.cm-s-night .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
@@ -170,47 +170,47 @@
     background: rgba(207, 234, 214, 0.3);
 }
 
-.CodeMirror.cm-s-paraiso-light .CodeMirror-matchingtag 
+.CodeMirror.cm-s-paraiso-light .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 1);
 }
 
-.CodeMirror.cm-s-rubyblue .CodeMirror-matchingtag 
+.CodeMirror.cm-s-rubyblue .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
 
-.CodeMirror.cm-s-solarized.CodeMirror-matchingtag 
+.CodeMirror.cm-s-solarized.CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 1);
 }
 
-.CodeMirror.cm-s-the-matrix .CodeMirror-matchingtag 
+.CodeMirror.cm-s-the-matrix .CodeMirror-matchingtag
 {
     background: rgba(0, 255, 0, 0.3);
 }
 
-.CodeMirror.cm-s-tomorrow-night-eighties .CodeMirror-matchingtag 
+.CodeMirror.cm-s-tomorrow-night-eighties .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
 
-.CodeMirror.cm-s-twilight .CodeMirror-matchingtag 
+.CodeMirror.cm-s-twilight .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
 
-.CodeMirror.cm-s-vibrant-ink .CodeMirror-matchingtag 
+.CodeMirror.cm-s-vibrant-ink .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.3);
 }
 
-.CodeMirror.cm-s-xq-dark .CodeMirror-matchingtag 
+.CodeMirror.cm-s-xq-dark .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 0.2);
 }
 
-.CodeMirror.cm-s-xq-light .CodeMirror-matchingtag 
+.CodeMirror.cm-s-xq-light .CodeMirror-matchingtag
 {
     background: rgba(207, 234, 214, 1);
 }

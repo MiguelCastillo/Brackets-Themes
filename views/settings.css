@@ -1,0 +1,9 @@
+.themeSettings .modal-body {
+    min-height: 300px;
+    max-height: 300px;
+    padding: 8px;
+}
+
+.themeSettings .row {
+    margin: 0px;
+}

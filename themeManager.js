@@ -10,14 +10,14 @@ define(function (require) {
 
     var CommandManager = brackets.getModule("command/CommandManager");
 
-    var preferences = require("preferences"),
+    var settings    = require("settings"),
         Theme       = require("theme"),
         themeFiles  = require("themeFiles"),
         themeApply  = require("themeApply"),
         menu        = require("menu");
 
     var themeManager = {
-        _selected: preferences.getValue("theme") || ["default"],
+        _selected: settings.getValue("theme") || ["default"],
         _mode: "",
         _themes: {}
     };
@@ -63,12 +63,12 @@ define(function (require) {
     }
 
 
-    function loadPreferencesMenu() {
+    function loadSettingsMenu() {
         // Create the command id used by the menu
-        var COMMAND_ID = "theme.preferences";
+        var COMMAND_ID = "theme.settings";
 
         // Register menu event...
-        CommandManager.register("Preferences", COMMAND_ID, preferences.open);
+        CommandManager.register("Settings", COMMAND_ID, settings.open);
 
         // Add theme menu item
         menu.addMenuItem(COMMAND_ID);
@@ -87,7 +87,7 @@ define(function (require) {
 
 
     themeFiles.ready(function() {
-        loadPreferencesMenu();
+        loadSettingsMenu();
 
         var i, length;
         var args = Array.prototype.slice.call(arguments);
