@@ -9,6 +9,8 @@ define(function(require, exports, module) {
 
     var _ = brackets.getModule("thirdparty/lodash");
     var Dialog = brackets.getModule("widgets/Dialogs"),
+        FileSystem = brackets.getModule("filesystem/FileSystem"),
+        Strings = brackets.getModule("strings"),
         ko = require("lib/knockout-3.0.0"),
         koFactory = require("lib/ko.factory"),
         tmpl = {
@@ -28,19 +30,53 @@ define(function(require, exports, module) {
     $("#scheduleSettings", $settings).html(tmpl.schedule);
 
 
+    function openFolder(path) {
+        var result = $.Deferred();
+
+        FileSystem.showOpenDialog(false, true, Strings.CHOOSE_FOLDER, path, null, function (err, files) {
+            if (!err) {
+                // If length == 0, user canceled the dialog; length should never be > 1
+                if (files.length > 0) {
+                    result.resolve(files[0]);
+                }
+                else {
+                    result.reject("User canceled");
+                }
+            } else {
+                Dialogs.showModalDialog(
+                    DefaultDialogs.DIALOG_ID_ERROR,
+                    "Error opening directory " + path,
+                    StringUtils.format(Strings.OPEN_DIALOG_ERROR, err)
+                );
+                result.reject("Error opening directory " + path);
+            }
+        });
+
+        return result.promise();
+    }
+
+
+
     function getViewModel(settings) {
-        var viewModel = koFactory($.extend(true, {}, settings._json));
+        var viewModel = koFactory($.extend(true, {}, settings));
 
         viewModel.addPath = function() {
-            //viewModel.paths.remove(this);
+            var _self = this;
+            openFolder("").done(function(newpath) {
+                _self.paths.push(koFactory({path: newpath}));
+            });
         };
 
         viewModel.editPath = function() {
-            console.log(this);
+            var _self = this;
+            openFolder(this.path()).done(function(newpath) {
+                _self.path(newpath);
+            });
         };
 
         viewModel.removePath = function() {
-            viewModel.paths.remove(this);
+            // Need to add a way to add a path before allowing to remove one :)
+            //viewModel.paths.remove(this);
         };
 
         return viewModel;
@@ -48,23 +84,26 @@ define(function(require, exports, module) {
 
 
     function open(settings) {
-        var viewModel = getViewModel(settings);
+        var viewModel = getViewModel(settings._json);
         var $template = $settings.clone();
-
-        // Do knockout binding
+        $template.data("settings", settings).find("[data-toggle=tab].default").tab("show");
         koFactory.bind(viewModel, $template);
-        Dialog.showModalDialogUsingTemplate($template);
-        $("[data-toggle=tab].default", $template).tab("show");
-    }
 
-
-    function close() {
+        Dialog.showModalDialogUsingTemplate($template).done(function( id ) {
+            if ( id === "save" ) {
+                var newSettings = koFactory.deserialize(viewModel);
+                for( var i in newSettings ) {
+                    if ( settings._json.hasOwnProperty(i) ) {
+                        settings.setValue( i, newSettings[i] );
+                    }
+                }
+            }
+        });
     }
 
 
     return {
-      open: open,
-      close: close
+      open: open
     };
 });
 
