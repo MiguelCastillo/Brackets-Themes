@@ -20,9 +20,9 @@ define(function(require) {
     // Default paths
     if ( !paths ) {
         paths = [
-            require.toUrl("./") + "../../themes",
-            require.toUrl("./theme/"),
-            cm_path + "/theme"
+            {path:require.toUrl("./") + "../../themes"},
+            {path:require.toUrl("./theme/")},
+            {path:cm_path + "/theme"}
         ];
 
         settings.setValue("paths", paths);
@@ -71,7 +71,7 @@ define(function(require) {
 
     function init() {
         for ( i = 0, length = paths.length; i < length; i++ ) {
-            pathContents[i] = loadContent( paths[i] );
+            pathContents[i] = loadContent( paths[i].path );
         }
 
         return $.when.apply( $, pathContents ).promise();

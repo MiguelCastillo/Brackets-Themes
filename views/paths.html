@@ -2,8 +2,8 @@
     <tbody>
         <!-- ko foreach: paths -->
         <tr>
-            <td data-bind="attr: {'path-id': $index}"><a class="edit" href="#" data-bind="html: $data"></a></td>
-            <td><a class="remove" href="#" class="remove">remove</a></td>
+            <td><a href="#" data-bind="html: path, click: $root.editPath"></a></td>
+            <td><a href="#" data-bind="click: $root.removePath">remove</a></td>
         </tr>
         <!-- /ko -->
     </tbody>

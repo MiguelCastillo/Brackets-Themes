@@ -27,22 +27,32 @@ define(function(require, exports, module) {
     $("#pathsSettings", $settings).html(tmpl.paths);
     $("#scheduleSettings", $settings).html(tmpl.schedule);
 
-    // Add global listeners
-    $("body").on("click", ".themeSettings #pathsSettings .edit", function(evt) {
-        console.log(ko.dataFor(this));
-    })
-    .on("click", ".themeSettings #pathsSettings .remove", function(evt) {
-        console.log(ko.dataFor(this));
-    });
+
+    function getViewModel(settings) {
+        var viewModel = koFactory($.extend(true, {}, settings._json));
+
+        viewModel.addPath = function() {
+            //viewModel.paths.remove(this);
+        };
+
+        viewModel.editPath = function() {
+            console.log(this);
+        };
+
+        viewModel.removePath = function() {
+            viewModel.paths.remove(this);
+        };
+
+        return viewModel;
+    }
 
 
     function open(settings) {
-        var _settings  = $.extend(true, {}, settings._json);
-        var _viewModel = koFactory(_settings);
-        var $template  = $settings.clone();
+        var viewModel = getViewModel(settings);
+        var $template = $settings.clone();
 
         // Do knockout binding
-        koFactory.bind(_viewModel, $template);
+        koFactory.bind(viewModel, $template);
         Dialog.showModalDialogUsingTemplate($template);
         $("[data-toggle=tab].default", $template).tab("show");
     }
