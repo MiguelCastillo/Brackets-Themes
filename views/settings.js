@@ -6,6 +6,7 @@
 
 
 define(function(require, exports, module) {
+    "use strict";
 
     var _ = brackets.getModule("thirdparty/lodash");
     var Dialog = brackets.getModule("widgets/Dialogs"),
@@ -54,7 +55,6 @@ define(function(require, exports, module) {
 
         return result.promise();
     }
-
 
 
     function getViewModel(settings) {
