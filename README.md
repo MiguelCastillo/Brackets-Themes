@@ -1,14 +1,15 @@
 Brackets-Themes
 ===============
 
-Apply CodeMirror themes to Brackets' file editor via the Themes menu.
+Set CodeMirror and Custom themes in Brackets.
 
 
 Features
 ===============
 
-* Automatic loading of CodeMirror's themes as shipped with Brackets.
-* Automatic loading of custom themes.  For custom themes 101 primer, please ready below.  Handy if you want to create your own themes or already have themes you want to keep when you upgrade brackets.
+* Automatic loading of CodeMirror's themes shipped with Brackets.
+* Enjoy a variety of Custom themes created by other users like yourself! For custom themes 101 primer, please ready below.
+* Configure custom folders to load themes from.  This is good if you want to have a folder to hold your custom themes that you want to persist after Brackets/Themes updates.
 
 
 Screenshot
@@ -62,7 +63,6 @@ Felipe K. de Mello: Dracula<br>
 Fernando Hurtado: Nando<br>
 Jordan Hess: Pixie<br>
 Christopher Kelly (scriptmunkee) for additions to reset.cs<br>
-
 
 
 Links
