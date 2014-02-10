@@ -8,9 +8,9 @@
 define(function (require) {
     "use strict";
     var PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
-        SettingsDialog     = require("views/settings");
-    var PREFERENCES_KEY    = "extensions.brackets-editorthemes";
-    var settings           = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
+        SettingsDialog     = require("views/settings"),
+        PREFERENCES_KEY    = "extensions.brackets-editorthemes",
+        settings           = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
 
     settings.open = function() {
         SettingsDialog.open(settings);

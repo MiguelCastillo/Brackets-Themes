@@ -1,7 +1,17 @@
+.themeSettings * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.themeSettings td {
+    padding: 4px;
+}
+
 .themeSettings .modal-body {
     min-height: 300px;
     max-height: 300px;
-    padding: 8px;
+    padding: 6px;
 }
 
 .themeSettings .row {

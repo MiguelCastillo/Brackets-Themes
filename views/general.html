@@ -1,1 +1,5 @@
-<div>Current theme: {{theme}}</div>
+<div>Current theme:
+    <!-- ko foreach: theme -->
+    <span data-bind="html: $data"></span>
+    <!-- /ko -->
+</div>

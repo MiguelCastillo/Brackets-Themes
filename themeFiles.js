@@ -40,6 +40,10 @@ define(function(require) {
     function loadContent (path) {
         var result = $.Deferred();
 
+        if ( ! path ) {
+            return result.reject("Path is null");
+        }
+
         function readContent(err, entries) {
             if ( err && err !== "NotFound" ) {
                 result.reject(err);

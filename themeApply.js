@@ -57,7 +57,7 @@ define(function(require) {
         // If the css has not yet been loaded, then we load it so that
         // styling is properly applied to codemirror
         $.each(themeManager._selected.slice(0), function (index, item) {
-            var _theme = themeManager._themes[item];
+            var _theme = themeManager._themes[item] || {};
             themes[item] = _theme;
 
             if (!_theme.css) {

@@ -1,9 +1,10 @@
 <table class="table table-striped">
     <tbody>
-        <!--{{#paths}}-->
-            <tr>
-                <td>{{.}}</td>
-            </tr>
-        <!--{{/paths}}-->
+        <!-- ko foreach: paths -->
+        <tr>
+            <td data-bind="attr: {'path-id': $index}"><a class="edit" href="#" data-bind="html: $data"></a></td>
+            <td><a class="remove" href="#" class="remove">remove</a></td>
+        </tr>
+        <!-- /ko -->
     </tbody>
 </table>
