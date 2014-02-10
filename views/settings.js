@@ -14,11 +14,13 @@ define(function(require, exports, module) {
         Strings = brackets.getModule("strings"),
         ko = require("lib/knockout-3.0.0"),
         koFactory = require("lib/ko.factory"),
+        packageInfo = JSON.parse(require("text!package.json")),
         tmpl = {
             main: require("text!views/settings.html"),
             general: require("text!views/general.html"),
             paths: require("text!views/paths.html"),
-            schedule: require("text!views/schedule.html")
+            schedule: require("text!views/schedule.html"),
+            about: require("text!views/about.html")
         };
 
     // Make sure koFactory get a reference to ko...
@@ -29,6 +31,7 @@ define(function(require, exports, module) {
     $("#generalSettings", $settings).html(tmpl.general);
     $("#pathsSettings", $settings).html(tmpl.paths);
     $("#scheduleSettings", $settings).html(tmpl.schedule);
+    $("#aboutSettings", $settings).html(tmpl.about);
 
 
     function openFolder(path) {
@@ -43,7 +46,8 @@ define(function(require, exports, module) {
                 else {
                     result.reject("User canceled");
                 }
-            } else {
+            }
+            else {
                 Dialogs.showModalDialog(
                     DefaultDialogs.DIALOG_ID_ERROR,
                     "Error opening directory " + path,
@@ -58,24 +62,24 @@ define(function(require, exports, module) {
 
 
     function getViewModel(settings) {
-        var viewModel = koFactory($.extend(true, {}, settings));
+        var viewModel = koFactory($.extend(true, {}, {settings: settings, package: packageInfo}));
 
         viewModel.addPath = function() {
             var _self = this;
             openFolder("").done(function(newpath) {
-                _self.paths.push(koFactory({path: newpath}));
+                _self.settings.paths.push(koFactory({path: newpath}));
             });
         };
 
         viewModel.editPath = function() {
             var _self = this;
             openFolder(this.path()).done(function(newpath) {
-                _self.path(newpath);
+                _self.settings.path(newpath);
             });
         };
 
         viewModel.removePath = function() {
-            viewModel.paths.remove(this);
+            viewModel.settings.paths.remove(this);
         };
 
         return viewModel;
@@ -90,7 +94,7 @@ define(function(require, exports, module) {
 
         Dialog.showModalDialogUsingTemplate($template).done(function( id ) {
             if ( id === "save" ) {
-                var newSettings = koFactory.deserialize(viewModel);
+                var newSettings = koFactory.deserialize(viewModel).settings;
                 for( var i in newSettings ) {
                     if ( settings._json.hasOwnProperty(i) ) {
                         settings.setValue( i, newSettings[i] );
