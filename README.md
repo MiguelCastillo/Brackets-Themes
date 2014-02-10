@@ -62,7 +62,7 @@ Diego Alvarez: Aquaman<br>
 Felipe K. de Mello: Dracula<br>
 Fernando Hurtado: Nando<br>
 Jordan Hess: Pixie<br>
-John Hamm: hammsidian.css<br>
+John Hamm: Hammsidian<br>
 Christopher Kelly (scriptmunkee) for additions to reset.cs<br>
 
 
