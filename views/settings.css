@@ -5,15 +5,23 @@
 }
 
 .themeSettings td {
-    padding: 4px;
+    padding: 2px;
 }
 
 .themeSettings .modal-body {
     min-height: 300px;
     max-height: 300px;
-    padding: 6px;
+    padding: 4px;
 }
 
 .themeSettings .row {
     margin: 0px;
+}
+
+.themeSettings .paths-header {
+    height: 24px;
+}
+
+.themeSettings .label {
+    padding: 4px !important;
 }

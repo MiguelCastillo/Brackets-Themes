@@ -1,9 +1,24 @@
-<table class="table table-striped">
+<div class="paths-header">
+    <ul class="unstyled pull-right">
+        <li>
+            <a href="#" data-bind="click: $root.addPath">
+                <!--<i class="icon-plus-sign"></i>-->
+                <span class="label label-success">Add</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<table class="table table-striped paths-body">
     <tbody>
         <!-- ko foreach: paths -->
         <tr>
             <td><a href="#" data-bind="html: path, click: $root.editPath"></a></td>
-            <!--<td><a href="#" data-bind="click: $root.removePath">remove</a></td>-->
+            <td>
+                <a href="#" data-bind="click: $root.removePath">
+                    <!--<i class="icon-remove-sign"></i>-->
+                    <span class="label label-info">Remove</span>
+                </a>
+            </td>
         </tr>
         <!-- /ko -->
     </tbody>

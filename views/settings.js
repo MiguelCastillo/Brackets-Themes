@@ -75,8 +75,7 @@ define(function(require, exports, module) {
         };
 
         viewModel.removePath = function() {
-            // Need to add a way to add a path before allowing to remove one :)
-            //viewModel.paths.remove(this);
+            viewModel.paths.remove(this);
         };
 
         return viewModel;
