@@ -8,7 +8,7 @@ Features
 ===============
 
 * Automatic loading of CodeMirror's themes shipped with Brackets.
-* Enjoy a variety of <i>custom</i> themes created by other users like yourself! For <i>custom</i> themes 101 primer, please ready below.
+* Enjoy a variety of <i>custom</i> themes created by other users like yourself! For <i>custom</i> themes 101 primer, please read below.
 * Configure custom folders to load themes from.  This is good if you want to have a folder to hold your custom themes that you want to persist after Brackets/Themes updates.
 
 
