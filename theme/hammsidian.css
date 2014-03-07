@@ -13,19 +13,19 @@
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-gutters
 {
-	background-color: #293134;
+    background-color: #293134;
 }
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-linenumber
 {
-	background-color: #293134;
-	color: #81969A;
+    background-color: #293134;
+    color: #81969A;
 }
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-matchingbracket
 {
     color: #dedede;
-	outline: 1px solid #dedede;
+    outline: 1px solid #dedede;
 }
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-linebackground,
@@ -57,7 +57,7 @@
 
 .cm-s-hammsidian.CodeMirror .cm-matchhighlight:not(.CodeMirror-selectedtext)
 {
-  	background-color: #616161;
+      background-color: #616161;
     color: white;
 }
 
@@ -66,30 +66,30 @@
 }
 
 .CodeMirror-foldmarker {
-padding-right: 5px;
-padding-left: 5px;
-background: #4d4d4d;
-border: 1px solid #ddd;
-margin-right: 3px;
-margin-left: 3px;
-border-radius: 3px;
-color: #fff;
-cursor: pointer;
+    padding-right:5px;
+    padding-left:5px;
+    background:#4d4d4d;
+    border:1px solid #ddd;
+    margin-right:3px;
+    margin-left:3px;
+    border-radius:3px;
+    color:#fff;
+    cursor:pointer;
 }
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-selectedtext
 {
-  	background-color: #804000;
+      background-color: #804000;
 }
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-selected
 {
-  	background: transparent;
+      background: transparent;
 }
 
 .cm-s-hammsidian.CodeMirror-focused .CodeMirror-selected
 {
-  	background: transparent;
+      background: transparent;
 }
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-cursor
@@ -98,28 +98,28 @@ cursor: pointer;
     border-left: 1px solid white;
 }
 
-.hammsidian #status-bar {                                    
+#status-bar {
     border-top:1px solid #484b4d;
     background:#3c3f41;
 
 }
 
-.hammsidian #status-bar #status-info {
+#status-bar #status-info {
     color:#f7c741;
 
 }
 
-.hammsidian #status-bar #status-indicators{
+#status-bar #status-indicators{
     background:#3c3f41;
 
 }
 
-.hammsidian #status-bar #status-indicators #status-language {
+#status-bar #status-indicators #status-language {
     color:#ed8d47;
 }
 
 
-.hammsidian #status-bar #status-indicators #status-indent {
+#status-bar #status-indicators #status-indent {
     color:#4bd278;
 }
 

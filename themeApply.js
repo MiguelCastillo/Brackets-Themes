@@ -48,7 +48,7 @@ define(function(require) {
             // Make sure we update the settings when a new theme is selected.
             settings.setValue("theme", themeManager._selected);
 
-            $("body").removeClass(currentThemes.replace(' ', ',')).addClass(newThemes.replace(' ', ','));
+            $("html").removeClass(currentThemes.replace(' ', ',')).addClass(newThemes.replace(' ', ','));
             cm.refresh();
             $(ExtensionUtils).trigger("Themes.themeChanged", [themes]);
         });

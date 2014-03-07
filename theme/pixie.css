@@ -1,21 +1,21 @@
-.pixie .panel {
+.panel {
   background:#2b2b2b;
 }
 
-.pixie #main-toolbar,
-.pixie #status-bar,
-.pixie #status-indicators {
+#main-toolbar,
+#status-bar,
+#status-indicators {
   background:#242424;
   color:#ccc;
 }
 
-/*.pixie #sidebar {
+/*#sidebar {
   position: inherit !important;
 }
-.pixie #working-set-header {
+#working-set-header {
   display: none !important;
 }
-.pixie #open-files-container {
+#open-files-container {
   width: 100% !important;
   position: absolute !important;
   z-index: 10 !important;
@@ -23,58 +23,58 @@
   height: auto !important;
   overflow: hidden !important;
 }
-.pixie #open-files-container li {
+#open-files-container li {
   float: left;
 }*/
 
-.pixie #status-info {
+#status-info {
   color:#ccc;
 }
 
-.pixie #open-files-container,
-.pixie #working-set-header {
+#open-files-container,
+#working-set-header {
   color:#aaa;
   background:#111;
 }
-.pixie #project-files-header {
+#project-files-header {
   color:#aaa;
   background:#222;
 }
-.pixie .recent-folder,
-.pixie #open-folder-link {
+.recent-folder,
+#open-folder-link {
   color:#ddd;
 }
-.pixie #project-dropdown.dropdown-menu a.selected {
+#project-dropdown.dropdown-menu a.selected {
   background: #0081c2;
 }
-.pixie .dropdown-menu {
+.dropdown-menu {
   background: #333;
   color: #aaa;
 }
-.pixie .dropdown-menu .divider {
+.dropdown-menu .divider {
   background: #222;
   border-bottom: 1px solid #444;
 }
-.pixie .sidebar-selection {
+.sidebar-selection {
   background: #1a1a1a;
 }
-.pixie .sidebar-selection-triangle {
+.sidebar-selection-triangle {
   display: none !important;
 }
 
-.pixie .jstree-brackets li.jstree-closed > a,
-.pixie .jstree-brackets li.jstree-open > a {
+.jstree-brackets li.jstree-closed > a,
+.jstree-brackets li.jstree-open > a {
   color:#ccc;
 }
 
-.pixie #open-files-container .extension,
-.pixie .jstree-brackets li .extension {
+#open-files-container .extension,
+.jstree-brackets li .extension {
   color:#aaa;
 }
 
 .cm-s-pixie.CodeMirror {
-	background-color:#202020;
-	color:#fff;
+    background-color:#202020;
+    color:#fff;
 }
 
 .cm-s-pixie.CodeMirror div.CodeMirror-cursor {
@@ -204,62 +204,62 @@
     background: rgba(55,55,55,0.9);
 }
 
-.pixie .extension-manager-dialog .modal-header,
-.pixie .extension-manager-dialog .modal-footer {
+.extension-manager-dialog .modal-header,
+.extension-manager-dialog .modal-footer {
   background: #222;
 }
-.pixie .extension-manager-dialog .modal-body {
+.extension-manager-dialog .modal-body {
   background: #1a1a1a;
 }
-.pixie .extension-manager-dialog .modal-footer {
+.extension-manager-dialog .modal-footer {
   border-color: #1a1a1a;
 }
-.pixie .extension-manager-dialog .modal-header .nav-tabs > li > a {
+.extension-manager-dialog .modal-header .nav-tabs > li > a {
   color: #eee;
 }
-.pixie .extension-manager-dialog .modal-header .nav-tabs > .active > a,
-.pixie .extension-manager-dialog .modal-header .nav-tabs > .active > a:hover {
+.extension-manager-dialog .modal-header .nav-tabs > .active > a,
+.extension-manager-dialog .modal-header .nav-tabs > .active > a:hover {
   background: #333;
   border-color: #1a1a1a #1a1a1a transparent #1a1a1a;
 }
-.pixie .table-striped tbody tr:nth-child(odd) td,
-.pixie .table-striped tbody tr:nth-child(odd) th {
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
   background: #333;
   color: #eee;
 }
-.pixie .table-striped tbody tr:nth-child(even) td,
-.pixie .table-striped tbody tr:nth-child(even) th {
+.table-striped tbody tr:nth-child(even) td,
+.table-striped tbody tr:nth-child(even) th {
   background: #2a2a2a;
   color: #eee;
 }
-body.platform-win.pixie .extension-manager-dialog .modal-body .extension-list .ext-name,
-body.platform-win.pixie .extension-manager-dialog .modal-body .extension-list .ext-desc {
+body.platform-win .extension-manager-dialog .modal-body .extension-list .ext-name,
+body.platform-win .extension-manager-dialog .modal-body .extension-list .ext-desc {
   color: #eee;
 }
-.pixie .extension-manager-dialog .modal-header .nav-tabs {
+.extension-manager-dialog .modal-header .nav-tabs {
   border-color: #1a1a1a;
 }
-.pixie .extension-manager-dialog .modal-body .info-message {
+.extension-manager-dialog .modal-body .info-message {
   background: #1a1a1a;
   color: #888;
 }
-.pixie #project-dropdown-toggle {
+#project-dropdown-toggle {
   width: auto;
 }
-.pixie #devdocs-viewer-iframe ._header {
+#devdocs-viewer-iframe ._header {
   background-color: #222;
 }
-.pixie .toolbar .nav .dropdown-menu li a,
-.pixie .context-menu .dropdown-menu li a,
-.pixie .codehint-menu .dropdown-menu li a {
+.toolbar .nav .dropdown-menu li a,
+.context-menu .dropdown-menu li a,
+.codehint-menu .dropdown-menu li a {
   color: #bbb;
 }
-.pixie .toolbar .nav .dropdown-menu li a:hover,
-.pixie .context-menu .dropdown-menu li a:hover,
-.pixie .codehint-menu .dropdown-menu li a:hover,
-.pixie .toolbar .nav .dropdown-menu li a.highlight,
-.pixie .context-menu .dropdown-menu li a.highlight,
-.pixie .codehint-menu .dropdown-menu li a.highlight {
+.toolbar .nav .dropdown-menu li a:hover,
+.context-menu .dropdown-menu li a:hover,
+.codehint-menu .dropdown-menu li a:hover,
+.toolbar .nav .dropdown-menu li a.highlight,
+.context-menu .dropdown-menu li a.highlight,
+.codehint-menu .dropdown-menu li a.highlight {
   color: #eee;
   background: #0081c2;
 }

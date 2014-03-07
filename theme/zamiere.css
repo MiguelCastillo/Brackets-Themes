@@ -1,31 +1,31 @@
-.zamiere .panel {
+.panel {
   background:#3C3F41;
 }
 
-.zamiere #status-bar,
-.zamiere #status-indicators {
+#status-bar,
+#status-indicators {
   background:#242424;
   color:#ccc;
 }
 
-.zamiere #status-info {
+#status-info {
   color:#ccc;
 }
 
-.zamiere #open-files-container,
-.zamiere #working-set-header,
-.zamiere #project-files-header {
+#open-files-container,
+#working-set-header,
+#project-files-header {
   color:#aaa;
   background:#565A5D;
 }
 
-.zamiere .jstree-brackets li.jstree-closed > a,
-.zamiere .jstree-brackets li.jstree-open > a {
+.jstree-brackets li.jstree-closed > a,
+.jstree-brackets li.jstree-open > a {
   color:#ccc;
 }
 
-.zamiere #open-files-container .extension,
-.zamiere .jstree-brackets li .extension {
+#open-files-container .extension,
+.jstree-brackets li .extension {
   color:#aaa;
 }
 
