@@ -53,7 +53,7 @@ define(function(require) {
             entries = entries || [];
 
             for (i = 0; i < entries.length; i++) {
-                if (entries[i].isFile && entries[i].name.endsWith(".css")) {
+                if (entries[i].isFile && (entries[i].name.endsWith(".css") || entries[i].name.endsWith(".less"))) {
                     files.push(entries[i].name);
                 }
             }
