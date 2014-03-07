@@ -45,6 +45,10 @@
     font-weight: bold;
 }
 
+.CodeMirror .CodeMirror-gutters {
+    background-color: #242424;
+}
+
 .CodeMirror .CodeMirror-searching {
   color: #242424;
   background-color: #ffe69d !important;
