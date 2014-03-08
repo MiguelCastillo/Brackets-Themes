@@ -5,11 +5,14 @@
  */
 
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, brackets, window, CodeMirror */
-
 define(function (require, exports, module) {
     "use strict";
+
+    var FileSystem     = brackets.getModule("filesystem/FileSystem"),
+        ExtensionUtils = brackets.getModule("utils/ExtensionUtils");
+
+    var commentRegex = /\/\*([\s\S]*?)\*\//mg,
+        scrollbarsRegex = /(?:[^}|,]*)::-webkit-scrollbar(?:[\s\S]*?){(?:[\s\S]*?)}/mg;
 
     /**
     *  Theme object to encasulate all the logic in one pretty bundle.
@@ -29,6 +32,28 @@ define(function (require, exports, module) {
     }
 
 
+    Theme.prototype.load = function(force) {
+        var theme = this;
+
+        if (theme.css && !force) {
+            return theme;
+        }
+
+        return readFile(theme.fileName, this.path)
+            .then(function(content) {
+                return lessify(content, theme);
+            })
+            .then(function(style) {
+                return ExtensionUtils.addEmbeddedStyleSheet(style);
+            })
+            .then(function(styleNode) {
+                theme.css = styleNode;
+                return theme;
+            })
+            .promise();
+    };
+
+
     /**
     *  Takes all dashes and converts them to white spaces...
     *  Then takes all first letters and capitalizes them.
@@ -42,6 +67,64 @@ define(function (require, exports, module) {
         });
 
         return parts.join(" ");
+    }
+
+
+    function readFile(fileName, filePath) {
+        var deferred = $.Deferred();
+
+        try {
+            var file = FileSystem.getFileForPath (filePath + "/" + fileName);
+            file.read(function( err, content /*, stat*/ ) {
+                if ( err ) {
+                    deferred.reject(err);
+                    return;
+                }
+
+                deferred.resolve(content);
+            });
+        }
+        catch(ex) {
+            deferred.reject(false);
+        }
+
+        return deferred.promise();
+    }
+
+
+    function extractScrollbars(content) {
+        var scrollbars = [];
+
+        // Go through and extract out scrollbar customizations so that we can
+        // enable/disable via settings.
+        content = content
+            .replace(commentRegex, "")
+            .replace(scrollbarsRegex, function(match) {
+                scrollbars.push(match);
+                return "";
+            });
+
+        return {
+            content: content,
+            scrollbars: scrollbars
+        };
+    }
+
+
+    function lessify(content, theme) {
+        var deferred = $.Deferred(),
+            parser = new less.Parser();
+
+        parser.parse("." + theme.name + "{" + content + "}", function (err, tree) {
+            if (err) {
+                deferred.reject(err);
+            }
+            else {
+                deferred.resolve(tree.toCSS());
+            }
+        });
+
+        return deferred.promise();
     }
 
 

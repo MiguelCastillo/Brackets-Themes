@@ -8,23 +8,30 @@
 define(function (require) {
     "use strict";
 
-    var CommandManager = brackets.getModule("command/CommandManager");
+    var _ = brackets.getModule("thirdparty/lodash");
+    var EditorManager  = brackets.getModule("editor/EditorManager"),
+        CommandManager = brackets.getModule("command/CommandManager");
 
-    var settings    = require("settings"),
-        Theme       = require("theme"),
-        themeFiles  = require("themeFiles"),
-        themeApply  = require("themeApply"),
-        menu        = require("menu");
+    var settings        = require("settings"),
+        Theme           = require("theme"),
+        themeFiles      = require("themeFiles"),
+        themeApply      = require("themeApply"),
+        scrollbarsApply = require("scrollbarsApply"),
+        menu            = require("menu");
 
     var themeManager = {
-        _selected: settings.getValue("theme") || ["default"],
-        _mode: "",
-        _themes: {}
+        selected: settings.getValue("theme") || ["default"],
+        docMode: "",
+        themes: {}
     };
 
 
-    function applyThemes() {
-        themeApply(themeManager);
+    function loadThemes(themes) {
+        // Iterate through each name in the themes and make them theme objects
+        return _.map(themes.files, function (themeFile, index) {
+            var theme = new Theme({fileName: themeFile, path: themes.path});
+            return (themeManager.themes[theme.name] = theme);
+        });
     }
 
 
@@ -35,29 +42,22 @@ define(function (require) {
         //
         // Iterate through each name in the themes and make them theme objects
         //
-        $.each(themes.files, function (index, themeFile) {
-            var _theme = new Theme({fileName: themeFile, path: themes.path});
-            themeManager._themes[_theme.name] = _theme;
-
+        $.each(themes, function (index, theme) {
             // Create the command id used by the menu
-            var COMMAND_ID = "theme." + _theme.name;
+            var COMMAND_ID = "theme." + theme.name;
 
             // Register menu event...
-            CommandManager.register(_theme.displayName, COMMAND_ID, function () {
+            CommandManager.register(theme.displayName, COMMAND_ID, function () {
                 syncSelection(false); // Clear selection
-                themeManager._selected = [_theme.name];
-                //syncSelection(true);  // Set selection
-
-                // Load the theme is needed
-                themeApply(themeManager);
-                this.setChecked(true);
+                themeManager.selected = [theme.name];
+                themeManager.update(true);
             });
 
             // Add theme menu item
             menu.addMenuItem(COMMAND_ID);
         });
 
-        if (themes.files.length !== 0 && !lastItem) {
+        if (themes.length !== 0 && !lastItem) {
             menu.addMenuDivider();
         }
     }
@@ -77,7 +77,7 @@ define(function (require) {
 
 
     function syncSelection(val) {
-        $.each(themeManager._selected, function (index, item) {
+        _.each(themeManager.selected, function (item) {
             var command = CommandManager.get("theme." + item);
             if (command) {
                 command.setChecked(val);
@@ -86,22 +86,63 @@ define(function (require) {
     }
 
 
+    function setDocumentMode(cm) {
+        var mode = cm.getDoc().getMode();
+        var docMode = mode && (mode.helperType || mode.name);
+        $("body").removeClass("doctype-" + themeManager.docMode).addClass("doctype-" + mode);
+        themeManager.docMode = docMode;
+    }
+
+
+    themeManager.update = function(sync) {
+        var editor = EditorManager.getActiveEditor();
+        if (!editor || !editor._codeMirror) {
+            return;
+        }
+
+        var cm = editor._codeMirror;
+
+        if (sync === true) {
+            syncSelection(true);
+            settings.setValue("theme", themeManager.selected);
+        }
+
+        setDocumentMode(cm);
+        themeApply(themeManager, cm);
+        scrollbarsApply(themeManager, cm);
+    };
+
+
+    themeManager.getThemes = function() {
+        return _.map(themeManager.selected.slice(0), function (item) {
+            return themeManager.themes[item] || {};
+        });
+    };
+
+
+    themeManager.init = function() {
+        themeManager.update(true);
+        $(EditorManager).on("activeEditorChange", themeManager.update);
+    };
+
+
+    /**
+    * Update Themes when all the files have been loaded
+    */
     themeFiles.ready(function() {
         loadSettingsMenu();
 
-        var i, length;
+        var i, length, themes;
         var args = Array.prototype.slice.call(arguments);
         for ( i = 0, length = args.length; i < length; i++ ) {
-            loadThemesMenu(args[i], i + 1 === length);
+            themes = loadThemes(args[i]);
+            loadThemesMenu( themes, i + 1 === length );
         }
 
-        // Let's just make sure we have the theme selected right from the get go.
-        syncSelection(true);
-        applyThemes();
+        themeManager.update(true);
     });
 
 
-    themeManager.applyThemes = applyThemes;
     return themeManager;
 });
 

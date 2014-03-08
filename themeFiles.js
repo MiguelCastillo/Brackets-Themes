@@ -15,7 +15,7 @@ define(function(require) {
 
     // Root directory for CodeMirror themes
     var cm_path = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2";
-    var i, length, pathContents = [];
+    var validExtensions = ["css", "less"];
 
     // Default paths
     if ( !paths ) {
@@ -37,7 +37,7 @@ define(function(require) {
     /**
     *  Return all the files in the specified path
     */
-    function loadContent (path) {
+    function loadDirectory (path) {
         var result = $.Deferred();
 
         if ( ! path ) {
@@ -53,7 +53,7 @@ define(function(require) {
             entries = entries || [];
 
             for (i = 0; i < entries.length; i++) {
-                if (entries[i].isFile && (entries[i].name.endsWith(".css") || entries[i].name.endsWith(".less"))) {
+                if (entries[i].isFile && validExtensions.indexOf(getExtension(entries[i].name)) !== -1) {
                     files.push(entries[i].name);
                 }
             }
@@ -69,18 +69,27 @@ define(function(require) {
     }
 
 
+    function getExtension(file) {
+        var lastIndexOf = file.lastIndexOf(".") + 1;
+        return file.substr(lastIndexOf);
+    }
+
+
     function init() {
+        var i, length, directories = [];
+
         for ( i = 0, length = paths.length; i < length; i++ ) {
-            pathContents[i] = loadContent( paths[i].path );
+            directories[i] = loadDirectory( paths[i].path );
         }
 
-        return $.when.apply( $, pathContents ).promise();
+        return $.when.apply( $, directories ).promise();
     }
 
 
     return {
         ready: init().done,
-        loadFile: loadFile
+        loadFile: loadFile,
+        loadDirectory: loadDirectory
     };
 
 });

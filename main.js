@@ -13,8 +13,7 @@ define(function (require, exports, module) {
 
     require("string");
 
-    var EditorManager   = brackets.getModule("editor/EditorManager"),
-        ExtensionUtils  = brackets.getModule("utils/ExtensionUtils"),
+    var ExtensionUtils  = brackets.getModule("utils/ExtensionUtils"),
         AppInit         = brackets.getModule("utils/AppInit");
 
     var themeManager     = require("themeManager"),
@@ -26,11 +25,7 @@ define(function (require, exports, module) {
     ExtensionUtils.loadStyleSheet(module, "views/settings.css");
 
     codeMirrorAddons.ready(function () {
-        // Once the app is fully loaded, we will proceed to check the theme that
-        // was last set
-        AppInit.appReady(function () {
-            themeManager.applyThemes();
-            $(EditorManager).on("activeEditorChange", themeManager.applyThemes);
-        });
+        AppInit.appReady(themeManager.init);
     });
 });
+
