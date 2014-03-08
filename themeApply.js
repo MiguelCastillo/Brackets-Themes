@@ -35,7 +35,8 @@ define(function(require) {
             if (editor !== mainEditor) {
                 setTimeout(function(){
                     EditorManager.resizeEditor(EditorManager.REFRESH_FORCE);
-                }, 100);
+                    cm.refresh();
+                }, 50);
             }
             return;
         }
@@ -49,7 +50,11 @@ define(function(require) {
             settings.setValue("theme", themeManager._selected);
 
             $("html").removeClass(currentThemes.replace(' ', ',')).addClass(newThemes.replace(' ', ','));
-            cm.refresh();
+
+            setTimeout(function(){
+                EditorManager.resizeEditor(EditorManager.REFRESH_FORCE);
+                cm.refresh();
+            }, 50);
             $(ExtensionUtils).trigger("Themes.themeChanged", [themes]);
         });
     }
