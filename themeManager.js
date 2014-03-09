@@ -10,7 +10,8 @@ define(function (require) {
 
     var _ = brackets.getModule("thirdparty/lodash");
     var EditorManager  = brackets.getModule("editor/EditorManager"),
-        CommandManager = brackets.getModule("command/CommandManager");
+        CommandManager = brackets.getModule("command/CommandManager"),
+        FileSystem     = brackets.getModule("filesystem/FileSystem");
 
     var settings        = require("settings"),
         Theme           = require("theme"),
@@ -174,6 +175,20 @@ define(function (require) {
 
         themeManager.update(true);
     });
+
+
+    FileSystem.on("change", function(evt, file) {
+        var name = (file.name || "").substring(0, file.name.lastIndexOf('.'));
+        var theme = themeManager.themes[name];
+
+        if ( theme && theme.path === file.parentPath ) {
+            theme.css = null;
+            if ( theme.fileName === file.name ) {
+                themeManager.update(true);
+            }
+        }
+    });
+
 
     return themeManager;
 });
