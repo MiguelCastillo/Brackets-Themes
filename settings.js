@@ -10,7 +10,9 @@ define(function (require) {
     var PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
         SettingsDialog     = require("views/settings"),
         PREFERENCES_KEY    = "extensions.brackets-editorthemes",
-        settings           = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
+        _settings          = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY);
+
+    var settings = {};
 
     settings.open = function() {
         SettingsDialog.open(settings);
@@ -18,6 +20,20 @@ define(function (require) {
 
     settings.close = function() {
         SettingsDialog.close();
+    };
+
+    settings.getValue = function() {
+        return _settings.getValue.apply(_settings, arguments);
+    };
+
+    settings.setValue = function() {
+        _settings.setValue.apply(_settings, arguments);
+        $(settings).trigger("change", arguments);
+        $(settings).trigger("change:" + arguments[0], [arguments[1]]);
+    };
+
+    settings.getAll = function() {
+        return $.extend({}, _settings._json);
     };
 
     return settings;

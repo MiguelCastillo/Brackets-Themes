@@ -86,6 +86,10 @@ define(function(require) {
     }
 
 
+    $(settings).on("change:paths", function(evt, value) {
+    });
+
+
     return {
         ready: init().done,
         loadFile: loadFile,

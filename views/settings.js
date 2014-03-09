@@ -87,16 +87,18 @@ define(function(require, exports, module) {
 
 
     function open(settings) {
-        var viewModel = getViewModel(settings._json);
-        var $template = $settings.clone();
-        $template.data("settings", settings).find("[data-toggle=tab].default").tab("show");
+        var settingsValues = settings.getAll();
+        var viewModel      = getViewModel(settingsValues);
+        var $template      = $settings.clone();
+
+        $template.find("[data-toggle=tab].default").tab("show");
         koFactory.bind(viewModel, $template);
 
         Dialog.showModalDialogUsingTemplate($template).done(function( id ) {
             if ( id === "save" ) {
                 var newSettings = koFactory.deserialize(viewModel).settings;
                 for( var i in newSettings ) {
-                    if ( settings._json.hasOwnProperty(i) ) {
+                    if ( settingsValues.hasOwnProperty(i) ) {
                         settings.setValue( i, newSettings[i] );
                     }
                 }

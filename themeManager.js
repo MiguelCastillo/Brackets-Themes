@@ -26,9 +26,9 @@ define(function (require) {
     };
 
 
-    function loadThemes(themes) {
+    function loadThemesFiles(themes) {
         // Iterate through each name in the themes and make them theme objects
-        return _.map(themes.files, function (themeFile, index) {
+        return _.map(themes.files, function (themeFile) {
             var theme = new Theme({fileName: themeFile, path: themes.path});
             return (themeManager.themes[theme.name] = theme);
         });
@@ -42,7 +42,7 @@ define(function (require) {
         //
         // Iterate through each name in the themes and make them theme objects
         //
-        $.each(themes, function (index, theme) {
+        _.each(themes, function (theme) {
             // Create the command id used by the menu
             var COMMAND_ID = "theme." + theme.name;
 
@@ -94,22 +94,37 @@ define(function (require) {
     }
 
 
+    function loadThemes(themes) {
+        var pending = _.map(themes, function (theme) {
+            return theme.load();
+        });
+
+        return $.when.apply((void 0), pending);
+    }
+
+
+    function refresh(cm) {
+        setTimeout(function(){
+            cm.refresh();
+            EditorManager.resizeEditor();
+        }, 100);
+    }
+
+
     themeManager.update = function(sync) {
-        var editor = EditorManager.getActiveEditor();
-        if (!editor || !editor._codeMirror) {
-            return;
-        }
+        var cm = getCM();
 
-        var cm = editor._codeMirror;
-
-        if (sync === true) {
+        if (cm && sync === true) {
             syncSelection(true);
             settings.setValue("theme", themeManager.selected);
-        }
 
-        setDocumentMode(cm);
-        themeApply(themeManager, cm);
-        scrollbarsApply(themeManager, cm);
+            setDocumentMode(cm);
+            loadThemes(themeManager.getThemes()).done(function() {
+                scrollbarsApply(themeManager);
+                themeApply(themeManager, cm);
+                refresh(cm);
+            });
+        }
     };
 
 
@@ -126,6 +141,15 @@ define(function (require) {
     };
 
 
+    function getCM() {
+        var editor = EditorManager.getActiveEditor();
+        if (!editor || !editor._codeMirror) {
+            return;
+        }
+        return editor._codeMirror;
+    }
+
+
     /**
     * Update Themes when all the files have been loaded
     */
@@ -135,13 +159,17 @@ define(function (require) {
         var i, length, themes;
         var args = Array.prototype.slice.call(arguments);
         for ( i = 0, length = args.length; i < length; i++ ) {
-            themes = loadThemes(args[i]);
+            themes = loadThemesFiles(args[i]);
             loadThemesMenu( themes, i + 1 === length );
         }
 
+        // Preload the scrollbar handler
+        loadThemes(themeManager.getThemes()).done(function() {
+            scrollbarsApply(themeManager);
+        });
+
         themeManager.update(true);
     });
-
 
     return themeManager;
 });

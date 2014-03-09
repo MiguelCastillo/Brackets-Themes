@@ -41,6 +41,11 @@ define(function (require, exports, module) {
 
         return readFile(theme.fileName, this.path)
             .then(function(content) {
+                var result = extractScrollbars(content);
+                theme.scrollbar = result.scrollbar;
+                return result.content;
+            })
+            .then(function(content) {
                 return lessify(content, theme);
             })
             .then(function(style) {
@@ -93,20 +98,20 @@ define(function (require, exports, module) {
 
 
     function extractScrollbars(content) {
-        var scrollbars = [];
+        var scrollbar = [];
 
         // Go through and extract out scrollbar customizations so that we can
         // enable/disable via settings.
         content = content
             .replace(commentRegex, "")
             .replace(scrollbarsRegex, function(match) {
-                scrollbars.push(match);
+                scrollbar.push(match);
                 return "";
             });
 
         return {
             content: content,
-            scrollbars: scrollbars
+            scrollbar: scrollbar
         };
     }
 
