@@ -9,6 +9,9 @@ Features
 
 * Automatic loading of CodeMirror's themes shipped with Brackets.
 * Enjoy a variety of <i>custom</i> themes created by other users like yourself! For <i>custom</i> themes 101 primer, please read below.
+* Configure font size and font type.
+* Disable scrollbars defined in themes.  Good if you just want to use the default scrollbars.
+* Support for LESS files!
 * Configure custom folders to load themes from.  This is good if you want to have a folder to hold your custom themes that you want to persist after Brackets/Themes updates.
 
 
@@ -45,6 +48,8 @@ FAQ
 
 * Why is only the editor getting themes?
   - Themes that are currently provided are from CodeMirror.  It is possible to theme Brackets beyond the editor, but it requires CSS to customize it.  You can take a look at theme/visual-studio-ex.css to see how @jacse has accomplished this.
+* Why disabling/enabling  the scrollbars don't always take effect?
+  - This due to the fact that CodeMirror builds "fake" scrollbars that only get created when the document is loaded.  So toggling the scrollbars with the document open might not take effect as expected.  To get around this behavior, reopen the document or restart Brackets.
 
 
 How to
