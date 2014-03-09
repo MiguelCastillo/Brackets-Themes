@@ -115,15 +115,17 @@ define(function (require) {
     themeManager.update = function(sync) {
         var cm = getCM();
 
-        if (cm && sync === true) {
+        if (sync === true) {
             syncSelection(true);
-            settings.setValue("theme", themeManager.selected);
+        }
 
+        if ( cm ) {
+            settings.setValue("theme", themeManager.selected);
             setDocumentMode(cm);
+            generalSettings(themeManager);
             loadThemes(themeManager.getThemes()).done(function() {
                 scrollbarsApply(themeManager);
                 themeApply(themeManager, cm);
-                generalSettings(themeManager);
                 refresh(cm);
             });
         }
