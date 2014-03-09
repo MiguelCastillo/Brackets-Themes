@@ -17,6 +17,7 @@ define(function (require) {
         themeFiles      = require("themeFiles"),
         themeApply      = require("themeApply"),
         scrollbarsApply = require("scrollbarsApply"),
+        generalSettings = require("generalSettings"),
         menu            = require("menu");
 
     var themeManager = {
@@ -89,7 +90,7 @@ define(function (require) {
     function setDocumentMode(cm) {
         var mode = cm.getDoc().getMode();
         var docMode = mode && (mode.helperType || mode.name);
-        $("body").removeClass("doctype-" + themeManager.docMode).addClass("doctype-" + mode);
+        $("body").removeClass("doctype-" + themeManager.docMode).addClass("doctype-" + docMode);
         themeManager.docMode = docMode;
     }
 
@@ -122,6 +123,7 @@ define(function (require) {
             loadThemes(themeManager.getThemes()).done(function() {
                 scrollbarsApply(themeManager);
                 themeApply(themeManager, cm);
+                generalSettings(themeManager);
                 refresh(cm);
             });
         }
