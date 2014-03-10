@@ -166,6 +166,7 @@ define(function (require) {
         for ( i = 0, length = args.length; i < length; i++ ) {
             themes = loadThemesFiles(args[i]);
             loadThemesMenu( themes, i + 1 === length );
+            FileSystem.watch({fullPath: args[i].path}, false, function(err) {});
         }
 
         // Preload the scrollbar handler
@@ -175,6 +176,7 @@ define(function (require) {
 
         themeManager.update(true);
     });
+
 
 
     FileSystem.on("change", function(evt, file) {

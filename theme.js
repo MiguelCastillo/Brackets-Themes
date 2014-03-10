@@ -5,7 +5,7 @@
  */
 
 
-define(function (require, exports, module) {
+define(function () {
     "use strict";
 
     var FileSystem     = brackets.getModule("filesystem/FileSystem"),
@@ -24,11 +24,12 @@ define(function (require, exports, module) {
     */
     function Theme(options) {
         var _self = this;
-        $.extend(_self, options);
+        var fileName = options.fileName;
+        _self.options = options;
 
         // Create a display and a theme name from the file name
-        _self.displayName = toDisplayName(_self.fileName);
-        _self.name = _self.fileName.substring(0, _self.fileName.lastIndexOf('.'));
+        _self.displayName = toDisplayName(fileName);
+        _self.name        = fileName.substring(0, fileName.lastIndexOf('.'));
     }
 
 
@@ -39,7 +40,8 @@ define(function (require, exports, module) {
             return theme;
         }
 
-        return readFile(theme.fileName, this.path)
+        var file = FileSystem.getFileForPath (this.options.path + "/" + this.options.fileName);
+        return readFile(file)
             .then(function(content) {
                 var result = extractScrollbars(content);
                 theme.scrollbar = result.scrollbar;
@@ -75,11 +77,10 @@ define(function (require, exports, module) {
     }
 
 
-    function readFile(fileName, filePath) {
+    function readFile(file) {
         var deferred = $.Deferred();
 
         try {
-            var file = FileSystem.getFileForPath (filePath + "/" + fileName);
             file.read(function( err, content /*, stat*/ ) {
                 if ( err ) {
                     deferred.reject(err);
