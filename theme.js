@@ -23,13 +23,14 @@ define(function () {
     * @constructor
     */
     function Theme(options) {
-        var _self = this;
-        var fileName = options.fileName;
-        _self.options = options;
+        var _self     = this,
+            file      = FileSystem.getFileForPath (options.path + "/" + options.fileName),
+            fileName  = options.fileName;
 
-        // Create a display and a theme name from the file name
+        _self.options     = options;
+        _self.file        = file;
+        _self.path        = file.parentPath;
         _self.fileName    = fileName;
-        _self.path        = options.path;
         _self.displayName = toDisplayName(fileName);
         _self.name        = fileName.substring(0, fileName.lastIndexOf('.'));
     }
@@ -42,8 +43,7 @@ define(function () {
             return theme;
         }
 
-        var file = FileSystem.getFileForPath (this.path + "/" + this.fileName);
-        return readFile(file)
+        return readFile(this.file)
             .then(function(content) {
                 var result = extractScrollbars(content);
                 theme.scrollbar = result.scrollbar;
