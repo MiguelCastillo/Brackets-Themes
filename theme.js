@@ -28,6 +28,8 @@ define(function () {
         _self.options = options;
 
         // Create a display and a theme name from the file name
+        _self.fileName    = fileName;
+        _self.path        = options.path;
         _self.displayName = toDisplayName(fileName);
         _self.name        = fileName.substring(0, fileName.lastIndexOf('.'));
     }
@@ -40,7 +42,7 @@ define(function () {
             return theme;
         }
 
-        var file = FileSystem.getFileForPath (this.options.path + "/" + this.options.fileName);
+        var file = FileSystem.getFileForPath (this.path + "/" + this.fileName);
         return readFile(file)
             .then(function(content) {
                 var result = extractScrollbars(content);
