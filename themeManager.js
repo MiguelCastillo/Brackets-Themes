@@ -182,7 +182,7 @@ define(function (require) {
     FileSystem.on("change", function(evt, file) {
         var name = (file.name || "").substring(0, file.name.lastIndexOf('.'));
         var theme = themeManager.themes[name];
-        if ( theme && theme.options.path === file.parentPath ) {
+        if ( theme && theme.path === file.parentPath ) {
             theme.css = null;
             if ( theme.fileName === file.name ) {
                 themeManager.update(true);
