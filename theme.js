@@ -24,16 +24,18 @@ define(function () {
     */
     function Theme(options) {
         var _self     = this,
-            file      = FileSystem.getFileForPath (options.path + "/" + options.fileName),
             fileName  = options.fileName;
 
-        _self.options     = options;
-        _self.file        = file;
-        _self.path        = file.parentPath;
+        _self.path        = options.path;
         _self.fileName    = fileName;
         _self.displayName = toDisplayName(fileName);
         _self.name        = fileName.substring(0, fileName.lastIndexOf('.'));
     }
+
+
+    Theme.prototype.getFile = function() {
+      return (this.file || (this.file = FileSystem.getFileForPath (this.path + "/" + this.fileName)));
+    };
 
 
     Theme.prototype.load = function(force) {
@@ -43,7 +45,11 @@ define(function () {
             return theme;
         }
 
-        return readFile(this.file)
+        if (theme.css) {
+          $(theme.css).remove();
+        }
+
+        return readFile(this.getFile())
             .then(function(content) {
                 var result = extractScrollbars(content);
                 theme.scrollbar = result.scrollbar;

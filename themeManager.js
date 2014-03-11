@@ -96,9 +96,9 @@ define(function (require) {
     }
 
 
-    function loadThemes(themes) {
+    function loadThemes(themes, refresh) {
         var pending = _.map(themes, function (theme) {
-            return theme.load();
+            return theme.load(refresh);
         });
 
         return $.when.apply((void 0), pending);
@@ -113,7 +113,7 @@ define(function (require) {
     }
 
 
-    themeManager.update = function(sync) {
+    themeManager.update = function(sync, refreshTheme) {
         var cm = getCM();
 
         if (sync === true) {
@@ -124,7 +124,7 @@ define(function (require) {
             settings.setValue("theme", themeManager.selected);
             setDocumentMode(cm);
             generalSettings(themeManager);
-            loadThemes(themeManager.getThemes()).done(function() {
+            loadThemes(themeManager.getThemes(), refreshTheme === true).done(function() {
                 scrollbarsApply(themeManager);
                 themeApply(themeManager, cm);
                 refresh(cm);
@@ -142,7 +142,9 @@ define(function (require) {
 
     themeManager.init = function() {
         themeManager.update(true);
-        $(EditorManager).on("activeEditorChange", themeManager.update);
+        $(EditorManager).on("activeEditorChange", function() {
+            themeManager.update(false);
+        });
     };
 
 
@@ -180,13 +182,11 @@ define(function (require) {
 
 
     FileSystem.on("change", function(evt, file) {
-        var name = (file.name || "").substring(0, file.name.lastIndexOf('.'));
-        var theme = themeManager.themes[name];
-        if ( theme && theme.path === file.parentPath ) {
-            theme.css = null;
-            if ( theme.fileName === file.name ) {
-                themeManager.update(true);
-            }
+        var name = (file.name || "").substring(0, file.name.lastIndexOf('.')),
+            theme = themeManager.themes[name];
+
+        if ( theme && theme.getFile().parentPath === file.parentPath ) {
+            themeManager.update(false, true);
         }
     });
 
