@@ -163,12 +163,16 @@ define(function (require) {
     themeFiles.ready(function() {
         loadSettingsMenu();
 
+        function returnTrue() {return true;}
+
         var i, length, themes;
         var args = Array.prototype.slice.call(arguments);
         for ( i = 0, length = args.length; i < length; i++ ) {
             themes = loadThemesFiles(args[i]);
             loadThemesMenu( themes, i + 1 === length );
-            FileSystem.watch({fullPath: args[i].path}, false, function(err) {});
+            FileSystem.watch({
+                fullPath: args[i].path
+            }, returnTrue, returnTrue);
         }
 
         // Preload the scrollbar handler
