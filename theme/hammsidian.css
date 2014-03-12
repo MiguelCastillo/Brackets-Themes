@@ -1,9 +1,9 @@
 .cm-s-hammsidian.CodeMirror
 {
-    font-family: consolas;
+    font-family: consolas !important;
     background-color: #293134;
     color: #E0E2E4;
-    font-size: 18px !important;
+    font-size: 16px !important;
 }
 
 .cm-s-hammsidian.CodeMirror .CodeMirror-lines pre
