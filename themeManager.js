@@ -195,6 +195,11 @@ define(function (require) {
     });
 
 
+    $(settings).on("change:fontSize", function() {
+        themeManager.update();
+    });
+
+
     return themeManager;
 });
 
