@@ -30,7 +30,7 @@ define(function (require) {
 
     generalSettings.updateFontSize = function() {
         var value = settings.getValue("fontSize");
-        $fontSize.text(".CodeMirror{" + "font-size: " + value + " !important;}");
+        $fontSize.text(".CodeMirror{" + "font-size: " + value + " !important; line-height: 1.3em;}");
     };
 
     generalSettings.updateFontType = function() {
