@@ -34,7 +34,7 @@ define(function () {
 
 
     Theme.prototype.getFile = function() {
-      return (this.file || (this.file = FileSystem.getFileForPath (this.path + "/" + this.fileName)));
+        return (this.file || (this.file = FileSystem.getFileForPath (this.path + "/" + this.fileName)));
     };
 
 
@@ -46,7 +46,7 @@ define(function () {
         }
 
         if (theme.css) {
-          $(theme.css).remove();
+            $(theme.css).remove();
         }
 
         return readFile(this.getFile())
