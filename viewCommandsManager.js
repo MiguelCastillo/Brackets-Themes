@@ -18,9 +18,9 @@ define(function (require) {
             fontSizeNumeric = new Number(fontSize.replace("px", "")),
             fontSizeOffset = fontSizeNumeric - defaults.FONT_SIZE;
         
-        if(fontSizeOffset > 0) {
+        if(!fontSizeOffset.isNaN()) {
             PreferencesManager.setViewState("fontSizeAdjustment", fontSizeOffset);
-            // this should work post spring 37 (as of 3/18/2014)
+            // this should work post sprint 37 (as of 3/18/2014)
             PreferencesManager.setViewState("fontSizeStyle", fontSize);
         }
         $(ViewCommandHandlers)
