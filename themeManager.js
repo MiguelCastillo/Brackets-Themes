@@ -179,7 +179,7 @@ define(function (require) {
         // Preload the scrollbar handler
         loadThemes(themeManager.getThemes()).done(function() {
             scrollbarsApply(themeManager);
-            new viewCommandsManager(themeManager);
+            viewCommandsManager(themeManager);
         });
 
         themeManager.update(true);
