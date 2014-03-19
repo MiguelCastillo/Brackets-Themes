@@ -28,6 +28,7 @@ define(function (require) {
     };
 
     viewCommandsManager.prototype.handleFontSizeChange = function (evt, adjustment, fontSize, lineHeight) {
+
         settings.setValue("fontSize", fontSize);
     };
 
