@@ -8,15 +8,15 @@
 define(function (require) {
     "use strict";
 
-    var settings = require("settings");
-    var $fontSize = $("<style type='text/css' id='fontSize'>").appendTo("head"),
+    var settings = require("settings"),
+        defaults = require("defaults"),
+        fontSize = settings.getValue("fontSize"),
+        fontType = settings.getValue("fontType"),
+        $fontSize = $("<style type='text/css' id='fontSize'>").appendTo("head"),
         $fontType = $("<style type='text/css' id='fontType'>").appendTo("head");
 
-    var fontSize = settings.getValue("fontSize"),
-        fontType = settings.getValue("fontType");
-
     if (fontSize === undefined) {
-        settings.setValue("fontSize", "12px");
+        settings.setValue("fontSize", defaults.FONT_SIZE + "px");
     }
 
     if (fontType === undefined) {
