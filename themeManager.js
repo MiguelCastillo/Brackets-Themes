@@ -19,6 +19,7 @@ define(function (require) {
         themeApply      = require("themeApply"),
         scrollbarsApply = require("scrollbarsApply"),
         generalSettings = require("generalSettings"),
+        viewCommandsManager = require("viewCommandsManager"),
         menu            = require("menu");
 
     var themeManager = {
@@ -178,6 +179,7 @@ define(function (require) {
         // Preload the scrollbar handler
         loadThemes(themeManager.getThemes()).done(function() {
             scrollbarsApply(themeManager);
+            new viewCommandsManager(themeManager);
         });
 
         themeManager.update(true);

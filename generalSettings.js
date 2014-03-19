@@ -8,18 +8,18 @@
 define(function (require) {
     "use strict";
 
-    var settings = require("settings");
-    var $fontSize = $("<style type='text/css' id='fontSize'>").appendTo("head");
-    var $fontType = $("<style type='text/css' id='fontType'>").appendTo("head");
+    var settings = require("settings"),
+        defaults = require("defaults"),
+        fontSize = settings.getValue("fontSize"),
+        fontType = settings.getValue("fontType"),
+        $fontSize = $("<style type='text/css' id='fontSize'>").appendTo("head"),
+        $fontType = $("<style type='text/css' id='fontType'>").appendTo("head");
 
-    var fontSize = settings.getValue("fontSize"),
-        fontType = settings.getValue("fontType");
-
-    if ( fontSize === undefined ) {
-        settings.setValue("fontSize", "12px");
+    if (fontSize === undefined) {
+        settings.setValue("fontSize", defaults.FONT_SIZE + "px");
     }
 
-    if ( fontType === undefined ) {
+    if (fontType === undefined) {
         settings.setValue("fontType", "'SourceCodePro-Medium', ＭＳ ゴシック, 'MS Gothic', monospace");
     }
 
@@ -28,17 +28,16 @@ define(function (require) {
         generalSettings.update();
     }
 
-    generalSettings.updateFontSize = function() {
+    generalSettings.updateFontSize = function () {
         var value = settings.getValue("fontSize");
         $fontSize.text(".CodeMirror{" + "font-size: " + value + " !important; line-height: 1.3em;}");
     };
-
-    generalSettings.updateFontType = function() {
+    generalSettings.updateFontType = function () {
         var value = settings.getValue("fontType");
-        $fontType.text(".CodeMirror{" + "font-family: " + value + " !important;}");
+        $fontType.text(".CodeMirror{" + "font-family: " + value + " !important; }");
     };
 
-    generalSettings.update = function() {
+    generalSettings.update = function () {
         // Remove this tag that is intefering with font settings set in this module
         $("#codemirror-dynamic-fonts").remove();
 
@@ -46,9 +45,7 @@ define(function (require) {
         generalSettings.updateFontType();
     };
 
-
     $(settings).on("change:fontSize", generalSettings.updateFontSize);
     $(settings).on("change:fontType", generalSettings.updateFontType);
     return generalSettings;
 });
-
