@@ -18,7 +18,7 @@ define(function (require) {
             fontSizeNumeric = new Number(fontSize.replace("px", "")),
             fontSizeOffset = fontSizeNumeric - defaults.FONT_SIZE;
         
-        if(!fontSizeOffset.isNaN()) {
+        if(!isNaN(fontSizeOffset)) {
             PreferencesManager.setViewState("fontSizeAdjustment", fontSizeOffset);
             // this should work post sprint 37 (as of 3/18/2014)
             PreferencesManager.setViewState("fontSizeStyle", fontSize);
