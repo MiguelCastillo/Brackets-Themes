@@ -46,7 +46,8 @@ define(function(require) {
 
         function readContent(err, entries) {
             if ( err && err !== "NotFound" ) {
-                result.reject(err);
+                console.log("======> Theme error", err);
+                return result.reject(err);
             }
 
             var i, files = [];
