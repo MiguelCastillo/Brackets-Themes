@@ -99,7 +99,9 @@ define(function (require) {
 
     function loadThemes(themes, refresh) {
         var pending = _.map(themes, function (theme) {
-            return theme.load(refresh);
+            if ( theme ) {
+                return theme.load(refresh);
+            }
         });
 
         return $.when.apply((void 0), pending);
@@ -136,7 +138,7 @@ define(function (require) {
 
     themeManager.getThemes = function() {
         return _.map(themeManager.selected.slice(0), function (item) {
-            return themeManager.themes[item] || {};
+            return themeManager.themes[item];
         });
     };
 

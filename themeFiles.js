@@ -40,14 +40,14 @@ define(function(require) {
     function loadDirectory (path) {
         var result = $.Deferred();
 
-        if ( ! path ) {
-            return result.reject("Path is null");
+        if ( !path ) {
+            return;
         }
 
         function readContent(err, entries) {
             if ( err && err !== "NotFound" ) {
                 console.log("======> Theme error", err);
-                return result.reject(err);
+                return;
             }
 
             var i, files = [];
@@ -77,10 +77,15 @@ define(function(require) {
 
 
     function init() {
-        var i, length, directories = [];
+        var i, length, directories = [], directory;
 
         for ( i = 0, length = paths.length; i < length; i++ ) {
-            directories[i] = loadDirectory( paths[i].path );
+            directory = loadDirectory( paths[i].path );
+
+            // Make sure we have a valid directory
+            if ( directory ) {
+                directories[i] = directory;
+            }
         }
 
         return $.when.apply( $, directories ).promise();
