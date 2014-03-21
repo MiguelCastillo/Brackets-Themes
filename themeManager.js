@@ -99,6 +99,7 @@ define(function (require) {
 
     function loadThemes(themes, refresh) {
         var pending = _.map(themes, function (theme) {
+            console.log("========> themeManager.loadThemes", theme);
             if ( theme ) {
                 return theme.load(refresh);
             }
@@ -137,7 +138,7 @@ define(function (require) {
 
 
     themeManager.getThemes = function() {
-        console.log("========> themeManager", themeManager.selected);
+        console.log("========> themeManager.getThemes", themeManager.selected);
         return _.map(themeManager.selected.slice(0), function (item) {
             return themeManager.themes[item];
         });
