@@ -30,6 +30,7 @@ define(function () {
         _self.fileName    = fileName;
         _self.displayName = toDisplayName(fileName);
         _self.name        = fileName.substring(0, fileName.lastIndexOf('.'));
+        _self.className   = "theme-" + _self.name;
     }
 
 
@@ -129,7 +130,7 @@ define(function () {
         var deferred = $.Deferred(),
             parser = new less.Parser();
 
-        parser.parse("." + theme.name + "{" + content + "}", function (err, tree) {
+        parser.parse("." + theme.className + "{" + content + "}", function (err, tree) {
             if (err) {
                 deferred.reject(err);
             }
