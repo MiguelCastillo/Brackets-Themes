@@ -137,6 +137,7 @@ define(function (require) {
 
 
     themeManager.getThemes = function() {
+        console.log("========> themeManager", themeManager.selected);
         return _.map(themeManager.selected.slice(0), function (item) {
             return themeManager.themes[item];
         });
