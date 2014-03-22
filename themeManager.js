@@ -28,6 +28,8 @@ define(function (require) {
         themes: {}
     };
 
+    var _initted = false;
+
 
     function loadThemesFiles(themes) {
         // Iterate through each name in the themes and make them theme objects
@@ -117,6 +119,10 @@ define(function (require) {
 
 
     themeManager.update = function(sync, refreshTheme) {
+        if ( !_initted ) {
+            return;
+        }
+
         var cm = getCM();
 
         if (sync === true) {
@@ -164,22 +170,30 @@ define(function (require) {
     * Update Themes when all the files have been loaded
     */
     themeFiles.ready(function() {
+        _initted = true;
         loadSettingsMenu();
 
         function returnTrue() {return true;}
 
         var i, length, themes;
-        var args = Array.prototype.slice.call(arguments);
+        var args = arguments;
+
         for ( i = 0, length = args.length; i < length; i++ ) {
             if ( args[i].error ) {
                 continue;
             }
-            
+
             themes = loadThemesFiles(args[i]);
             loadThemesMenu( themes, i + 1 === length );
-            FileSystem.watch({
-                fullPath: args[i].path
-            }, returnTrue, returnTrue);
+
+            try {
+                FileSystem.watch({
+                    fullPath: args[i].path
+                }, returnTrue, returnTrue);
+            }
+            catch(ex) {
+                console.log("=============> Themes file watch", ex);
+            }
         }
 
         // Preload the scrollbar handler
@@ -209,4 +223,3 @@ define(function (require) {
 
     return themeManager;
 });
-
