@@ -13,22 +13,20 @@ define(function (require) {
         CommandManager = brackets.getModule("command/CommandManager"),
         FileSystem     = brackets.getModule("filesystem/FileSystem");
 
-    var settings        = require("settings"),
-        Theme           = require("theme"),
-        themeFiles      = require("themeFiles"),
-        themeApply      = require("themeApply"),
-        scrollbarsApply = require("scrollbarsApply"),
-        generalSettings = require("generalSettings"),
+    var settings            = require("settings"),
+        Theme               = require("theme"),
+        themeFiles          = require("themeFiles"),
+        themeApply          = require("themeApply"),
+        scrollbarsApply     = require("scrollbarsApply"),
+        generalSettings     = require("generalSettings"),
         viewCommandsManager = require("viewCommandsManager"),
-        menu            = require("menu");
+        menu                = require("menu");
 
     var themeManager = {
         selected: settings.getValue("theme") || ["default"],
         docMode: "",
         themes: {}
     };
-
-    var _initted = false;
 
 
     function loadThemesFiles(themes) {
@@ -53,9 +51,9 @@ define(function (require) {
 
             // Register menu event...
             CommandManager.register(theme.displayName, COMMAND_ID, function () {
-                syncSelection(false); // Clear selection
-                themeManager.selected = [theme.name];
-                themeManager.update(true);
+                syncMenuSelection(false); // Clear selection
+                setThemesClass([theme.name]);
+                themeManager.update(true, true);
             });
 
             // Add theme menu item
@@ -81,7 +79,7 @@ define(function (require) {
     }
 
 
-    function syncSelection(val) {
+    function syncMenuSelection(val) {
         _.each(themeManager.selected, function (item) {
             var command = CommandManager.get("theme." + item);
             if (command) {
@@ -91,10 +89,23 @@ define(function (require) {
     }
 
 
+    function setThemesClass(newThemes) {
+        var oldThemes = themeManager.selected;
+        newThemes = newThemes || [];
+        themeManager.selected = newThemes;
+
+        // We gotta prefix theme names with "theme" because themes that start with a number
+        // will not render correctly.  Class names that start with a number are invalid
+        newThemes = _.map(newThemes, function(theme){ return "theme-" + theme; }).join(" ");
+        oldThemes = _.map(oldThemes, function(theme){ return "theme-" + theme; }).join(" ");
+        $("html").removeClass(oldThemes.replace(' ', ',')).addClass(newThemes.replace(' ', ','));
+    }
+
+
     function setDocumentMode(cm) {
         var mode = cm.getDoc().getMode();
         var docMode = mode && (mode.helperType || mode.name);
-        $("body").removeClass("doctype-" + themeManager.docMode).addClass("doctype-" + docMode);
+        $("html").removeClass("doctype-" + themeManager.docMode).addClass("doctype-" + docMode);
         themeManager.docMode = docMode;
     }
 
@@ -118,27 +129,33 @@ define(function (require) {
     }
 
 
-    themeManager.update = function(sync, refreshTheme) {
-        if ( !_initted ) {
+    function getCM() {
+        var editor = EditorManager.getActiveEditor();
+        if (!editor || !editor._codeMirror) {
             return;
         }
+        return editor._codeMirror;
+    }
 
-        var cm = getCM();
 
-        if (sync === true) {
-            syncSelection(true);
+    themeManager.update = function(syncMenu, refreshThemes) {
+        if (syncMenu === true) {
+            syncMenuSelection(true);
         }
 
-        if ( cm ) {
+        loadThemes(themeManager.getThemes(), refreshThemes === true).done(function() {
             settings.setValue("theme", themeManager.selected);
-            setDocumentMode(cm);
+            setThemesClass(themeManager.selected);
             generalSettings(themeManager);
-            loadThemes(themeManager.getThemes(), refreshTheme === true).done(function() {
-                scrollbarsApply(themeManager);
+            scrollbarsApply(themeManager);
+
+            var cm = getCM();
+            if ( cm ) {
+                setDocumentMode(cm);
                 themeApply(themeManager, cm);
                 refresh(cm);
-            });
-        }
+            }
+        });
     };
 
 
@@ -150,31 +167,23 @@ define(function (require) {
 
 
     themeManager.init = function() {
-        themeManager.update(true);
-        $(EditorManager).on("activeEditorChange", function() {
-            themeManager.update(false);
+        // Make sure we do any initting when themes is actually done loading the stuff it needs
+        themeFiles.ready(function() {
+            $(EditorManager).on("activeEditorChange", function() {
+                themeManager.update(false);
+            });
         });
     };
-
-
-    function getCM() {
-        var editor = EditorManager.getActiveEditor();
-        if (!editor || !editor._codeMirror) {
-            return;
-        }
-        return editor._codeMirror;
-    }
 
 
     /**
     * Update Themes when all the files have been loaded
     */
     themeFiles.ready(function() {
-        _initted = true;
+        viewCommandsManager();
         loadSettingsMenu();
 
         function returnTrue() {return true;}
-
         var i, length, themes;
         var args = arguments;
 
@@ -196,13 +205,7 @@ define(function (require) {
             }
         }
 
-        // Preload the scrollbar handler
-        loadThemes(themeManager.getThemes()).done(function() {
-            scrollbarsApply(themeManager);
-            viewCommandsManager(themeManager);
-        });
-
-        themeManager.update(true);
+        themeManager.update(true, true);
     });
 
 
