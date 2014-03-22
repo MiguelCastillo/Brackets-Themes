@@ -20,7 +20,7 @@ define(function (require) {
     if (fontSize === undefined) {
         settings.setValue("fontSize", defaults.FONT_SIZE + "px");
     }
-    
+
     if (lineHeight === undefined) {
         settings.setValue("lineHeight", defaults.LINE_HEIGHT);
     }
@@ -43,6 +43,7 @@ define(function (require) {
         var value = settings.getValue("fontSize");
         $fontSize.text(".CodeMirror{" + "font-size: " + value + " !important; }");
     };
+
     generalSettings.updateFontType = function () {
         var value = settings.getValue("fontType");
         $fontType.text(".CodeMirror{" + "font-family: " + value + " !important; }");
