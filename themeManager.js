@@ -28,6 +28,8 @@ define(function (require) {
         themes: {}
     };
 
+    var _initted = false;
+
 
     function loadThemesFiles(themes) {
         // Iterate through each name in the themes and make them theme objects
@@ -51,7 +53,7 @@ define(function (require) {
 
             // Register menu event...
             CommandManager.register(theme.displayName, COMMAND_ID, function () {
-                syncMenuSelection(false); // Clear selection
+                syncMenuSelection(false);
                 setThemesClass([theme.name]);
                 themeManager.update(true, true);
             });
@@ -91,8 +93,7 @@ define(function (require) {
 
     function setThemesClass(newThemes) {
         var oldThemes = themeManager.selected;
-        newThemes = newThemes || [];
-        themeManager.selected = newThemes;
+        themeManager.selected = (newThemes = newThemes || []);
 
         // We gotta prefix theme names with "theme" because themes that start with a number
         // will not render correctly.  Class names that start with a number are invalid
@@ -139,23 +140,29 @@ define(function (require) {
 
 
     themeManager.update = function(syncMenu, refreshThemes) {
-        if (syncMenu === true) {
+        var cm = getCM();
+        if ( cm ) {
+            setDocumentMode(cm);
+            themeApply(themeManager, cm);
+        }
+
+        if ( syncMenu === true ) {
             syncMenuSelection(true);
         }
 
-        loadThemes(themeManager.getThemes(), refreshThemes === true).done(function() {
+        if ( refreshThemes === true ) {
             settings.setValue("theme", themeManager.selected);
             setThemesClass(themeManager.selected);
-            generalSettings(themeManager);
-            scrollbarsApply(themeManager);
 
-            var cm = getCM();
-            if ( cm ) {
-                setDocumentMode(cm);
-                themeApply(themeManager, cm);
-                refresh(cm);
-            }
-        });
+            loadThemes(themeManager.getThemes(), refreshThemes === true).done(function() {
+                generalSettings(themeManager);
+                scrollbarsApply(themeManager);
+
+                if ( cm ) {
+                    refresh(cm);
+                }
+            });
+        }
     };
 
 
@@ -167,46 +174,46 @@ define(function (require) {
 
 
     themeManager.init = function() {
-        // Make sure we do any initting when themes is actually done loading the stuff it needs
+        if ( _initted ) {
+            return;
+        }
+
+        _initted = true;
+
+        // Init themes when files meta data have all been loaded.  By the time
+        // themeManager.init has been called, this is generally ready
         themeFiles.ready(function() {
+            viewCommandsManager();
+            loadSettingsMenu();
+
+            function returnTrue() {return true;}
+            var i, length, themes;
+            var args = arguments;
+
+            for ( i = 0, length = args.length; i < length; i++ ) {
+                if ( args[i].error ) {
+                    continue;
+                }
+
+                themes = loadThemesFiles(args[i]);
+                loadThemesMenu( themes, i + 1 === length );
+
+                try {
+                    FileSystem.watch({
+                        fullPath: args[i].path
+                    }, returnTrue, returnTrue);
+                }
+                catch(ex) {
+                    console.log("=============> Themes file watch", ex);
+                }
+            }
+
+            themeManager.update(true, true);
             $(EditorManager).on("activeEditorChange", function() {
-                themeManager.update(false);
+                themeManager.update();
             });
         });
     };
-
-
-    /**
-    * Update Themes when all the files have been loaded
-    */
-    themeFiles.ready(function() {
-        viewCommandsManager();
-        loadSettingsMenu();
-
-        function returnTrue() {return true;}
-        var i, length, themes;
-        var args = arguments;
-
-        for ( i = 0, length = args.length; i < length; i++ ) {
-            if ( args[i].error ) {
-                continue;
-            }
-
-            themes = loadThemesFiles(args[i]);
-            loadThemesMenu( themes, i + 1 === length );
-
-            try {
-                FileSystem.watch({
-                    fullPath: args[i].path
-                }, returnTrue, returnTrue);
-            }
-            catch(ex) {
-                console.log("=============> Themes file watch", ex);
-            }
-        }
-
-        themeManager.update(true, true);
-    });
 
 
     FileSystem.on("change", function(evt, file) {
