@@ -30,7 +30,6 @@ define(function(require) {
 
 
     function loadFile(file) {
-
     }
 
 
@@ -41,15 +40,14 @@ define(function(require) {
         var result = $.Deferred();
 
         if ( !path ) {
-            return;
+            return result.resolve({
+                files: [],
+                path: path,
+                error: "Path not defined"
+            });
         }
 
         function readContent(err, entries) {
-            if ( err && err !== "NotFound" ) {
-                console.log("======> Theme error", err);
-                return;
-            }
-
             var i, files = [];
             entries = entries || [];
 
@@ -61,7 +59,8 @@ define(function(require) {
 
             result.resolve({
                 files: files,
-                path: path
+                path: path,
+                error: err
             });
         }
 
@@ -77,18 +76,13 @@ define(function(require) {
 
 
     function init() {
-        var i, length, directories = [], directory;
+        var i, length, directories = [];
 
         for ( i = 0, length = paths.length; i < length; i++ ) {
-            directory = loadDirectory( paths[i].path );
-
-            // Make sure we have a valid directory
-            if ( directory ) {
-                directories[i] = directory;
-            }
+            directories.push(loadDirectory( paths[i].path ));
         }
 
-        return $.when.apply( $, directories ).promise();
+        return $.when.apply((void 0), directories).promise();
     }
 
 

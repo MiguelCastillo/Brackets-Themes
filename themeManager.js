@@ -140,6 +140,7 @@ define(function (require) {
     themeManager.getThemes = function() {
         console.log("========> themeManager.getThemes", themeManager.selected);
         return _.map(themeManager.selected.slice(0), function (item) {
+            console.log("========> themeManager.getThemes.theme", item);
             return themeManager.themes[item];
         });
     };
@@ -173,6 +174,10 @@ define(function (require) {
         var i, length, themes;
         var args = Array.prototype.slice.call(arguments);
         for ( i = 0, length = args.length; i < length; i++ ) {
+            if ( args[i].error ) {
+                continue;
+            }
+            
             themes = loadThemesFiles(args[i]);
             loadThemesMenu( themes, i + 1 === length );
             FileSystem.watch({
@@ -188,7 +193,6 @@ define(function (require) {
 
         themeManager.update(true);
     });
-
 
 
     FileSystem.on("change", function(evt, file) {
