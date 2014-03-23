@@ -31,6 +31,9 @@ define(function (require) {
     var _initted = false;
 
 
+    /**
+    * Process theme meta deta to create theme instances
+    */
     function loadThemesFiles(themes) {
         // Iterate through each name in the themes and make them theme objects
         return _.map(themes.files, function (themeFile) {
@@ -55,7 +58,8 @@ define(function (require) {
             CommandManager.register(theme.displayName, COMMAND_ID, function () {
                 syncMenuSelection(false);
                 setThemesClass([theme.name]);
-                themeManager.update(true, true);
+                syncMenuSelection(true);
+                themeManager.update(true);
             });
 
             // Add theme menu item
@@ -111,6 +115,9 @@ define(function (require) {
     }
 
 
+    /**
+    * Loads theme style files
+    */
     function loadThemes(themes, refresh) {
         var pending = _.map(themes, function (theme) {
             if ( theme ) {
@@ -139,22 +146,33 @@ define(function (require) {
     }
 
 
-    themeManager.update = function(syncMenu, refreshThemes) {
+    FileSystem.on("change", function(evt, file) {
+        var name = (file.name || "").substring(0, file.name.lastIndexOf('.')),
+            theme = themeManager.themes[name];
+
+        if ( theme && theme.getFile().parentPath === file.parentPath ) {
+            themeManager.update(true);
+        }
+    });
+
+
+    $(settings).on("change:fontSize", function() {
+        themeManager.update();
+    });
+
+
+    themeManager.update = function(refreshThemes) {
         var cm = getCM();
         if ( cm ) {
             setDocumentMode(cm);
             themeApply(themeManager, cm);
         }
 
-        if ( syncMenu === true ) {
-            syncMenuSelection(true);
-        }
-
         if ( refreshThemes === true ) {
             settings.setValue("theme", themeManager.selected);
-            setThemesClass(themeManager.selected);
 
             loadThemes(themeManager.getThemes(), refreshThemes === true).done(function() {
+                setThemesClass(themeManager.selected);
                 generalSettings(themeManager);
                 scrollbarsApply(themeManager);
 
@@ -192,6 +210,7 @@ define(function (require) {
 
             for ( i = 0, length = args.length; i < length; i++ ) {
                 if ( args[i].error ) {
+                    console.log("=============> Themes error", args[i], args[i].error);
                     continue;
                 }
 
@@ -208,27 +227,13 @@ define(function (require) {
                 }
             }
 
-            themeManager.update(true, true);
+            syncMenuSelection(true);
+            themeManager.update(true);
             $(EditorManager).on("activeEditorChange", function() {
                 themeManager.update();
             });
         });
     };
-
-
-    FileSystem.on("change", function(evt, file) {
-        var name = (file.name || "").substring(0, file.name.lastIndexOf('.')),
-            theme = themeManager.themes[name];
-
-        if ( theme && theme.getFile().parentPath === file.parentPath ) {
-            themeManager.update(false, true);
-        }
-    });
-
-
-    $(settings).on("change:fontSize", function() {
-        themeManager.update();
-    });
 
 
     return themeManager;

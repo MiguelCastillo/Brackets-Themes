@@ -23,9 +23,6 @@ define(function (require, exports, module) {
     // they make the themes look really bad.
     ExtensionUtils.loadStyleSheet(module, "reset.css");
     ExtensionUtils.loadStyleSheet(module, "views/settings.css");
-
-    codeMirrorAddons.ready(function () {
-        AppInit.appReady(themeManager.init);
-    });
+    codeMirrorAddons.ready(themeManager.init);
 });
 
