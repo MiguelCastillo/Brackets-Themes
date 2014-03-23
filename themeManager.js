@@ -218,10 +218,7 @@ define(function (require) {
                 loadThemesMenu( themes, i + 1 === length );
 
                 try {
-//                  File watch is causing some issues in Ubuntu...  Disable for now
-//                  FileSystem.watch({
-//                      fullPath: args[i].path
-//                  }, returnTrue, returnTrue);
+                    FileSystem.watch(FileSystem.getDirectoryForPath(args[i].path), returnTrue, returnTrue);
                 }
                 catch(ex) {
                     console.log("=============> Themes file watch", ex);
