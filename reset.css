@@ -24,11 +24,6 @@
     outline: 1px solid #dddddd;
 }
 
-.CodeMirror:not(.cm-s-default) .CodeMirror-linebackground
-{
-    z-index: 5;
-}
-
 .CodeMirror:not(.cm-s-default) .CodeMirror-matchingtag
 {
     background: transparent;/*rgba(49, 49, 49, 0.9);*/
