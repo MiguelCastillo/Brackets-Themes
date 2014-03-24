@@ -16,12 +16,13 @@ define(function (require, exports, module) {
     var ExtensionUtils  = brackets.getModule("utils/ExtensionUtils"),
         AppInit         = brackets.getModule("utils/AppInit");
 
-    var themeManager = require("themeManager");
+    var themeManager     = require("themeManager"),
+        codeMirrorAddons = require("codeMirrorAddons");
 
     // Load up reset.css to override brackground settings from brackets because
     // they make the themes look really bad.
     ExtensionUtils.loadStyleSheet(module, "reset.css");
     ExtensionUtils.loadStyleSheet(module, "views/settings.css");
-    themeManager.init();
+    codeMirrorAddons.ready(themeManager.init);
 });
 

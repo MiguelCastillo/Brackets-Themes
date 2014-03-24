@@ -7,8 +7,9 @@
 
 define(function() {
 
-    var FileUtils = brackets.getModule("file/FileUtils"),
-        cm_path   = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/";
+    var FileUtils  = brackets.getModule("file/FileUtils"),
+        CodeMirror = brackets.getModule("thirdparty/CodeMirror2/lib/codemirror"),
+        cm_path    = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/";
 
 
     function initAddons( ) {
@@ -24,8 +25,8 @@ define(function() {
         */
         var promises = [
             // Load up codemirror addon for active lines
-            $.getScript(cm_path + "selection/mark-selection.js").promise(),
-            $.getScript(cm_path + "search/match-highlighter.js").promise()
+            //$.getScript(cm_path + "selection/mark-selection.js").promise(),
+            //$.getScript(cm_path + "search/match-highlighter.js").promise()
         ];
 
         return $.when.apply($, promises).done(initAddons).promise();

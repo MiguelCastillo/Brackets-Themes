@@ -11,6 +11,7 @@ define(function (require) {
     var _ = brackets.getModule("thirdparty/lodash");
     var EditorManager  = brackets.getModule("editor/EditorManager"),
         CommandManager = brackets.getModule("command/CommandManager"),
+        CodeMirror     = brackets.getModule("thirdparty/CodeMirror2/lib/codemirror"),
         FileSystem     = brackets.getModule("filesystem/FileSystem");
 
     var settings            = require("settings"),

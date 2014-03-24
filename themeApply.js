@@ -9,7 +9,8 @@ define(function(require) {
     "use strict";
 
     var _ = brackets.getModule("thirdparty/lodash");
-    var ExtensionUtils = brackets.getModule("utils/ExtensionUtils");
+    var ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
+        CodeMirror     = brackets.getModule("thirdparty/CodeMirror2/lib/codemirror");
 
     /**
     *  Handles updating codemirror with the current selection of themes.

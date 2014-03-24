@@ -11,6 +11,6 @@
         "url": "git://github.com/MiguelCastillo/Brackets-Themes.git"
     },
     "engines": {
-    "brackets": ">=0.37.0"
+    "brackets": ">=0.38.0"
   }
 }
