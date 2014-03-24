@@ -132,7 +132,7 @@
 
 .CodeMirror.cm-s-midnight .CodeMirror-matchingtag
 {
-    background: rgba(207, 234, 214, 0.1);
+    background: rgba(207, 234, 214, 0.7);
 }
 
 .CodeMirror.cm-s-monokai .CodeMirror-matchingtag
@@ -182,7 +182,7 @@
 
 .CodeMirror.cm-s-twilight .CodeMirror-matchingtag
 {
-    background: rgba(207, 234, 214, 0.3);
+    background: rgba(207, 234, 214, 0.7);
 }
 
 .CodeMirror.cm-s-vibrant-ink .CodeMirror-matchingtag
@@ -192,7 +192,7 @@
 
 .CodeMirror.cm-s-xq-dark .CodeMirror-matchingtag
 {
-    background: rgba(207, 234, 214, 0.2);
+    background: rgba(207, 234, 214, 0.5);
 }
 
 .CodeMirror.cm-s-xq-light .CodeMirror-matchingtag
