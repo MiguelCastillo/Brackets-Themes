@@ -47,9 +47,7 @@ If you have a cool theme you created and want to share, please send it my way an
 FAQ
 ===============
 
-* Why is only the editor getting themes?
-  - Themes that are currently provided are from CodeMirror.  It is possible to theme Brackets beyond the editor, but it requires CSS to customize it.  You can take a look at theme/visual-studio-ex.css to see how @jacse has accomplished this.
-* Why disabling/enabling  the scrollbars don't always take effect?
+* Why disabling/enabling the scrollbars don't always take effect?
   - This due to the fact that CodeMirror builds "fake" scrollbars that only get created when the document is loaded.  So toggling the scrollbars with the document open might not take effect as expected.  To get around this behavior, reopen the document or restart Brackets.
 
 
