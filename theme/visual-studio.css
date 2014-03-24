@@ -38,12 +38,6 @@
     outline: 2px solid #dddddd;
 }
 
-.cm-s-visual-studio .CodeMirror-activeline .CodeMirror-gutter-elt
-{
-    outline: 0px;
-}
-
-
 .cm-s-visual-studio.CodeMirror .cm-matchhighlight
 {
     background-color: yellow;
