@@ -182,7 +182,7 @@
 
 .CodeMirror.cm-s-twilight .CodeMirror-matchingtag
 {
-    background: rgba(207, 234, 214, 0.7);
+    background: rgba(33, 96, 33, .8);
 }
 
 .CodeMirror.cm-s-vibrant-ink .CodeMirror-matchingtag
