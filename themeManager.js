@@ -130,6 +130,10 @@ define(function (require) {
 
 
     function refresh(cm) {
+        if ( !cm ) {
+            return;
+        }
+
         setTimeout(function(){
             cm.refresh();
             EditorManager.resizeEditor();
@@ -158,6 +162,7 @@ define(function (require) {
 
     $(settings).on("change:fontSize", function() {
         themeManager.update();
+        refresh(getCM());
     });
 
 
