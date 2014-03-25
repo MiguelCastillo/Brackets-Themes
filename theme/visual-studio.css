@@ -24,7 +24,6 @@
 .cm-s-visual-studio.CodeMirror .CodeMirror-linebackground
 {
     outline: 2px solid #dddddd;
-    z-index: 3;
 }
 
 .cm-s-visual-studio .CodeMirror-activeline-background,
