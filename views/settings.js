@@ -14,13 +14,15 @@ define(function(require, exports, module) {
         Strings = brackets.getModule("strings"),
         ko = require("lib/knockout-3.0.0"),
         koFactory = require("lib/ko.factory"),
+        importer = require("mirror-style/main"),
         packageInfo = JSON.parse(require("text!package.json")),
         tmpl = {
-            main: require("text!views/settings.html"),
-            general: require("text!views/general.html"),
-            paths: require("text!views/paths.html"),
-            schedule: require("text!views/schedule.html"),
-            about: require("text!views/about.html")
+            "main": require("text!views/settings.html"),
+            "general": require("text!views/general.html"),
+            "paths": require("text!views/paths.html"),
+            "import": require("text!views/import.html"),
+            "schedule": require("text!views/schedule.html"),
+            "about": require("text!views/about.html")
         };
 
     // Make sure koFactory get a reference to ko...
@@ -30,14 +32,19 @@ define(function(require, exports, module) {
     var $settings = $(tmpl.main).addClass("themeSettings");
     $("#generalSettings", $settings).html(tmpl.general);
     $("#pathsSettings", $settings).html(tmpl.paths);
+    $("#importSettings", $settings).html(tmpl.import);
     $("#scheduleSettings", $settings).html(tmpl.schedule);
     $("#aboutSettings", $settings).html(tmpl.about);
 
+    var _currentSettings;
 
-    function openFolder(path) {
+
+    function openDialog(path, openFile, title) {
         var result = $.Deferred();
+        openFile = !openFile;
+        title    = openFile ? Strings.CHOOSE_FOLDER : Strings.OPEN_FILE;
 
-        FileSystem.showOpenDialog(false, true, Strings.CHOOSE_FOLDER, path, null, function (err, files) {
+        FileSystem.showOpenDialog(false, openFile, title, path, null, function (err, files) {
             if (!err) {
                 // If length == 0, user canceled the dialog; length should never be > 1
                 if (files.length > 0) {
@@ -66,14 +73,14 @@ define(function(require, exports, module) {
 
         viewModel.addPath = function() {
             var _self = this;
-            openFolder("").done(function(newpath) {
+            openDialog("").done(function(newpath) {
                 _self.settings.paths.push(koFactory({path: newpath}));
             });
         };
 
         viewModel.editPath = function() {
             var _self = this;
-            openFolder(this.path()).done(function(newpath) {
+            openDialog(this.path()).done(function(newpath) {
                 _self.settings.path(newpath);
             });
         };
@@ -82,11 +89,31 @@ define(function(require, exports, module) {
             viewModel.settings.paths.remove(this);
         };
 
+        viewModel.importStudioStyle = function() {
+            function importTheme(themeFile) {
+                return importer.importFile(themeFile);
+            }
+
+            function saveTheme(theme) {
+                // Default to users folder...
+                var path = require.toUrl("./") + "../theme/";
+                FileSystem.showSaveDialog("Save Theme", path, theme.fileName, function(err, fileName) {
+                    var file = FileSystem.getFileForPath (fileName);
+                    file.write(theme.content);
+                });
+            }
+
+            openDialog("", true)
+                .then(importTheme)
+                .then(saveTheme);
+        };
+
         return viewModel;
     }
 
 
     function open(settings) {
+        _currentSettings = settings;
         var settingsValues = settings.getAll();
         var viewModel      = getViewModel(settingsValues);
         var $template      = $settings.clone();
@@ -108,7 +135,7 @@ define(function(require, exports, module) {
 
 
     return {
-      open: open
+        open: open
     };
 });
 
