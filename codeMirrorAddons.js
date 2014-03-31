@@ -24,8 +24,8 @@ define(function() {
         */
         var promises = [
             // Load up codemirror addon for active lines
-            $.getScript(cm_path + "selection/mark-selection.js").promise(),
-            $.getScript(cm_path + "search/match-highlighter.js").promise()
+            //$.getScript(cm_path + "selection/mark-selection.js").promise(),
+            //$.getScript(cm_path + "search/match-highlighter.js").promise()
         ];
 
         return $.when.apply($, promises).done(initAddons).promise();
