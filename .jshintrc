@@ -11,6 +11,7 @@
     "$": true,
     "window": true,
     "_": true,
-    "brackets": true
+    "brackets": true,
+    "CodeMirror": true
   }
 }
