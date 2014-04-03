@@ -5,18 +5,16 @@
  */
 
 
-define(function() {
+define(function (require, exports, module) {
+    "use strict";
 
-    var FileUtils = brackets.getModule("file/FileUtils"),
-        cm_path   = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/addon/";
+    var spromise  = require("lib/spromise");
 
-
-    function initAddons( ) {
+    function initAddons() {
         // Set some default value for codemirror...
         CodeMirror.defaults.highlightSelectionMatches = true;
         CodeMirror.defaults.styleSelectedText = true;
     }
-
 
     function init() {
         /**
@@ -24,13 +22,16 @@ define(function() {
         */
         var promises = [
             // Load up codemirror addon for active lines
-            //$.getScript(cm_path + "selection/mark-selection.js").promise(),
-            //$.getScript(cm_path + "search/match-highlighter.js").promise()
+            spromise(function(resolve) {
+                brackets.getModule(["thirdparty/CodeMirror2/addon/selection/mark-selection"], resolve);
+            }),
+            spromise(function(resolve) {
+                brackets.getModule(["thirdparty/CodeMirror2/addon/search/match-highlighter"], resolve);
+            })
         ];
 
-        return $.when.apply($, promises).done(initAddons).promise();
+        return spromise.when.apply((void 0), promises).done(initAddons);
     }
-
 
     return {
         ready: init().done
