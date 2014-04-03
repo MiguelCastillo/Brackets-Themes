@@ -5,9 +5,6 @@
  */
 
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, brackets, window, CodeMirror */
-
 define(function (require, exports, module) {
     "use strict";
 
@@ -23,7 +20,7 @@ define(function (require, exports, module) {
     // they make the themes look really bad.
     ExtensionUtils.loadStyleSheet(module, "reset.css");
     ExtensionUtils.loadStyleSheet(module, "views/settings.css");
-    
+
     AppInit.appReady(function(){
         codeMirrorAddons.ready(themeManager.init);
     });
