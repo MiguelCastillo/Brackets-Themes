@@ -24,11 +24,6 @@
     z-index: 5;
 }
 
-.CodeMirror-cursors {
-    visibility: visible !important;
-    z-index: 5 !important;
-}
-
 
 /**
 * Overrides for CodeMirror themes.
