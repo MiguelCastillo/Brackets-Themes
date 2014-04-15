@@ -20,17 +20,12 @@ define(function (require, exports, module) {
         /**
         *  This is where is all starts to load up...
         */
-        var promises = [
-            // Load up codemirror addon for active lines
-            spromise(function(resolve) {
-                brackets.getModule(["thirdparty/CodeMirror2/addon/selection/mark-selection"], resolve);
-            }),
-            spromise(function(resolve) {
-                brackets.getModule(["thirdparty/CodeMirror2/addon/search/match-highlighter"], resolve);
-            })
-        ];
-
-        return spromise.when.apply((void 0), promises).done(initAddons);
+        return spromise(function(resolve) {
+            brackets.getModule([
+                "thirdparty/CodeMirror2/addon/selection/mark-selection",
+                "thirdparty/CodeMirror2/addon/search/match-highlighter"
+            ], resolve);
+        }).done(initAddons);
     }
 
     return {
