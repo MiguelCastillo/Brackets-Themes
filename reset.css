@@ -24,6 +24,10 @@
     z-index: 5;
 }
 
+.CodeMirror-cursors {
+    z-index: 5 !important;
+}
+
 
 /**
 * Overrides for CodeMirror themes.
