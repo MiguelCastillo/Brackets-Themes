@@ -23,12 +23,17 @@ define(function (require) {
         menu                = require("menu");
 
     var themeManager = {
-        selected: settings.getValue("theme") || ["default"],
+        selected: settings.getValue("theme"),
         docMode: "",
         themes: {}
     };
 
     var _initted = false;
+
+    if ( themeManager.selected === undefined ) {
+        settings.setValue("theme",  ["default"]);
+        themeManager.selected = ["default"];
+    }
 
 
     /**
