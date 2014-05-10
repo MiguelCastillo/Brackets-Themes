@@ -10,7 +10,7 @@ define(function (require, exports, module) {
 
     var spromise  = require("lib/spromise");
 
-    function initAddons() {
+    function initAddons(CodeMirror) {
         // Set some default value for codemirror...
         CodeMirror.defaults.highlightSelectionMatches = true;
         CodeMirror.defaults.styleSelectedText = true;
@@ -18,10 +18,11 @@ define(function (require, exports, module) {
 
     function init() {
         /**
-        *  This is where is all starts to load up...
+        *  This is where it all starts to load up...
         */
         return spromise(function(resolve) {
             brackets.getModule([
+                "thirdparty/CodeMirror2/lib/codemirror",
                 "thirdparty/CodeMirror2/addon/selection/mark-selection",
                 "thirdparty/CodeMirror2/addon/search/match-highlighter"
             ], resolve);
