@@ -27,7 +27,7 @@ define(function (require) {
     scrollbarsApply.update = function(themeManager) {
         theme = themeManager ? themeManager.getThemes()[0] : (theme || {});
         if ( settings.getValue("enableScrollbars") ) {
-            var scrollbar = (theme.scrollbar || []).join(" ");
+            var scrollbar = ((theme && theme.scrollbar) || []).join(" ");
             $scrollbars.text(scrollbar || "");
         }
         else {

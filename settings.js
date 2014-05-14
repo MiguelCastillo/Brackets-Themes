@@ -31,6 +31,8 @@ define(function (require) {
 
     settings.setValue = function() {
         _settings.set.apply(_settings, arguments);
+        _settings.save();
+
         $(settings).trigger("change", arguments);
         $(settings).trigger("change:" + arguments[0], [arguments[1]]);
     };

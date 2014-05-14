@@ -64,7 +64,17 @@ define(function(require) {
             });
         }
 
-        FileSystem.getDirectoryForPath(path).getContents(readContent);
+        try {
+            FileSystem.getDirectoryForPath(path).getContents(readContent);
+        }
+        catch(ex) {
+            result.resolve({
+                files: [],
+                path: path,
+                error: ex.message
+            });
+        }
+
         return result.promise();
     }
 
