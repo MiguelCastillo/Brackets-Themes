@@ -119,4 +119,6 @@
   white-space:nowrap;
 }
 
-#status-overwrite { color:white;}
+#status-overwrite { 
+  color:white;
+}
