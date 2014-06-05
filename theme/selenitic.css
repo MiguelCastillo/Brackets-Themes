@@ -177,4 +177,6 @@
 .inline-editor-header a.filename {
   color: #f8cb4f !important;
 }
-#status-overwrite { color:#4BD278;}
+#status-overwrite { 
+  color:#4BD278;
+}
