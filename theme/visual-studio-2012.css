@@ -245,3 +245,4 @@ input:focus {
 .cm-s-visual-studio-2012.CodeMirror .cm-attribute { color: red; }
 .cm-s-visual-studio-2012.CodeMirror .cm-property { color: black; }
 
+#status-overwrite { color:white; }
