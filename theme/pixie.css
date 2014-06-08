@@ -263,3 +263,7 @@ body.platform-win .extension-manager-dialog .modal-body .extension-list .ext-des
   color: #eee;
   background: #0081c2;
 }
+
+#status-overwrite { 
+  color:white;
+}
