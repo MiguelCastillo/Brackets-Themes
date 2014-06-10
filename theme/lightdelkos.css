@@ -45,8 +45,9 @@
 .cm-s-lightdelkos span.cm-keyword {
     color: #0d98fd;
     text-shadow: 0 0 2pt #fff;
-    background-color: #dee;
-    border-bottom: 1pt solid #cdd;
+    background-color: #ddeefb;
+    border-bottom: 1pt solid #5cc5e6;
+    -webkit-animation: hilightKey 2s alternate ease-in-out infinite;
 }
 .cm-s-lightdelkos span.cm-string {
     color: #f016ad;
@@ -61,7 +62,7 @@
     border-bottom: 1pt solid #a9cca9;
 }
 .cm-s-lightdelkos span.cm-variable-2 {
-    color: #0455b4;
+    color: #0092ff;
     text-shadow: 0 0 2pt #fff;    
     background-color: #d1e2eb;
     border-bottom: 1pt solid #0092ff;
@@ -114,5 +115,26 @@
     {
         background-color:#000;
         color: white;        
+    }
+}
+
+
+@-webkit-keyframes hilightKey {
+    0%
+    {
+        border-bottom: 1pt solid #4dd6ff;
+        background-color: #ddeefb;
+    }
+    
+    50%
+    {
+       border-bottom: 1pt solid #00a1f8;        
+       background-color: #dfeefa;
+    }
+    
+    100%
+    {
+        border-bottom: 1pt solid #4dd6ff;
+        background-color: #ddeefb;
     }
 }
