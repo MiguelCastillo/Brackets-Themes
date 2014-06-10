@@ -1,0 +1,66 @@
+.cm-s-delkos.CodeMirror {background: #262626; color: #f8f8f8;}
+.cm-s-delkos div.CodeMirror-selected {
+    background-color: #484848; 
+}
+.cm-s-delkos .CodeMirror-gutters {background: #222; border-right: 0pt;}
+.cm-s-delkos .CodeMirror-cursor {
+    border-left: 1pt solid rgb(255, 255, 255) !important;    
+}
+
+.cm-s-delkos span.cm-comment {color: #95927e;text-shadow: 0 0 2pt #000;}
+.cm-s-delkos span.cm-atom {color: #ccaaff;text-shadow: 0 0 2pt #c000aa;}
+.cm-s-delkos span.cm-number {color: #ff7272;text-shadow: 0 0 2pt #aa0000;}
+.cm-s-delkos span.cm-property, .cm-s-delkos span.cm-attribute {color: #c7e58a;}
+.cm-s-delkos span.cm-keyword {
+    color: #91c0ff;
+    text-shadow: 0 0 1pt #052148;
+}
+
+.cm-s-delkos span.cm-string {
+    color: #ffa2ea;
+    text-shadow: 0 0 4pt #f01662;    
+}
+
+.cm-s-delkos span.cm-variable {color: #aaeaaa;text-shadow: 0 0 2pt #327232;}
+.cm-s-delkos span.cm-variable-2 {color: #64eaff;text-shadow: 0 0 4pt #0092ff;}
+
+.cm-s-delkos span.cm-def{color: #ffd800;text-shadow: 0 0 .25em rgba(206, 143, 0, 0.79);}
+.cm-s-delkos span.cm-bracket{color: #f8f8f8;text-shadow: 0 0 2pt #CAEAFF;}
+
+.cm-s-delkos span.cm-tag {color: #ff61bc;text-shadow: 0 0 2pt #b22878;}
+
+.cm-s-delkos span.cm-link {color: #ae81ff;}
+.cm-s-delkos span.cm-error {background: #ff3292; color: #f8f8f0;}
+
+.cm-s-delkos .CodeMirror-activeline-background {background-color: rgba(0, 0, 0, 0.1) !important;}
+
+.cm-s-delkos .CodeMirror-matchingbracket {
+  color: white !important;
+    box-shadow: 0 0 1em #0AE0FF;
+    border-radius:0.5em;
+    border:1pt solid #00ACF0;
+    background-color: #0AE0FF; 
+    -webkit-animation: hilightMB 2s alternate ease-in-out infinite;
+}
+@-webkit-keyframes hilightMB {
+    0%
+    {
+        background-color:#FF0AE0;
+        border:1pt solid #F000AC;
+        box-shadow: 0 0 1em #FF0AE0;
+    }
+    
+    50%
+    {
+        background-color: transparent;
+        border:1pt solid transparent;
+        box-shadow: 0 0 1em transparent;
+    }
+    
+    100%
+    {
+        background-color:#0AE0FF;
+        border:1pt solid #00ACF0;
+        box-shadow: 0 0 1em #0AE0FF;
+    }
+}
