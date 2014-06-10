@@ -5,7 +5,7 @@
 
 .cm-s-lightdelkos.CodeMirror {
     background: #EEE;
-    color: #222;
+    color: #222;   
 }
 .cm-s-lightdelkos div.CodeMirror-selected {
     background-color: #def;
@@ -36,9 +36,10 @@
 
 
 .cm-s-lightdelkos span.cm-property {
-    color: #17a;
+    color: #0c658d;
     text-shadow: 0 0 2pt #fff;    
-    border-bottom: 1pt solid #acd;
+    background-color: #e0eaf0;
+    border-bottom: 1pt solid #0086c4;
 }
 
 .cm-s-lightdelkos span.cm-keyword {
@@ -55,16 +56,21 @@
 }
 .cm-s-lightdelkos span.cm-variable {
     color: #2f5d2f;
-    text-shadow: 0 0 2pt #c7d8c7;
+    background-color: #dfeedf;
+    text-shadow: 0 0 2pt #fff;
+    border-bottom: 1pt solid #a9cca9;
 }
 .cm-s-lightdelkos span.cm-variable-2 {
-    color: #0092ff;
-    text-shadow: 0 0 4pt #e6f2ff;    
-    border-bottom: 1pt solid #c7dbff;
+    color: #0455b4;
+    text-shadow: 0 0 2pt #fff;    
+    background-color: #d1e2eb;
+    border-bottom: 1pt solid #0092ff;
 }
 .cm-s-lightdelkos span.cm-def {
-    color: #c6a601;
-    text-shadow: 0 0 1pt #fff;
+    color: #9a8c00;
+    background-color: #f5f5ce;
+    text-shadow: 0 0 1pt #ffffef;
+    border-bottom: 1pt solid #e8c731;
 }
 .cm-s-lightdelkos span.cm-bracket {
     color: #111;
@@ -82,7 +88,8 @@
     color: #feedff;
 }
 .cm-s-lightdelkos .CodeMirror-activeline-background {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0.025) !important;
+    z-index: 999;
 }
 .cm-s-lightdelkos .CodeMirror-matchingbracket {
     color: black !important;
