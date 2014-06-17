@@ -53,3 +53,13 @@
   color: #242424;
   background-color: #ffe69d !important;
 }
+
+.cm-dk-whitespace-space:before, .cm-dk-whitespace-tab:before  {
+    background-color: rgba(255,255,255,0.2);
+}
+.cm-dk-whitespace-leading-space:before, .cm-dk-whitespace-leading-tab:before  {
+    background-color: rgba(255,255,255,0.2);
+}
+.cm-dk-whitespace-trailing-space:before, .cm-dk-whitespace-trailing-tab:before {
+    background-color: red;
+}
