@@ -13,7 +13,7 @@ Features
 * Disable scrollbars defined in themes.  Good if you just want to use the default scrollbars.
 * Support for LESS files!
 * Auto reload themes upon saving changes made to theme files.
-* Configure custom folders to load themes from.  This is good if you want to have a folder to hold your custom themes that you want to persist after Brackets/Themes updates.  Read this issue if you want to see why sometimes you need to do this feature. https://github.com/MiguelCastillo/Brackets-Themes/issues/81
+* Configure custom folders to load themes from.  This is good if you want to have a folder to hold your custom themes that you want to persist after Brackets/Themes updates.  Read this <a href='https://github.com/MiguelCastillo/Brackets-Themes/issues/81'>issue</a> if you want to see why sometimes you need to do this feature.
 
 
 Screenshot
