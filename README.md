@@ -19,25 +19,25 @@ Features
 Screenshot
 ===============
 <b>Visual Studio</b>
-![Visual Studio](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/VisualStudio.png)
+![Visual Studio](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/VisualStudio.png)
 
 <b>Monokai Dark Soda</b>
-![Monokai Dark Soda theme](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/MonakaiDarkSoda.png)
+![Monokai Dark Soda theme](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/MonakaiDarkSoda.png)
 
 <b>Dracula</b>
-![Dracula](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Dracula.png)
+![Dracula](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/Dracula.png)
 
 <b>Solarized</b>
-![Obsidian](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Solarized.png)
+![Obsidian](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/Solarized.png)
 
 <b>Delkos</b>
-![Delkos](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Delkos.png)
+![Delkos](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/Delkos.png)
 
 <b>Obsidian</b>
-![Obsidian](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Obsidian.png)
+![Obsidian](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/Obsidian.png)
 
 <b>Zamiere</b>
-![Delkos](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Zamiere.png)
+![Delkos](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/Zamiere.png)
 
 Custom themes 101 guide
 ===============
