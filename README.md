@@ -22,7 +22,7 @@ Screenshot
 ![Visual Studio](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/VisualStudio.png)
 
 <b>Monokai Dark Soda</b>
-![Monokai Dark Soda theme](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/MonakaiDarkSoda.png)
+![Monokai Dark Soda theme](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/MonokaiDarkSoda.png)
 
 <b>Dracula</b>
 ![Dracula](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/Dracula.png)
