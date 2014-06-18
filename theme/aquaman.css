@@ -47,13 +47,16 @@
         border-right:0;
     }
 
+    .cm-s-aquaman .CodeMirror-activeline .CodeMirror-gutter-elt {
+        color: #eeeeee;
+    }
 
-     .cm-s-aquaman .CodeMirror-hscrollbar{
+    .cm-s-aquaman .CodeMirror-hscrollbar{
         bottom: 2px;
         border-color: #202020;
     }
 
-     .cm-s-aquaman .CodeMirror-vscrollbar{
+    .cm-s-aquaman .CodeMirror-vscrollbar{
         right: 2px;
         border-color: #202020;
     }
@@ -219,7 +222,6 @@
 
 
 .inline-widget .color-editor ul.swatches li span.value{color:#525252}
-
 
 
 

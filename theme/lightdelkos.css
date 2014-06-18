@@ -1,11 +1,11 @@
-/* 
+/*
  * Light lightdelkos theme by David Sánchez i Gregori
  *
  */
 
 .cm-s-lightdelkos.CodeMirror {
     background: #EEE;
-    color: #222;   
+    color: #222;
 }
 .cm-s-lightdelkos div.CodeMirror-selected {
     background-color: #def;
@@ -14,6 +14,11 @@
     background: #222;
     border-right: 0pt;
 }
+
+.cm-s-lightdelkos .CodeMirror-activeline .CodeMirror-gutter-elt {
+    color: #eeeeee;
+}
+
 .cm-s-lightdelkos .CodeMirror-cursor {
     border-left: 1pt solid rgb(0, 0, 0) !important;
 }
@@ -37,7 +42,7 @@
 
 .cm-s-lightdelkos span.cm-property {
     color: #0c658d;
-    text-shadow: 0 0 2pt #fff;    
+    text-shadow: 0 0 2pt #fff;
     background-color: #e0eaf0;
     border-bottom: 1pt solid #0086c4;
 }
@@ -63,7 +68,7 @@
 }
 .cm-s-lightdelkos span.cm-variable-2 {
     color: #0092ff;
-    text-shadow: 0 0 2pt #fff;    
+    text-shadow: 0 0 2pt #fff;
     background-color: #d1e2eb;
     border-bottom: 1pt solid #0092ff;
 }
@@ -102,19 +107,19 @@
     0%
     {
         background-color:#FFF;
-        color:black;                
+        color:black;
     }
-    
+
     50%
     {
         background-color: transparent;
-        color: black;        
+        color: black;
     }
-    
+
     100%
     {
         background-color:#000;
-        color: white;        
+        color: white;
     }
 }
 
@@ -125,13 +130,13 @@
         border-bottom: 1pt solid #4dd6ff;
         background-color: #ddeefb;
     }
-    
+
     50%
     {
-       border-bottom: 1pt solid #00a1f8;        
+       border-bottom: 1pt solid #00a1f8;
        background-color: #dfeefa;
     }
-    
+
     100%
     {
         border-bottom: 1pt solid #4dd6ff;

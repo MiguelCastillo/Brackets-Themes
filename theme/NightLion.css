@@ -36,10 +36,10 @@ Good luck, have fun!
 .CodeMirror{background-color: #1a1a1a; color: #777; }/*Main coding area, without line count.*/
 .CodeMirror-lines{}/*Code lines, syntax coloring has higher priority then .CodeMirror-lines*/
 
-.CodeMirror div.CodeMirror-cursor { border-left: 1px solid #333; z-index: 3;} /*Cursor stling*/
+.CodeMirror div.CodeMirror-cursor { border-left: 1px solid #b4b4b4; z-index: 3;} /*Cursor stling*/
 .CodeMirror div.CodeMirror-secondarycursor {} /* Shown when moving in bi-directional text  - from CM docs*/
 
-	/*Brackets is based on webkit, so you can use scrollbar styling. Example below contains 8px width, grey scrollbar for the main area. You can use it with other section, just remember about z-indexes or things like 'selected' with overlap your scrollbar.*/
+  /*Brackets is based on webkit, so you can use scrollbar styling. Example below contains 8px width, grey scrollbar for the main area. You can use it with other section, just remember about z-indexes or things like 'selected' with overlap your scrollbar.*/
 .CodeMirror .CodeMirror-vscrollbar{ width: 8px; bottom:8px !important;} /*Scrollbar vertical. These values MUST be the same as height/width of scrollbars*/
 .CodeMirror .CodeMirror-hscrollbar{ height:8px; right:8px !important;} /*Scrollbar horizontal. These values MUST be the same as height/width of scrollbars*/
 
@@ -50,7 +50,7 @@ Good luck, have fun!
 .CodeMirror-scrollbar-filler {height:8px !important; width:8px !important; background:none;} /* Corner where scrollbars meet. Width and height MUST be the same as that of scrollbars. Background should be the same as that of the scrollbar track*/
 .CodeMirror-gutter-filler{ height:8px !important;} /* Linenumber area left of horizontal scrollbar. Height MUST be the same as width/height of scrollbars */
 
-
+.CodeMirror-activeline .CodeMirror-gutter-elt { color: #eeeeee; }
 
 .CodeMirror .CodeMirror-scroll .CodeMirror-gutters{background-color: #545454; color:#ffffff;}/*Left vertical bar with line count*/
 .CodeMirror-gutter{color:#ffffff;} /*Left bar with line count - it will affect global line count, BUT line count in inline editor won't be changed.*/
@@ -114,11 +114,11 @@ div.CodeMirror span.CodeMirror-searching{background-color: #ffffff !important;} 
 #context-menu-bar .dropdown-menu a{} /*Single option, treat it like <li> ex. background*/
 #context-menu-bar .dropdown-menu a:hover{} /*Single option, treat it like <li> ex. background - hover state. RGBA is not working!*/
 
-		/*If you need different dropdown style for different sections, use IDs below.*/
-			#context-menu-bar #project-context-menu .dropdown-menu{} /*Dropdown menu for project files section*/
-			#context-menu-bar #editor-context-menu .dropdown-menu{} /*Dropdown menu for editor section*/
-			#context-menu-bar #inline-editor-context-menu .dropdown-menu{} /*Dropdown menu for inline editor like Quick Edit*/
-		/*--back to general--*/
+    /*If you need different dropdown style for different sections, use IDs below.*/
+      #context-menu-bar #project-context-menu .dropdown-menu{} /*Dropdown menu for project files section*/
+      #context-menu-bar #editor-context-menu .dropdown-menu{} /*Dropdown menu for editor section*/
+      #context-menu-bar #inline-editor-context-menu .dropdown-menu{} /*Dropdown menu for inline editor like Quick Edit*/
+    /*--back to general--*/
 
 #codehint-menu-bar .dropdown-menu{} /*Code hint menu, dropdown visible when writing code.*/
 #codehint-menu-bar .dropdown-menu li a{} /*Code hint menu option, dropdown visible when writing code. Treat like <li>*/

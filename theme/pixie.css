@@ -87,6 +87,10 @@
   opacity:.5;
 }
 
+.cm-s-pixie .CodeMirror-activeline .CodeMirror-gutter-elt {
+  color: #eeeeee;
+}
+
 .cm-s-pixie .cm-keyword    {color:#CC7833;}
 .cm-s-pixie .cm-atom       {color:#A5C261;}
 .cm-s-pixie .cm-number     {color:#A5C261;}
@@ -264,6 +268,6 @@ body.platform-win .extension-manager-dialog .modal-body .extension-list .ext-des
   background: #0081c2;
 }
 
-#status-overwrite { 
+#status-overwrite {
   color:white;
 }
