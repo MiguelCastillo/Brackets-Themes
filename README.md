@@ -66,14 +66,7 @@ Felipe K. de Mello: Dracula<br>
 Fernando Hurtado: Nando<br>
 Jordan Hess: Pixie<br>
 John Hamm: Hammsidian<br>
-Christopher Kelly (scriptmunkee) for additions to reset.cs<br>
-
-
-Links
-===============
-Brackets? Right here... http://brackets.io/ <br>
-Brackets github? Right here... https://github.com/adobe/brackets
-
+Christopher Kelly (scriptmunkee) for additions to reset.css<br>
 
 Contact me
 ===============
