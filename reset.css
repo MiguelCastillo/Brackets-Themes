@@ -59,16 +59,6 @@
     background: rgba(125, 0, 0, 0.5);
 }
 
-.cm-s-monokai-dark-soda .cm-dk-whitespace-leading-space:before,
-.cm-s-monokai-dark-soda .cm-dk-whitespace-leading-tab:before {
-    background-color: rgba(200, 200, 200, .3);
-}
-
-.cm-s-monokai-dark-soda.CodeMirror .cm-dk-whitespace-space:before,
-.cm-s-monokai-dark-soda.CodeMirror .cm-dk-whitespace-tab:before {
-    background-color: rgba(100, 250, 100, .3);
-}
-
 .cm-s-nando .CodeMirror-matchingtag {
     background: rgba(207, 234, 214, 0.3);
 }
@@ -195,4 +185,65 @@
 
 .cm-s-xq-light .CodeMirror-matchingtag {
     background: rgba(207, 234, 214, 1);
+}
+
+
+.cm-s-monokai-dark-soda .cm-dk-whitespace-leading-space:before,
+.cm-s-monokai-dark-soda .cm-dk-whitespace-leading-tab:before {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+.cm-s-monokai-dark-soda .cm-dk-whitespace-space:before,
+.cm-s-monokai-dark-soda .cm-dk-whitespace-tab:before {
+    background-color: rgba(100, 250, 100, .5);
+}
+
+.cm-s-zamiere .cm-dk-whitespace-leading-space:before,
+.cm-s-zamiere .cm-dk-whitespace-leading-tab:before {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+.cm-s-zamiere .cm-dk-whitespace-space:before,
+.cm-s-zamiere .cm-dk-whitespace-tab:before {
+    background-color: rgba(100, 250, 100, .5);
+}
+
+.cm-s-delkos .cm-dk-whitespace-leading-space:before,
+.cm-s-delkos .cm-dk-whitespace-leading-tab:before {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+.cm-s-delkos .cm-dk-whitespace-space:before,
+.cm-s-delkos .cm-dk-whitespace-tab:before {
+    background-color: rgba(100, 250, 100, .5);
+}
+
+.cm-s-pixie .cm-dk-whitespace-leading-space:before,
+.cm-s-pixie .cm-dk-whitespace-leading-tab:before {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+.cm-s-pixie .cm-dk-whitespace-space:before,
+.cm-s-pixie .cm-dk-whitespace-tab:before {
+    background-color: rgba(100, 250, 100, .5);
+}
+
+.cm-s-railscasts .cm-dk-whitespace-leading-space:before,
+.cm-s-railscasts .cm-dk-whitespace-leading-tab:before {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+.cm-s-railscasts .cm-dk-whitespace-space:before,
+.cm-s-railscasts .cm-dk-whitespace-tab:before {
+    background-color: rgba(100, 250, 100, .5);
+}
+
+.cm-s-obsidian .cm-dk-whitespace-leading-space:before,
+.cm-s-obsidian .cm-dk-whitespace-leading-tab:before {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+.cm-s-obsidian .cm-dk-whitespace-space:before,
+.cm-s-obsidian .cm-dk-whitespace-tab:before {
+    background-color: rgba(100, 250, 100, .5);
 }
