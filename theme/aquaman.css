@@ -194,6 +194,10 @@
     color:#41cf70;
 }
 
+#status-indicators #status-overwrite {
+    color: #ddd;
+}
+
 #context-menu-bar .dropdown-menu a{color:#3c3f41}
 #context-menu-bar .dropdown-menu a:hover{background:#f8cb4f}
 
