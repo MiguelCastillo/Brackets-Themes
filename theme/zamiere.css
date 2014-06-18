@@ -40,7 +40,7 @@
 }
 
 .cm-s-zamiere .CodeMirror-selected {
-  background:#3d3d3d;
+  background:#676767;
   opacity:.5;
 }
 
@@ -89,6 +89,10 @@
   margin:-1px -10px;
 }
 
+.cm-s-zamiere .CodeMirror-activeline .CodeMirror-gutter-elt {
+  color: #eeeeee;
+}
+
 .cm-s-zamiere div.CodeMirror-gutter {
   color:#ccc;
 }
@@ -119,6 +123,6 @@
   white-space:nowrap;
 }
 
-#status-overwrite { 
+#status-overwrite {
   color:white;
 }
