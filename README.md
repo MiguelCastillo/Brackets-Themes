@@ -36,6 +36,9 @@ Screenshot
 <b>Obsidian</b>
 ![Obsidian](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Obsidian.png)
 
+<b>Zamiere</b>
+![Delkos](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Zamiere.png)
+
 Custom themes 101 guide
 ===============
 
