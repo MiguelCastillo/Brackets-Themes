@@ -18,11 +18,23 @@ Features
 
 Screenshot
 ===============
-<b>Visual Studio theme</b>
-![Visual Studio theme](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/VisualStudio.png)
+<b>Visual Studio</b>
+![Visual Studio](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/VisualStudio.png)
 
-<b>Monokai Dark Soda custom theme by @simpleshadow.</b>
-![Monokai Dark Soda theme](https://raw.github.com/wiki/MiguelCastillo/Brackets-Themes/images/MonokaiDarkSoda.png)
+<b>Monokai Dark Soda</b>
+![Monokai Dark Soda theme](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/MonakaiDarkSoda.png)
+
+<b>Dracula</b>
+![Dracula](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Dracula.png)
+
+<b>Solarized</b>
+![Obsidian](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Solarized.png)
+
+<b>Delkos</b>
+![Delkos](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Delkos.png)
+
+<b>Obsidian</b>
+![Obsidian](https://raw.githubusercontent.com/MiguelCastillo/Brackets-Themes/master/screenshots/Obsidian.png)
 
 Custom themes 101 guide
 ===============
