@@ -3,14 +3,13 @@
   color: #fff;
 }
 
-.CodeMirror div.CodeMirror-cursor {
+.CodeMirror .CodeMirror-cursor {
   border-left: 1px solid #f8f8f0;
   z-index: 3;
 }
 
 .CodeMirror-selected {
-    background: #3d3d3d;
-    opacity: .23;
+    background: rgba(125, 0, 0, 0.5);
 }
 
 .cm-s-monokai-dark-soda .cm-keyword {color: #ff007f;}
@@ -36,8 +35,8 @@
 }
 
 .cm-s-monokai-dark-soda .cm-matchhighlight {
-  background-color: #00CCFF;
-  color: #242424;
+    background-color: #00CCFF;
+    color: #242424;
 }
 
 .CodeMirror .CodeMirror-matchingbracket {
@@ -50,6 +49,10 @@
 }
 
 .CodeMirror .CodeMirror-searching {
-  color: #242424;
-  background-color: #ffe69d !important;
+    color: #242424;
+    background-color: #ffe69d !important;
+}
+
+.CodeMirror-activeline .CodeMirror-gutter-elt {
+    color: #eeeeee;
 }
