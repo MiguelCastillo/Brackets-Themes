@@ -9,7 +9,7 @@
 }
 
 .CodeMirror-selected {
-    background: rgba(125, 0, 0, 0.5);
+    background: rgba(0, 100, 125, 0.5);
 }
 
 .cm-s-monokai-dark-soda .cm-keyword {color: #ff007f;}
