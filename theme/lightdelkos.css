@@ -1,6 +1,6 @@
 /* 
  * Light lightdelkos theme by David Sánchez i Gregori
- *
+ * Licensed under BSD License
  */
 
 .cm-s-lightdelkos.CodeMirror {
@@ -8,7 +8,7 @@
     color: #222;   
 }
 .cm-s-lightdelkos div.CodeMirror-selected {
-    background-color: #def;
+    background-color: #def !important;   
 }
 .cm-s-lightdelkos .CodeMirror-gutters {
     background: #222;
@@ -22,16 +22,21 @@
     text-shadow: 0 0 2pt #FFF;
 }
 .cm-s-lightdelkos span.cm-atom {
-    color: #a26fff;
-    text-shadow: 0 0 2pt #f1dcf8;
+    color: #410c76;
+    background-color: #ede1f2;
+    text-shadow: 0 0 2pt #fadcff;
+    border-bottom: 1pt solid #9600f4;
 }
 .cm-s-lightdelkos span.cm-number {
     color: #f00;
-    text-shadow: 0 0 1pt #eba;
+    text-shadow: 0 0 1pt #b75;
 }
 
 .cm-s-lightdelkos span.cm-attribute {
     color: #199;
+    background-color: #dfeee9;
+    text-shadow: 0 0 2pt #fff;
+    border-bottom: 1pt solid #68ddbd;
 }
 
 
@@ -78,8 +83,10 @@
     text-shadow: 0 0 1pt #d8edfc;
 }
 .cm-s-lightdelkos span.cm-tag {
-    color: #ff61bc;
-    text-shadow: 0 0 2pt rgb(255, 214, 245);
+    color: #965d05;
+    text-shadow: 0 0 1pt #fff;
+    background-color: #f5f2e5;
+    border-bottom: 1pt solid #e0a624;
 }
 .cm-s-lightdelkos span.cm-link {
     color: #ae81ff;
@@ -102,19 +109,19 @@
     0%
     {
         background-color:#FFF;
-        color:black;                
+        color:#888;                
     }
     
     50%
     {
-        background-color: transparent;
+        background-color: #eee;
         color: black;        
     }
     
     100%
     {
-        background-color:#000;
-        color: white;        
+        background-color:#ddd;
+        color: #000;        
     }
 }
 
