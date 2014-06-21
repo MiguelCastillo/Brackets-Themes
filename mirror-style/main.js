@@ -29,55 +29,45 @@ define(function(require) {
     function splitColor (color) {
         var colorProps = {};
         // AA BB GG RR (VS reverses BB && RR bits...)
-        var split = color.match(/0x([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/);
-        var splitValue;
+        var split = color.match(/0x([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/) || [];
+        var opacity;
 
-        if (split && split.length > 0) {
-            if (split.length > 2) {
-                colorProps.color = split[4] + split[3] + split[2];
-            }
-            if (split.length > 1) {
-                splitValue = Number(split[1]);
-                if (splitValue > 0) {
-                    colorProps.opacity = splitValue;
-                }
-            }
+        // Get rid of regex match.
+        split.shift();
+
+        // We should have four channels...  But, we only care whether or not the 'alpha'
+        // channel is 2.  If it is 2, then we skip the color.
+        if (split.length === 4) {
+            opacity            = Number(split[0]);
+            colorProps.color   = [split[3], split[2], split[1]];
+            colorProps.rgba    = [parseInt(split[3], 16), parseInt(split[2], 16), parseInt(split[1], 16)];
+            colorProps.inherit = opacity === 2;
         }
-        else {
-            colorProps.color = color;
-        }
+
         return colorProps;
     }
 
 
-    // From mirror-style
-    function splitHexAColor (color) {
-        var colorProps = {};
-        var hex = color.replace(/0x/, '');
-        var a = (hex & 0xFF000000) >> 24;
-        var r = (hex & 0xFF0000) >> 16;
-        var g = (hex & 0xFF00) >> 8;
-        var b = (hex & 0xFF);
-        colorProps.color = r.toString(16) + g.toString(16) + b.toString(16);
-        colorProps.opacity = Number(a.toString(16));
-        return colorProps;
+    function colorString(input) {
+        if (input.inherit) {
+            return "inherit";
+        }
+
+        var func = input.rgba.length === 3 ? 'rgb' : 'rgba';
+        return func + '(' + input.rgba.join(',') + ')';
     }
 
 
     // From mirror-style
     function readItem (item) {
-        var prop = {};
-        if (item.length > 0) {
-            var backgroundValues = splitColor(item.attr('background'));
-            var foregroundValues = splitColor(item.attr('foreground'));
-            prop = {
-                color: '#' + foregroundValues.color,
-                background: '#' + backgroundValues.color,
-                opacity: backgroundValues.opacity,
-                bold: item.attr('boldfont') === 'Yes' ? true : false
-            };
-        }
-        return prop;
+        var backgroundValues = splitColor(item.attr('background'));
+        var foregroundValues = splitColor(item.attr('foreground'));
+
+        return {
+            color: colorString(foregroundValues),
+            background: colorString(backgroundValues),
+            bold: item.attr('boldfont') === 'Yes' ? true : false
+        };
     }
 
 
@@ -88,11 +78,14 @@ define(function(require) {
             props = {};
         var lessParser, currentLessTmpl;
 
-        $('Items Item', $content).each(function (i, item) {
+        $('Items > Item', $content).each(function (i, item) {
             var $item = $(item),
-                name = $item.attr('name');
-            var prop = readItem($item);
-            props[ cleanup(name) ] = prop;
+                name  = $item.attr('name'),
+                prop  = readItem($item);
+
+            if ($item.length && (prop.color || prop.background)) {
+                props[ cleanup(name) ] = prop;
+            }
         });
 
         props.name = themeName;

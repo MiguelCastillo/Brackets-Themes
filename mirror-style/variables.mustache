@@ -4,7 +4,7 @@
 @plainTextColor: <%= PlainText.color %>;
 
 @guttersBackground: <%= LineNumbers.background %>;
-@guttersColor: <%= LineNumbers.color %>;
+@linenumberColor: <%= LineNumbers.color %>;
 
 @hscrollbarBorder: #202020;
 @vscrollbarBorder: #202020;
@@ -15,11 +15,11 @@
 @keywordColor: <%= Keyword.color %>;
 @numberColor: <%= Number.color %>;
 
-@variableColor: <%= PlainText.color %>;
-@variable2Color: <%= PreprocessorKeyword.color %>;
+@variableColor:  <%= PlainText.color %>;
+@variable2Color: <%= PlainText.color %>;
 @variable3Color: <%= PlainText.color %>;
 
-@propertyColor: <%= UserTypesValueTypes.color %>;
+@propertyColor: <%= Identifier.color %>;
 @operatorColor: <%= Operator.color %>;
 
 @atomColor: <%= Keyword.color %>;
@@ -27,14 +27,11 @@
 @commentColor: <%= Comment.color %>;
 @commentBackground: <%= Comment.background %>;
 
-@commentHoverColor: lighten(<%= Comment.color %>, 20%);
-@commentHoverBackground: darken(<%= Comment.background %>, 20%);
-
 @stringColor: <%= String.color %>;
 @string2Color: <%= StringCVerbatim.color %>;
-@definitionColor: <%= UserTypes.color %>;
+@definitionColor: <%= Identifier.color %>;
 @metaColor: <%= XMLAttribute.color %>;
-@qualifierColor: <%= CSSPropertyName.color %>;
+@qualifierColor: <%= CSSSelector.color %>;
 @tagColor: <%= HTMLElementName.color %>;
 
 @builtingColor: <%= Keyword.color %>;
@@ -49,3 +46,47 @@
 
 @matchingBracketColor: <%= outliningverticalrule.color %>;
 @nonmatchingBracketColor: <%= outliningcollapsehintadornment.color %>;
+
+
+// CSS definitions
+//
+//<Item Name="CSS Comment" Foreground="0x00FFFF00" Background="0x02000000" BoldFont="No"/>
+//<Item Name="CSS Keyword" Foreground="0x003278CC" Background="0x02000000" BoldFont="No"/>
+//<Item Name="CSS Property Name" Foreground="0x00BEF4FC" Background="0x02000000" BoldFont="No"/>
+//<Item Name="CSS Property Value" Foreground="0x00FFFFFF" Background="0x02000000" BoldFont="No"/>
+//<Item Name="CSS Selector" Foreground="0x00BEF4FC" Background="0x02000000" BoldFont="No"/>
+//<Item Name="CSS String Value" Foreground="0x00FFFF00" Background="0x02000000" BoldFont="No"/>
+//
+@cssCommentColor:       <%= CSSComment.color %>;
+@cssCommentBackground:  <%= CSSComment.background %>;
+@cssKeywordColor:       <%= CSSKeyword.color %>;
+@cssPropertyColor:      <%= CSSPropertyName.color %>;
+@cssAtomColor:          <%= CSSPropertyValue.color %>;
+@cssStringColor:        <%= CSSStringValue.color %>;
+@cssNumberColor:        <%= CSSStringValue.color %>;
+@cssQualifierColor:     <%= CSSSelector.color %>;
+@cssMetaColor:          <%= CSSSelector.color %>;
+@cssTagColor:           <%= CSSSelector.color %>;
+
+
+// HTML definitions
+//
+//<Item Name="HTML Attribute" Foreground="0x00B18C67" Background="0x02000000" BoldFont="No"/>
+//<Item Name="HTML Attribute Value" Foreground="0x000076EC" Background="0x02000000" BoldFont="No"/>
+//<Item Name="HTML Comment" Foreground="0x007B7466" Background="0x02000000" BoldFont="No"/>
+//<Item Name="HTML Element Name" Foreground="0x0063C793" Background="0x02000000" BoldFont="No"/>
+//<Item Name="HTML Entity" Foreground="0x00BD82A0" Background="0x02000000" BoldFont="No"/>
+//<Item Name="HTML Operator" Foreground="0x00E4E2E0" Background="0x00343129" BoldFont="No"/>
+//<Item Name="HTML Server-Side Script" Foreground="0x00B48C8C" Background="0x02000000" BoldFont="No"/>
+//<Item Name="HTML Tag Delimiter" Foreground="0x02000000" Background="0x02000000" BoldFont="No"/>
+//
+@htmlAttributeColor:      <%= HTMLAttribute.color %>;
+@htmlAttributeValueColor: <%= HTMLAttributeValue.color %>;
+@htmlCommentColor:        <%= HTMLComment.color %>;
+@htmlCommentBackground:   <%= HTMLComment.background %>;
+@htmlElementNameColor:    <%= HTMLElementName.color %>;
+@htmlEntityColor:         <%= HTMLEntity.color %>;
+@htmlOperatorColor:       <%= HTMLOperator.color %>;
+@htmlOperatorBackground:  <%= HTMLOperator.background %>;
+@htmlTagDelimiterColor:   <%= HTMLTagDelimiter.color %>;
+
