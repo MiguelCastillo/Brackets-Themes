@@ -3,14 +3,26 @@
 @plainTextBackground: <%= PlainText.background %>;
 @plainTextColor: <%= PlainText.color %>;
 
+.documentBackground() when not(iscolor(@plainTextBackground)) {
+    @backgroundColor: #e8e8e8;
+}
+
+.documentBackground() when (iscolor(@plainTextBackground)) {
+    @backgroundColor: @plainTextBackground;
+}
+
+.documentFontColor() when not (iscolor(@plainTextColor)) {
+    .documentBackground();
+    @fontColor: contrast(@backgroundColor);
+}
+
+.documentFontColor() when (iscolor(@plainTextColor)) {
+    @fontColor: @plainTextColor;
+}
+
+
 @guttersBackground: <%= LineNumbers.background %>;
 @linenumberColor: <%= LineNumbers.color %>;
-
-@hscrollbarBorder: #202020;
-@vscrollbarBorder: #202020;
-@scrollbarThumbBackground: #3c3f41;
-@scrollbarHoverBackground: #dd8440;
-@scrollbarActiveBackground: #4bd278;
 
 @keywordColor: <%= Keyword.color %>;
 @numberColor: <%= Number.color %>;

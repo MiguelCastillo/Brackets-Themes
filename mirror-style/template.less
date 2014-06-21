@@ -1,6 +1,8 @@
 .CodeMirror {
-    background: @plainTextBackground;
-    color: @plainTextColor;
+    .documentBackground();
+    .documentFontColor();
+    background: @backgroundColor;
+    color: @fontColor;
 }
 
 .CodeMirror-gutters {
@@ -12,49 +14,6 @@
 .CodeMirror-linenumber {
     color: @linenumberColor;
     border-right: 0;
-}
-
-.CodeMirror-hscrollbar {
-    bottom: 2px;
-    border-color: @hscrollbarBorder;
-}
-
-.CodeMirror-vscrollbar {
-    right: 2px;
-    border-color: @vscrollbarBorder;
-}
-
-.CodeMirror-hscrollbar::-webkit-scrollbar {
-    height: 10px;
-}
-
-.CodeMirror-vscrollbar::-webkit-scrollbar {
-    width: 10px;
-}
-
-.CodeMirror-vscrollbar::-webkit-scrollbar-track,
-.CodeMirror-hscrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
-.CodeMirror-hscrollbar::-webkit-scrollbar-thumb {
-    background: @scrollbarThumbBackground;
-}
-
-.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
-.CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover {
-    background: @scrollbarHoverBackground;
-}
-
-.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:active,
-.CodeMirror-hscrollbar::-webkit-scrollbar-thumb:active {
-    background: @scrollbarActiveBackground;
-}
-
-.CodeMirror-scrollbar-filler,
-.CodeMirror-gutter-filler {
-    background-color: transparent;
 }
 
 .cm-keyword {
@@ -223,8 +182,6 @@
 .doctype-htmlmixed:extend(.doctype-html all) {
 }
 
-
-
 .CodeMirror-selected {
     background: @selectedTextBackground !important;
     opacity: @selectedTextOpacity;
@@ -237,7 +194,8 @@
 }
 
 .CodeMirror-matchingtag {
-    background-color: darken(@plainTextBackground, 10%) !important;
+    .documentBackground();
+    background-color: darken(@backgroundColor, 10%) !important;
 }
 
 .CodeMirror-searching {
@@ -266,24 +224,34 @@
 
 .CodeMirror-cursor,
 .CodeMirror-secondarycursor {
-    border-left: 2px solid #ff8833;
-    z-index: 5;
+    .documentBackground();
+    border-left: 1px solid contrast(@backgroundColor) !important;
 }
 
 #status-bar {
-    border-top: 1px solid #484b4d;
-    background: #3c3f41;
+    .documentBackground();
+    .documentFontColor();
+
+    background: @backgroundColor;
+
     #status-info {
-        color: #f7c741;
+        color: lighten(@fontColor, 10%);
     }
+
     #status-indicators {
-        background: #3c3f41;
+        background: @backgroundColor;
+        color: @fontColor;
     }
-    #status-indicators #status-language {
-        color: #dd8440;
+
+    #status-overwrite {
+        background: @backgroundColor;
+        color: @fontColor;
     }
-    #status-indicators #status-indent {
-        color: #41cf70;
+
+    #status-language {
+    }
+
+    #status-indent {
     }
 }
 
@@ -291,6 +259,7 @@
     .dropdown-menu a {
         color: #3c3f41
     }
+
     .dropdown-menu a:hover {
         background: #f8cb4f
     }
@@ -298,6 +267,7 @@
 
 .inline-widget .CodeMirror-gutter {
     background: #242424 !important;
+
     .color-editor ul.swatches li span.value {
         color: #525252
     }
@@ -308,9 +278,11 @@
     background: #242424;
     height: 30px;
     width: 100%;
+
     a.filename span.line-number {
         color: #e0e0e0 !important;
     }
+
     a.filename {
         color: #f8cb4f !important;
     }
