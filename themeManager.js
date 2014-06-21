@@ -115,7 +115,7 @@ define(function (require) {
     function setDocumentMode(cm) {
         var mode = cm.getDoc().getMode();
         var docMode = mode && (mode.helperType || mode.name);
-        $("html").removeClass("doctype-" + themeManager.docMode).addClass("doctype-" + docMode);
+        $("body").removeClass("doctype-" + themeManager.docMode).addClass("doctype-" + docMode);
         themeManager.docMode = docMode;
     }
 
