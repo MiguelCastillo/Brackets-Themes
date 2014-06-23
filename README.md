@@ -9,6 +9,7 @@ Features
 
 * Automatic loading of CodeMirror's themes shipped with Brackets.
 * Enjoy a variety of <i>custom</i> themes created by other users like yourself! For <i>custom</i> themes 101 primer, please read below.
+* Import themes from http://studiostyl.es/.
 * Configure font size and font type.
 * Disable scrollbars defined in themes.  Good if you just want to use the default scrollbars.
 * Support for LESS files!
