@@ -8,14 +8,15 @@
 define(function(require, exports, module) {
     "use strict";
 
-    var _ = brackets.getModule("thirdparty/lodash");
-    var Dialog = brackets.getModule("widgets/Dialogs"),
-        FileSystem = brackets.getModule("filesystem/FileSystem"),
-        Strings = brackets.getModule("strings"),
-        ko = require("lib/knockout-3.0.0"),
-        koFactory = require("lib/ko.factory"),
-        importer = require("mirror-style/main"),
-        packageInfo = JSON.parse(require("text!package.json")),
+    var Dialogs        = brackets.getModule("widgets/Dialogs"),
+        DefaultDialogs = brackets.getModule("widgets/DefaultDialogs"),
+        FileSystem     = brackets.getModule("filesystem/FileSystem"),
+        StringUtils    = brackets.getModule("utils/StringUtils"),
+        Strings        = brackets.getModule("strings"),
+        ko             = require("lib/knockout-3.0.0"),
+        koFactory      = require("lib/ko.factory"),
+        importer       = require("mirror-style/main"),
+        packageInfo    = JSON.parse(require("text!package.json")),
         tmpl = {
             "main": require("text!views/settings.html"),
             "general": require("text!views/general.html"),
@@ -36,15 +37,15 @@ define(function(require, exports, module) {
     $("#scheduleSettings", $settings).html(tmpl.schedule);
     $("#aboutSettings", $settings).html(tmpl.about);
 
-    var _currentSettings;
-
+    var lastSaveImportThemeDirectory = "";
 
     function openDialog(path, openFile, title) {
         var result = $.Deferred();
-        openFile = !openFile;
-        title    = openFile ? Strings.CHOOSE_FOLDER : Strings.OPEN_FILE;
+        title = openFile ? Strings.OPEN_FILE : Strings.CHOOSE_FOLDER;
 
-        FileSystem.showOpenDialog(false, openFile, title, path, null, function (err, files) {
+        FileSystem.showOpenDialog(false, !openFile, title, path, null, function (err, files) {
+            var errorMessage;
+
             if (!err) {
                 // If length == 0, user canceled the dialog; length should never be > 1
                 if (files.length > 0) {
@@ -55,12 +56,13 @@ define(function(require, exports, module) {
                 }
             }
             else {
+                errorMessage = openFile ? "Error opening file " + path : "Error opening directory " + path;
+                result.reject(errorMessage);
                 Dialogs.showModalDialog(
                     DefaultDialogs.DIALOG_ID_ERROR,
-                    "Error opening directory " + path,
+                    errorMessage,
                     StringUtils.format(Strings.OPEN_DIALOG_ERROR, err)
                 );
-                result.reject("Error opening directory " + path);
             }
         });
 
@@ -68,20 +70,23 @@ define(function(require, exports, module) {
     }
 
 
-    function getViewModel(settings) {
+    function getViewModel(settingsManager) {
+        var settings  = settingsManager.getAll();
         var viewModel = koFactory($.extend(true, {}, {settings: settings, package: packageInfo}));
 
+        viewModel.reset = function() {
+            settingsManager.reset();
+        };
+
         viewModel.addPath = function() {
-            var _self = this;
             openDialog("").done(function(newpath) {
-                _self.settings.paths.push(koFactory({path: newpath}));
+                viewModel.settings.paths.push(koFactory(newpath));
             });
         };
 
         viewModel.editPath = function() {
-            var _self = this;
-            openDialog(this.path()).done(function(newpath) {
-                _self.settings.path(newpath);
+            openDialog(this).done(function(newpath) {
+                viewModel.settings.path(newpath);
             });
         };
 
@@ -90,16 +95,33 @@ define(function(require, exports, module) {
         };
 
         viewModel.importStudioStyle = function() {
+            // This is really important.  If the default folder to place custom themes
+            // does not exist, then we need to create one so that we have a place to
+            // put these default themes to prevent them from being deleted when updates
+            // take place.
+            var directory = FileSystem.getDirectoryForPath(settingsManager.customPath);
+            directory.exists(function(err, exists) {
+                if (!err && !exists) {
+                    directory.create();
+                }
+            });
+
+            // We want to save themes in the custom path by default.  But we will cache
+            // the value of the last selected directory in case the user just wants to
+            // save themes in a different location.
+            lastSaveImportThemeDirectory = lastSaveImportThemeDirectory || settingsManager.customPath;
+
             function importTheme(themeFile) {
                 return importer.importFile(themeFile);
             }
 
             function saveTheme(theme) {
-                // Default to users folder...
-                var path = require.toUrl("./") + "../theme/";
-                FileSystem.showSaveDialog("Save Theme", path, theme.fileName, function(err, fileName) {
-                    var file = FileSystem.getFileForPath (fileName);
-                    file.write(theme.content);
+                FileSystem.showSaveDialog("Save Theme", lastSaveImportThemeDirectory, theme.fileName, function(err, fileName) {
+                    if (fileName) {
+                        var file = FileSystem.getFileForPath (fileName);
+                        file.write(theme.content);
+                        lastSaveImportThemeDirectory = file._parentPath;
+                    }
                 });
             }
 
@@ -113,15 +135,14 @@ define(function(require, exports, module) {
 
 
     function open(settings) {
-        _currentSettings = settings;
         var settingsValues = settings.getAll();
-        var viewModel      = getViewModel(settingsValues);
+        var viewModel      = getViewModel(settings);
         var $template      = $settings.clone();
 
         $template.find("[data-toggle=tab].default").tab("show");
         koFactory.bind(viewModel, $template);
 
-        Dialog.showModalDialogUsingTemplate($template).done(function( id ) {
+        Dialogs.showModalDialogUsingTemplate($template).done(function( id ) {
             if ( id === "save" ) {
                 var newSettings = koFactory.deserialize(viewModel).settings;
                 for( var i in newSettings ) {
@@ -134,8 +155,6 @@ define(function(require, exports, module) {
     }
 
 
-    return {
-        open: open
-    };
+    exports.open = open;
 });
 

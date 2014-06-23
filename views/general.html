@@ -1,7 +1,7 @@
 <form class="form-horizontal">
     <div class="control-group">
         <label class="control-label">Current theme:</label>
-        <!-- ko foreach: settings.theme -->
+        <!-- ko foreach: settings.themes -->
         <div class="controls">
             <label class="control-label" data-bind="html: $data" style="text-align:left;"></label>
         </div>
@@ -11,7 +11,7 @@
     <div class="control-group">
         <label class="control-label">Custom scrollbars:</label>
         <div class="controls">
-            <input type="checkbox" data-bind="checked: settings.enableScrollbars">
+            <input type="checkbox" data-bind="checked: settings.customScrollbars">
         </div>
     </div>
 
@@ -28,7 +28,7 @@
             <input type="text" data-bind="value: settings.fontType">
         </div>
     </div>
-    
+
     <div class="control-group">
         <label class="control-label">Line height:</label>
         <div class="controls">
