@@ -71,27 +71,32 @@ define(function(require, exports, module) {
 
 
     function getViewModel(settingsManager) {
-        var settings  = settingsManager.getAll();
-        var viewModel = koFactory($.extend(true, {}, {settings: settings, package: packageInfo}));
+        var viewModel = koFactory.serialize(defaults());
+
+        function defaults() {
+            var settings  = settingsManager.getAll();
+            return $.extend(true, {}, {settings: settings, package: packageInfo});
+        }
 
         viewModel.reset = function() {
             settingsManager.reset();
+            koFactory.serialize(defaults(), viewModel);
         };
 
         viewModel.addPath = function() {
             openDialog("").done(function(newpath) {
-                viewModel.settings.paths.push(koFactory(newpath));
-            });
-        };
-
-        viewModel.editPath = function() {
-            openDialog(this).done(function(newpath) {
-                viewModel.settings.path(newpath);
+                viewModel.settings.paths.push(koFactory({path:newpath}));
             });
         };
 
         viewModel.removePath = function() {
             viewModel.settings.paths.remove(this);
+        };
+
+        viewModel.editPath = function() {
+            openDialog(this.path()).done(function(newpath) {
+                this.path(newpath);
+            }.bind(this));
         };
 
         viewModel.importStudioStyle = function() {
@@ -135,19 +140,19 @@ define(function(require, exports, module) {
 
 
     function open(settings) {
-        var settingsValues = settings.getAll();
-        var viewModel      = getViewModel(settings);
-        var $template      = $settings.clone();
+        var viewModel = getViewModel(settings);
+        var $template = $settings.clone();
 
         $template.find("[data-toggle=tab].default").tab("show");
         koFactory.bind(viewModel, $template);
 
         Dialogs.showModalDialogUsingTemplate($template).done(function( id ) {
-            if ( id === "save" ) {
+            if (id === "save") {
                 var newSettings = koFactory.deserialize(viewModel).settings;
-                for( var i in newSettings ) {
-                    if ( settingsValues.hasOwnProperty(i) ) {
-                        settings.setValue( i, newSettings[i] );
+                var settingsValues = settings.getAll();
+                for (var i in newSettings) {
+                    if (settingsValues.hasOwnProperty(i)) {
+                        settings.setValue(i, newSettings[i]);
                     }
                 }
             }

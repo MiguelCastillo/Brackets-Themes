@@ -33,7 +33,7 @@ define(function (require, exports, module) {
                 var paths = settingsManager.getValue("paths");
 
                 paths.forEach(function(path) {
-                    themeManager.loadDirectory(path).done(function() {
+                    themeManager.loadDirectory(path.path).done(function() {
                         var themes = Array.prototype.slice.call(arguments);
                         if (themes.length) {
                             menuManager.loadThemes(themes, path === paths[paths.length - 1]);

@@ -26,21 +26,21 @@ define(function (require, exports, module) {
     function updateLineHeight() {
         clearFonts();
         var value = prefs.get("lineHeight");
-        templates.$lineHeight.text(".CodeMirror{" + "line-height: " + value + "; }");
+        templates.$lineHeight.text(".CodeMirror{line-height: " + value + ";}");
     }
 
 
     function updateFontSize() {
         clearFonts();
         var value = prefs.get("fontSize");
-        templates.$fontSize.text(".CodeMirror{" + "font-size: " + value + " !important; }");
+        templates.$fontSize.text(".CodeMirror{font-size: " + value + " !important;}");
     }
 
 
     function updateFontType() {
         clearFonts();
         var value = prefs.get("fontType");
-        templates.$fontType.text(".CodeMirror{" + "font-family: " + value + " !important; }");
+        templates.$fontType.text(".CodeMirror{font-family: " + value + " !important;}");
     }
 
 
