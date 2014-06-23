@@ -44,7 +44,7 @@
      * we are guaranteed that the mouse event will be captured by our parent div, and click events will
      * be dispatched.
      */
-    pointer-events: auto;
+    pointer-events: none;
 }
 
 .CodeMirror-linewidget {
