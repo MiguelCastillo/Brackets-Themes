@@ -22,19 +22,19 @@ define(function (require, exports, module) {
         custom_path = user_path.substr(0, ExtensionLoader.getUserExtensionPath().lastIndexOf('/')) + "/themes";
 
     var defaults = {
-        fontSize: '12',
+        fontSize: '12px',
         lineHeight: '1.3em',
         fontType: "'SourceCodePro-Medium', ＭＳ ゴシック, 'MS Gothic', monospace",
         customScrollbars: true,
         themes: ["default"],
-        paths: [custom_path, user_path, cm_path]
+        paths: [{path:custom_path}, {path:user_path}, {path:cm_path}]
     };
 
 
     function init() {
         var fontSize        = prefs.get("fontSize"),
-            fontSizeNumeric = Number(fontSize.replace("px", "")),
-            fontSizeOffset  = fontSizeNumeric - defaults.fontSize;
+            fontSizeNumeric = Number(fontSize.replace(/px|em/, "")),
+            fontSizeOffset  = fontSizeNumeric - Number(defaults.fontSize.replace(/px|em/, ""));
 
         if (!isNaN(fontSizeOffset)) {
             PreferencesManager.setViewState("fontSizeAdjustment", fontSizeOffset);
@@ -43,6 +43,10 @@ define(function (require, exports, module) {
 
         $(ViewCommandHandlers).on("fontSizeChange", function(evt, adjustment, fontSize /*, lineHeight*/) {
             prefs.set("fontSize", fontSize);
+        });
+
+        prefs.on("change", "fontSize", function() {
+            PreferencesManager.setViewState("fontSizeStyle", prefs.get("fontSize"));
         });
     }
 
@@ -78,7 +82,7 @@ define(function (require, exports, module) {
 
     function reset() {
         prefs.set("themes", defaults.themes);
-        prefs.set("fontSize", defaults.fontSize + "px");
+        prefs.set("fontSize", defaults.fontSize);
         prefs.set("lineHeight", defaults.lineHeight);
         prefs.set("fontType", defaults.fontType);
         prefs.set("customScrollbars", defaults.customScrollbars);
@@ -88,7 +92,7 @@ define(function (require, exports, module) {
 
     // Define all default values
     prefs.definePreference("themes", "array", defaults.themes);
-    prefs.definePreference("fontSize", "string", defaults.fontSize + "px");
+    prefs.definePreference("fontSize", "string", defaults.fontSize);
     prefs.definePreference("lineHeight", "string", defaults.lineHeight);
     prefs.definePreference("fontType", "string", defaults.fontType);
     prefs.definePreference("customScrollbars", "boolean", defaults.customScrollbars);
