@@ -31,7 +31,7 @@ define(function (require, exports, module) {
                     themeManager.loadDirectory(path.path).done(function() {
                         var themes = Array.prototype.slice.call(arguments);
                         if (themes.length) {
-                            menuManager.loadThemes(themes, path === paths[paths.length - 1], path.path);
+                            menuManager.loadThemes(themes, path.path);
                         }
                     });
                 });
@@ -44,11 +44,7 @@ define(function (require, exports, module) {
                 initMenu();
             }
 
-            $(settingsManager).on("imported", function(evt, imported) {
-                initMenu();
-            });
-
-
+            $(settingsManager).on("imported", initMenu);
             codeMirrorAddons.ready(initAll);
         });
     }

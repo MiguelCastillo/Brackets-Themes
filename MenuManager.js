@@ -27,8 +27,6 @@ define(function(require, exports, module) {
     function init() {
         // Add theme menu item
         menu.addMenuItem(SETTINGS_COMMAND_ID);
-        menu.addMenuDivider();
-
         prefs.on("change", "themes", function() {
             selectThemes(prefs.get("themes"));
         });
@@ -41,7 +39,7 @@ define(function(require, exports, module) {
 
         var command = {
             id: THEME_COMMAND_ID,
-            theme: theme,
+            name: theme.name,
             fn: function() {
                 prefs.set("themes", [theme.name]);
             }
@@ -56,39 +54,66 @@ define(function(require, exports, module) {
     /**
     *  Create theme objects and add them to the global themes container.
     */
-    function loadThemes(themes, lastItem, group) {
+    function loadThemes(themes, group) {
         var currentThemes = prefs.get("themes");
         var addDivider    = !allCommands[group];
         var commands      = allCommands[group] || (allCommands[group] = {});
         var lastEntry     = commands[_.keys(commands)[0]];
+
+        // Filter out themes that have already been loaded
+        themes = _.filter(themes, function(theme) {
+            return !loadedThemes[theme.name];
+        });
+
+        if (themes.length !== 0 && addDivider) {
+            menu.addMenuDivider();
+        }
+
+        /*
+        * Really wish we could add menu items relative to dividers
+        * https://github.com/adobe/brackets/issues/8240
+        */
+        /*
+        var divider;
+        if (themes.length !== 0 && addDivider) {
+            if (settingsManager.customPath === group) {
+                divider = menu.addMenuDivider(Menus.AFTER, SETTINGS_COMMAND_ID);
+                lastEntry = {
+                    id: divider.dividerId
+                };
+            }
+            else {
+                divider = menu.addMenuDivider();
+                lastEntry = {
+                    id: divider.dividerId
+                };
+            }
+        }
+        */
 
         //
         // Iterate through each name in the themes and make them theme objects
         //
         _.each(themes, function (theme) {
             // Create the command id used by the menu
-            var command = commands[theme.name] || registerCommand(theme);
+            var command = registerCommand(theme);
 
-            // Make sure we dont load themes that have already been laoded in the menu
-            if (!commands[theme.name]) {
-
-                if (lastEntry) {
-                    // Add theme menu item
-                    if (theme.name > lastEntry.theme.name) {
-                        menu.addMenuItem(command.id, false, Menus.AFTER, lastEntry.id);
-                    }
-                    else {
-                        menu.addMenuItem(command.id, false, Menus.BEFORE, lastEntry.id);
-                    }
+            if (lastEntry) {
+                // Add theme menu item
+                if (theme.name > lastEntry.name || !lastEntry.name) {
+                    menu.addMenuItem(command.id, "", Menus.AFTER, lastEntry.id);
                 }
                 else {
-                    // Add theme menu item
-                    menu.addMenuItem(command.id);
+                    menu.addMenuItem(command.id, "", Menus.BEFORE, lastEntry.id);
                 }
-
-                loadedThemes[theme.name] = theme;
-                commands[theme.name] = command;
             }
+            else {
+                // Add theme menu item
+                menu.addMenuItem(command.id);
+            }
+
+            loadedThemes[theme.name] = theme;
+            commands[theme.name] = command;
 
             // Keep track of last menu entry to make sure we have the right place for
             // the next menu item
@@ -99,10 +124,6 @@ define(function(require, exports, module) {
                 syncMenuSelection(true, [theme.name]);
             }
         });
-
-        if (themes.length !== 0 && !lastItem && addDivider) {
-            menu.addMenuDivider();
-        }
     }
 
 
