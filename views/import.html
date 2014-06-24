@@ -1,3 +1,9 @@
 <div>
-  <a href="http://studiostyl.es">http://studiostyl.es/</a> <button class="btn" data-bind="click: $root.importStudioStyle">Import</button>
+    <a href="http://studiostyl.es">http://studiostyl.es/</a> <button class="btn" data-bind="click: $root.importStudioStyle">Import</button>
+
+    <div class="imported-themes" data-bind="foreach: imported">
+        <div>
+            <span data-bind="text: fileName"></span><span class="status" data-bind="css: {error: err}"></span>
+        </div>
+    </div>
 </div>

@@ -24,23 +24,32 @@ define(function (require, exports, module) {
             "codeMirrorAddons"
         ], function(settingsManager, themeManager, menuManager, codeMirrorAddons) {
 
-            codeMirrorAddons.ready(function() {
-                settingsManager.init();
-                themeManager.init();
-                menuManager.init();
-
-                // Get paths so that we load the themes in them
+            function initMenu() {
                 var paths = settingsManager.getValue("paths");
 
                 paths.forEach(function(path) {
                     themeManager.loadDirectory(path.path).done(function() {
                         var themes = Array.prototype.slice.call(arguments);
                         if (themes.length) {
-                            menuManager.loadThemes(themes, path === paths[paths.length - 1]);
+                            menuManager.loadThemes(themes, path === paths[paths.length - 1], path.path);
                         }
                     });
                 });
+            }
+
+            function initAll() {
+                settingsManager.init();
+                themeManager.init();
+                menuManager.init();
+                initMenu();
+            }
+
+            $(settingsManager).on("imported", function(evt, imported) {
+                initMenu();
             });
+
+
+            codeMirrorAddons.ready(initAll);
         });
     }
 

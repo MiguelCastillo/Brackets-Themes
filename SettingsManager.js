@@ -48,6 +48,10 @@ define(function (require, exports, module) {
         prefs.on("change", "fontSize", function() {
             PreferencesManager.setViewState("fontSizeStyle", prefs.get("fontSize"));
         });
+
+        $(SettingsDialog).on("imported", function(evt, imported) {
+            $(exports).triggerHandler("imported", [imported]);
+        });
     }
 
 

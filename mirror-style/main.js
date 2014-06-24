@@ -89,16 +89,21 @@ define(function(require) {
         });
 
         props.name = themeName;
-        currentLessTmpl = _.template(mustacheTmpl, props) + lessTmpl;
         lessParser = new (less.Parser)();
 
-        lessParser.parse(currentLessTmpl, function (e, tree) {
-            deferred.resolve({
-                name: themeName,
-                fileName: themeName + ".css",
-                content: tree.toCSS()
+        try {
+            currentLessTmpl = _.template(mustacheTmpl, props) + lessTmpl;
+            lessParser.parse(currentLessTmpl, function (e, tree) {
+                deferred.resolve({
+                    name: themeName,
+                    fileName: themeName + ".css",
+                    content: tree.toCSS()
+                });
             });
-        });
+        }
+        catch(ex) {
+            deferred.reject(ex);
+        }
 
         return deferred.promise();
     }
@@ -109,18 +114,20 @@ define(function(require) {
         var deferred = $.Deferred();
 
         try {
-            file.read(function( err, content ) {
-                if ( err ) {
+            file.read(function(err, content) {
+                if (err) {
                     deferred.reject(err);
                     return;
                 }
 
                 var themeName = fileName.split("/").pop().split(".").shift();
-                parse(themeName, content).done(deferred.resolve);
+                parse(themeName, content)
+                    .done(deferred.resolve)
+                    .fail(deferred.reject);
             });
         }
         catch(ex) {
-            deferred.reject(false);
+            deferred.reject(ex);
         }
 
         return deferred.promise();

@@ -8,6 +8,7 @@
 define(function(require, exports, module) {
     "use strict";
 
+    var _ = brackets.getModule("thirdparty/lodash");
     var Dialogs        = brackets.getModule("widgets/Dialogs"),
         DefaultDialogs = brackets.getModule("widgets/DefaultDialogs"),
         FileSystem     = brackets.getModule("filesystem/FileSystem"),
@@ -37,7 +38,6 @@ define(function(require, exports, module) {
     $("#scheduleSettings", $settings).html(tmpl.schedule);
     $("#aboutSettings", $settings).html(tmpl.about);
 
-    var lastSaveImportThemeDirectory = "";
 
     function openDialog(path, openFile, title) {
         var result = $.Deferred();
@@ -71,12 +71,12 @@ define(function(require, exports, module) {
 
 
     function getViewModel(settingsManager) {
-        var viewModel = koFactory.serialize(defaults());
-
         function defaults() {
             var settings  = settingsManager.getAll();
-            return $.extend(true, {}, {settings: settings, package: packageInfo});
+            return $.extend(true, {}, {settings: settings, package: packageInfo, imported: []});
         }
+
+        var viewModel = koFactory.serialize(defaults());
 
         viewModel.reset = function() {
             settingsManager.reset();
@@ -111,21 +111,22 @@ define(function(require, exports, module) {
                 }
             });
 
-            // We want to save themes in the custom path by default.  But we will cache
-            // the value of the last selected directory in case the user just wants to
-            // save themes in a different location.
-            lastSaveImportThemeDirectory = lastSaveImportThemeDirectory || settingsManager.customPath;
-
             function importTheme(themeFile) {
-                return importer.importFile(themeFile);
+                return importer.importFile(themeFile).fail(function(err) {
+                    viewModel.imported.push({fileName: themeFile, err: !!err});
+                    console.log("Failure importing theme", themeFile, "- " + err);
+                });
             }
 
             function saveTheme(theme) {
-                FileSystem.showSaveDialog("Save Theme", lastSaveImportThemeDirectory, theme.fileName, function(err, fileName) {
-                    if (fileName) {
-                        var file = FileSystem.getFileForPath (fileName);
-                        file.write(theme.content);
-                        lastSaveImportThemeDirectory = file._parentPath;
+                var fileName = settingsManager.customPath + "/" + theme.fileName;
+                var file = FileSystem.getFileForPath (fileName);
+
+                file.write(theme.content, {}, function(err) {
+                    viewModel.imported.push({fileName: theme.fileName, err: !!err});
+
+                    if (err) {
+                        console.log("Failure importing theme", theme.fileName, "- " + err);
                     }
                 });
             }
@@ -148,12 +149,22 @@ define(function(require, exports, module) {
 
         Dialogs.showModalDialogUsingTemplate($template).done(function( id ) {
             if (id === "save") {
-                var newSettings = koFactory.deserialize(viewModel).settings;
+                var model = koFactory.deserialize(viewModel);
+                var newSettings = model.settings;
                 var settingsValues = settings.getAll();
+
+                var imported = _.filter(model.imported, function(item) {
+                   return !item.err;
+                });
+
                 for (var i in newSettings) {
                     if (settingsValues.hasOwnProperty(i)) {
                         settings.setValue(i, newSettings[i]);
                     }
+                }
+
+                if (imported.length) {
+                    $(settings).triggerHandler("imported", [imported]);
                 }
             }
         });

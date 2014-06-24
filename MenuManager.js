@@ -15,20 +15,18 @@ define(function(require, exports, module) {
         prefs              = PreferencesManager.getExtensionPrefs("brackets-themes-extension");
 
     var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
+    var SETTINGS_COMMAND_ID = "theme.settings";
     var settingsManager = require("SettingsManager");
-    var loadedThemes = {};
+    var loadedThemes = {}, allCommands = {};
+
+    // Register menu event...
+    CommandManager.register("Settings", SETTINGS_COMMAND_ID, settingsManager.openDialog);
 
 
     // Load in the settings menu
     function init() {
-        // Create the command id used by the menu
-        var COMMAND_ID = "theme.settings";
-
-        // Register menu event...
-        CommandManager.register("Settings", COMMAND_ID, settingsManager.openDialog);
-
         // Add theme menu item
-        menu.addMenuItem(COMMAND_ID);
+        menu.addMenuItem(SETTINGS_COMMAND_ID);
         menu.addMenuDivider();
 
         prefs.on("change", "themes", function() {
@@ -37,27 +35,64 @@ define(function(require, exports, module) {
     }
 
 
+    function registerCommand(theme) {
+        // Create the command id used by the menu
+        var THEME_COMMAND_ID = "theme." + theme.name;
+
+        var command = {
+            id: THEME_COMMAND_ID,
+            theme: theme,
+            fn: function() {
+                prefs.set("themes", [theme.name]);
+            }
+        };
+
+        // Register menu event...
+        CommandManager.register(theme.displayName, THEME_COMMAND_ID, command.fn);
+        return command;
+    }
+
+
     /**
-     *  Create theme objects and add them to the global themes container.
-     */
-    function loadThemes(themes, lastItem) {
+    *  Create theme objects and add them to the global themes container.
+    */
+    function loadThemes(themes, lastItem, group) {
         var currentThemes = prefs.get("themes");
+        var addDivider    = !allCommands[group];
+        var commands      = allCommands[group] || (allCommands[group] = {});
+        var lastEntry     = commands[_.keys(commands)[0]];
 
         //
         // Iterate through each name in the themes and make them theme objects
         //
         _.each(themes, function (theme) {
             // Create the command id used by the menu
-            var COMMAND_ID = "theme." + theme.name;
-            loadedThemes[theme.name] = theme;
+            var command = commands[theme.name] || registerCommand(theme);
 
-            // Register menu event...
-            CommandManager.register(theme.displayName, COMMAND_ID, function () {
-                prefs.set("themes", [theme.name]);
-            });
+            // Make sure we dont load themes that have already been laoded in the menu
+            if (!commands[theme.name]) {
 
-            // Add theme menu item
-            menu.addMenuItem(COMMAND_ID);
+                if (lastEntry) {
+                    // Add theme menu item
+                    if (theme.name > lastEntry.theme.name) {
+                        menu.addMenuItem(command.id, false, Menus.AFTER, lastEntry.id);
+                    }
+                    else {
+                        menu.addMenuItem(command.id, false, Menus.BEFORE, lastEntry.id);
+                    }
+                }
+                else {
+                    // Add theme menu item
+                    menu.addMenuItem(command.id);
+                }
+
+                loadedThemes[theme.name] = theme;
+                commands[theme.name] = command;
+            }
+
+            // Keep track of last menu entry to make sure we have the right place for
+            // the next menu item
+            lastEntry = command;
 
             // Make sure to init the menu entry when loading the themes.
             if (currentThemes.indexOf(theme.name) !== -1) {
@@ -65,7 +100,7 @@ define(function(require, exports, module) {
             }
         });
 
-        if (themes.length !== 0 && !lastItem) {
+        if (themes.length !== 0 && !lastItem && addDivider) {
             menu.addMenuDivider();
         }
     }
@@ -81,6 +116,12 @@ define(function(require, exports, module) {
     }
 
 
+    function clear() {
+        Menus.removeMenu("editortheme");
+        loadedThemes = {};
+    }
+
+
     function selectThemes(themes) {
         syncMenuSelection(false);
         syncMenuSelection(true, themes);
@@ -89,4 +130,5 @@ define(function(require, exports, module) {
 
     exports.init = init;
     exports.loadThemes = loadThemes;
+    exports.clear = clear;
 });
