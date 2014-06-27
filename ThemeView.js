@@ -4,6 +4,7 @@
  * Licensed under MIT
  */
 
+
 define(function (require, exports, module) {
     "use strict";
 
@@ -11,9 +12,9 @@ define(function (require, exports, module) {
 
     var _                  = brackets.getModule("thirdparty/lodash"),
         CodeMirror         = brackets.getModule("thirdparty/CodeMirror2/lib/codemirror"),
-        PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
-        prefs              = PreferencesManager.getExtensionPrefs("brackets-themes-extension");
+        SettingsManager    = require("SettingsManager");
 
+    var prefs = SettingsManager.getPreferences();
 
     var templates = {
         $lineHeight: $("<style type='text/css' id='lineHeight'>").appendTo("head"),

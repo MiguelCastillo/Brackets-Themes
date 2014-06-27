@@ -5,9 +5,6 @@
  */
 
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global $, define, require, less, setTimeout */
-
 define(function (require, exports, module) {
     "use strict";
 
@@ -16,11 +13,11 @@ define(function (require, exports, module) {
         FileUtils          = brackets.getModule("file/FileUtils"),
         EditorManager      = brackets.getModule("editor/EditorManager"),
         ExtensionUtils     = brackets.getModule("utils/ExtensionUtils"),
-        PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
-        prefs              = PreferencesManager.getExtensionPrefs("brackets-themes-extension"),
+        SettingsManager    = require("SettingsManager"),
         ThemeView          = require("ThemeView");
 
-    var loadedThemes    = {},
+    var prefs           = SettingsManager.getPreferences(),
+        loadedThemes    = {},
         defaultTheme    = "default",
         commentRegex    = /\/\*([\s\S]*?)\*\//mg,
         scrollbarsRegex = /(?:[^}|,]*)::-webkit-scrollbar(?:[\s\S]*?){(?:[\s\S]*?)}/mg,

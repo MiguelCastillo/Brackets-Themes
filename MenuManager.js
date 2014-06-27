@@ -5,22 +5,22 @@
  */
 
 
-define(function(require, exports, module) {
+define(function (require, exports, module) {
     "use strict";
 
-    var _                  = brackets.getModule("thirdparty/lodash"),
-        Menus              = brackets.getModule("command/Menus"),
-        CommandManager     = brackets.getModule("command/CommandManager"),
-        PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
-        prefs              = PreferencesManager.getExtensionPrefs("brackets-themes-extension");
+    var _               = brackets.getModule("thirdparty/lodash"),
+        Menus           = brackets.getModule("command/Menus"),
+        CommandManager  = brackets.getModule("command/CommandManager"),
+        SettingsManager = require("SettingsManager");
 
-    var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
-    var SETTINGS_COMMAND_ID = "theme.settings";
-    var settingsManager = require("SettingsManager");
-    var loadedThemes = {}, allCommands = {};
+    var prefs = SettingsManager.getPreferences(),
+        menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU),
+        SETTINGS_COMMAND_ID = "theme.settings",
+        loadedThemes = {},
+        allCommands = {};
 
     // Register menu event...
-    CommandManager.register("Settings", SETTINGS_COMMAND_ID, settingsManager.openDialog);
+    CommandManager.register("Settings", SETTINGS_COMMAND_ID, SettingsManager.openDialog);
 
 
     // Load in the settings menu

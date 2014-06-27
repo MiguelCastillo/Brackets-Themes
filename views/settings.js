@@ -29,6 +29,7 @@ define(function(require, exports, module) {
 
     // Make sure koFactory get a reference to ko...
     koFactory.ko = ko;
+    koFactory.$  = $;
 
     // Setup all the templates so that we can easily render them with Mustache
     var $settings = $(tmpl.main).addClass("themeSettings");
@@ -145,7 +146,7 @@ define(function(require, exports, module) {
         var $template = $settings.clone();
 
         $template.find("[data-toggle=tab].default").tab("show");
-        koFactory.bind(viewModel, $template);
+        koFactory.bind($template, viewModel);
 
         Dialogs.showModalDialogUsingTemplate($template).done(function( id ) {
             if (id === "save") {

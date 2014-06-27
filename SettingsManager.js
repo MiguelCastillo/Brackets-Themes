@@ -8,14 +8,14 @@
 define(function (require, exports, module) {
     "use strict";
 
-    var _ = brackets.getModule("thirdparty/lodash");
     var PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         FileUtils           = brackets.getModule("file/FileUtils"),
         ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
         ExtensionLoader     = brackets.getModule("utils/ExtensionLoader"),
         ViewCommandHandlers = brackets.getModule("view/ViewCommandHandlers"),
-        SettingsDialog      = require("views/settings"),
-        prefs               = PreferencesManager.getExtensionPrefs("brackets-themes-extension");
+        SettingsDialog      = require("views/settings");
+
+    var prefs = PreferencesManager.getExtensionPrefs("themes-brackets-extension");
 
     var cm_path     = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme",
         user_path   = ExtensionUtils.getModulePath(module, "theme"),
@@ -63,25 +63,22 @@ define(function (require, exports, module) {
         SettingsDialog.close();
     }
 
-    function getValue() {
-        return prefs.get.apply(prefs, arguments);
+    function getValue(name) {
+        return prefs.get(name);
     }
 
-    function setValue() {
-        prefs.set.apply(prefs, arguments);
+    function setValue(name, value) {
+        prefs.set(name, value);
         $(exports).trigger("change", arguments);
         $(exports).trigger("change:" + arguments[0], [arguments[1]]);
     }
 
     function getAll() {
-        var pathLength = prefs.prefix.length;
-        var prefix = prefs.prefix;
-
-        return _.transform(prefs.base._scopes.user.data, function(result, value, key) {
-            if ( key.indexOf(prefix) === 0 ) {
-                result[key.substr(pathLength)] = value;
-            }
+        var result = {};
+        Object.keys(defaults).forEach(function(value) {
+            result[value] = prefs.get(value);
         });
+        return result;
     }
 
     function reset() {
@@ -91,6 +88,10 @@ define(function (require, exports, module) {
         prefs.set("fontType", defaults.fontType);
         prefs.set("customScrollbars", defaults.customScrollbars);
         prefs.set("paths", defaults.paths);
+    }
+
+    function getPreferences() {
+        return prefs;
     }
 
 
@@ -103,13 +104,14 @@ define(function (require, exports, module) {
     prefs.definePreference("paths", "array", defaults.paths);
 
 
-    exports.init        = init;
-    exports.defaults    = defaults;
-    exports.reset       = reset;
-    exports.openDialog  = openDialog;
-    exports.closeDialog = closeDialog;
-    exports.getValue    = getValue;
-    exports.setValue    = setValue;
-    exports.getAll      = getAll;
-    exports.customPath  = custom_path;
+    exports.init           = init;
+    exports.defaults       = defaults;
+    exports.reset          = reset;
+    exports.openDialog     = openDialog;
+    exports.closeDialog    = closeDialog;
+    exports.getValue       = getValue;
+    exports.setValue       = setValue;
+    exports.getAll         = getAll;
+    exports.customPath     = custom_path;
+    exports.getPreferences = getPreferences;
 });

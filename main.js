@@ -22,29 +22,29 @@ define(function (require, exports, module) {
             "ThemeManager",
             "MenuManager",
             "codeMirrorAddons"
-        ], function(settingsManager, themeManager, menuManager, codeMirrorAddons) {
+        ], function(SettingsManager, ThemeManager, MenuManager, codeMirrorAddons) {
 
             function initMenu() {
-                var paths = settingsManager.getValue("paths");
+                var paths = SettingsManager.getValue("paths");
 
                 paths.forEach(function(path) {
-                    themeManager.loadDirectory(path.path).done(function() {
+                    ThemeManager.loadDirectory(path.path).done(function() {
                         var themes = Array.prototype.slice.call(arguments);
                         if (themes.length) {
-                            menuManager.loadThemes(themes, path.path);
+                            MenuManager.loadThemes(themes, path.path);
                         }
                     });
                 });
             }
 
             function initAll() {
-                settingsManager.init();
-                themeManager.init();
-                menuManager.init();
+                SettingsManager.init();
+                ThemeManager.init();
+                MenuManager.init();
                 initMenu();
             }
 
-            $(settingsManager).on("imported", initMenu);
+            $(SettingsManager).on("imported", initMenu);
             codeMirrorAddons.ready(initAll);
         });
     }
