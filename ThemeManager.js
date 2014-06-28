@@ -383,6 +383,10 @@ define(function (require, exports, module) {
         $(EditorManager).on("activeEditorChange", function() {
             refresh();
         });
+
+        // Call to update fonts
+        ThemeView.updateFonts();
+        ThemeView.updateScrollbars();
     }
 
     //
