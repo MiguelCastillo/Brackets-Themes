@@ -1,0 +1,76 @@
+/* delkoseclipse theme by David Sánchez i Gregori
+ * Licensed under BSD-License
+ */
+.cm-s-delkoseclipse.CodeMirror {background: #FCFCFC; color: #484848;text-shadow: 0 0 2pt #eAeAeA;}
+.cm-s-delkoseclipse div.CodeMirror-selected {
+    background-color: #EAEDEF;
+}
+.cm-s-delkoseclipse .CodeMirror-gutters {background: #F0F0F0; border-right: 0pt;}
+.cm-s-delkoseclipse .CodeMirror-cursor {
+    border-left: 1pt solid rgba(88, 14, 111, 0.75) !important;
+    border-right: 1pt solid rgba(98, 20, 116, 0.25) !important;
+}
+
+.cm-s-delkoseclipse .CodeMirror-activeline .CodeMirror-gutter-elt {
+    color: #058;
+}
+
+.cm-s-delkoseclipse span.cm-comment {color: #9a9a9a;}
+.cm-s-delkoseclipse span.cm-atom {color: #7d4dd3;text-shadow: 0 0 2pt #fdddfc;}
+.cm-s-delkoseclipse span.cm-number {color: #f33;text-shadow: 0 0 2pt #ffe4e4;}
+.cm-s-delkoseclipse span.cm-property {color: #81b700;text-shadow: 0 0 2pt #cff4b4}
+.cm-s-delkoseclipse span.cm-attribute {color: #00a07c;text-shadow: 0 0 2pt #93ebd0}
+
+.cm-s-delkoseclipse span.cm-keyword {
+    color: #034c9a;
+    text-shadow: 0 0 3pt #c7d6e5;
+}
+
+.cm-s-delkoseclipse span.cm-string {
+    color: #f268ed;
+    text-shadow: 0 0 4pt #ffd6f6;
+}
+
+.cm-s-delkoseclipse span.cm-variable {color: #327232;text-shadow: 0 0 2pt #e6ffe6;}
+.cm-s-delkoseclipse span.cm-variable-2 {color: #44a8ce;text-shadow: 0 0 4pt #cbddef;}
+
+.cm-s-delkoseclipse span.cm-def{color: #c19700;text-shadow: 0 0 2pt #edd4af;}
+.cm-s-delkoseclipse span.cm-bracket{color: #7491a5;text-shadow: 0 0 2pt #daf1ff;}
+
+.cm-s-delkoseclipse span.cm-tag {color: #b22878;text-shadow: 0 0 2pt #ffc9ea;}
+
+.cm-s-delkoseclipse span.cm-link {color: #8d5ac1;text-shadow: 0 0 2pt #f3e8ff;}
+.cm-s-delkoseclipse span.cm-error {background: #ff3292; color: #f8f8f0;}
+
+.cm-s-delkoseclipse .CodeMirror-activeline-background {background-color: rgba(0, 0, 0, 0.1) !important;}
+
+.cm-s-delkoseclipse .CodeMirror-matchingbracket {
+  color: black !important;
+    box-shadow: 0 0 1em #0AE0FF;
+    border-radius:0.25em;
+    border:1pt solid #00ACF0;
+    background-color: #c1f5ff;
+    -webkit-animation: hilightMB 2s alternate ease-in-out infinite;
+}
+@-webkit-keyframes hilightMB {
+    0%
+    {
+        background-color:#ffccf7;
+        border:1pt solid #F000AC;
+        box-shadow: 0 0 1em #FF0AE0;
+    }
+
+    50%
+    {
+        background-color: transparent;
+        border:1pt solid transparent;
+        box-shadow: 0 0 1em transparent;
+    }
+
+    100%
+    {
+        background-color:#d1f6ff;
+        border:1pt solid #00ACF0;
+        box-shadow: 0 0 1em #0AE0FF;
+    }
+}
