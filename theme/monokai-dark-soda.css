@@ -4,7 +4,7 @@
 }
 
 .CodeMirror .CodeMirror-cursor {
-  border-left: 1px solid #f8f8f0;
+  border-left: 1px solid #f8f8f0 !important;
   z-index: 3;
 }
 
