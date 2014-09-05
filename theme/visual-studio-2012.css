@@ -28,6 +28,7 @@
 #working-set-option-btn, #project-dropdown-toggle, #main-toolbar a, .btn {
 	color:#60728C;
 }
+#working-set-option-btn {background-color:#D6DBE9;}
 .btn {
 	color:#000;
 	border: 1px solid #ACACAC;
