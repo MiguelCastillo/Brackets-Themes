@@ -28,9 +28,9 @@
 #working-set-option-btn, #project-dropdown-toggle, #main-toolbar a, .btn {
 	color:#60728C;
 }
+#working-set-option-btn {background-color:#D6DBE9;}
 .btn {
 	color:#000;
-	background: linear-gradient(to bottom, #f0f0f0 0%,#e5e5e5 100%);
 	border: 1px solid #ACACAC;
 	border-radius: 0px;
 	box-shadow: none;
@@ -48,12 +48,21 @@
 .btn:not([disabled]):hover {
 	background: none;
 }
-#working-set-option-btn:hover, #project-dropdown-toggle:hover, #main-toolbar a:hover, .btn:not([disabled]):hover { /* Open url when hover */
+#working-set-option-btn:hover, #project-dropdown-toggle:hover, #main-toolbar a:hover { /* Open url when hover */
     color:#000;
 	background-color:#FFF0D0 !important;
 	border: 1px solid #E5C365;
 	border-radius: 0px;
 }
+.btn:not([disabled]):hover
+{
+    color:#000;
+    background-color:#FFF0D0;
+    border: 1px solid #E5C365;
+    border-radius: 0px;
+}
+.status-language .btn:hover {background-color: #293955;} 
+
 input {
 	border: 1px solid #ACACAC;
 	background-color: #f0f0f0;
@@ -75,25 +84,28 @@ input:focus {
 	background: #293955;
 }
 
-.jstree-brackets li a,
-.jstree-brackets li a .extension, /* Files, folder and extensions */
+.jstree-brackets li a, /* Files, folder */
 #open-files-container li a,
-#open-files-container li a .extension,
-#open-files-container li a.jstree-clicked { /* Files, folder and extensions in "working fiels"*/
+#open-files-container li a.jstree-clicked { /* Files, folder in "working fiels"*/
     color:#fff;
 }
-.jstree-brackets li.selected a,
+.jstree-brackets li a .extension, 
+#open-files-container li a .extension,
 .jstree-brackets li.selected a .extension,
-.jstree-brackets li a.jstree-clicked,
-.jstree-brackets li a.jstree-clicked .extension, /* Files, folder and extensions */
+.jstree-brackets li a.jstree-clicked .extension, 
+#open-files-container li.selected a .extension
+{
+    color: #ADACAC;
+}
+.jstree-brackets li.selected a,
+.jstree-brackets li a.jstree-clicked, /* Files, folder  */
 #open-files-container li.selected a,
-#open-files-container li.selected a .extension,
-#open-files-container li.selected a.jstree-clicked { /* Files, folder and extensions in "working fiels"*/
+#open-files-container li.selected a.jstree-clicked { /* Files, folder in "working fiels"*/
     color:#000;
 }
 
 .sidebar-selection{ /* Selected file or folder */
-    background:#FFF0D0;
+    background:#A78B51;
 	margin-left:0px;
 }
 
@@ -162,7 +174,7 @@ input:focus {
 
 .cm-s-visual-studio-2012.CodeMirror .CodeMirror-linenumber
 {
-    color: /*#0E97A1*/ #BAC1D6;
+    color: #BAC1D6;
     background-color: #fefefe;
 	font-family: consolas !important;
 }
@@ -209,7 +221,7 @@ input:focus {
 .cm-s-visual-studio-2012.CodeMirror .CodeMirror-selected,
 .cm-s-visual-studio-2012.CodeMirror-focused .CodeMirror-selected
 {
-    background: transparent;
+    background: #dedede;
 }
 
 
