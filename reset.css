@@ -27,33 +27,6 @@
     z-index: 5;
 }
 
-/*
-* Needed for matching html tags not showing the cursor unless we bump the z-index.
-*/
-.CodeMirror-cursors {
-    z-index: 3 !important;
-}
-
-/**
-* Extracted from brackets.  But this will get reworked once themes are integrated into core.
-*/
-.CodeMirror-lines {
-    /* This is necessary for issue #2780. The logic for closing dropdowns depends on "click" events. Now
-     * that each line has a separate div element, there is a good chance that mouseDown and mouseUp events
-     * occur on different elements, which means a click event will not be sent. By disabling pointer events here,
-     * we are guaranteed that the mouse event will be captured by our parent div, and click events will
-     * be dispatched.
-     */
-    pointer-events: none;
-}
-
-.CodeMirror-linewidget {
-    /* Re-enable pointer events for line widget. Pointer events are disabled for "CodeMirror-lines", which is the
-     * parent of line widgets, so they need to be explicitly re-enabled here in order for selection to work.
-     */
-    pointer-events: auto;
-}
-
 
 /**
 * Overrides for CodeMirror themes.

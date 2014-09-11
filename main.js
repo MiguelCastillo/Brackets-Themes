@@ -8,48 +8,60 @@
 define(function (require, exports, module) {
     "use strict";
 
-    var ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
+    var EditorManager  = brackets.getModule("editor/EditorManager"),
+        ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
         AppInit        = brackets.getModule("utils/AppInit");
 
     // Load up reset.css to override brackground settings from brackets because
     // they make the themes look really bad.
     ExtensionUtils.loadStyleSheet(module, "reset.css");
     ExtensionUtils.loadStyleSheet(module, "views/settings.css");
+    
 
-    function init() {
-        require([
-            "SettingsManager",
-            "ThemeManager",
-            "MenuManager",
-            "codeMirrorAddons"
-        ], function(SettingsManager, ThemeManager, MenuManager, codeMirrorAddons) {
+    function init(SettingsManager, ThemeManager, MenuManager, codeMirrorAddons) {
+        function initMenu() {
+            var paths = SettingsManager.getValue("paths");
 
-            function initMenu() {
-                var paths = SettingsManager.getValue("paths");
-
-                paths.forEach(function(path) {
-                    ThemeManager.loadDirectory(path.path).done(function() {
-                        var themes = Array.prototype.slice.call(arguments);
-                        if (themes.length) {
-                            MenuManager.loadThemes(themes, path.path);
-                        }
-                    });
+            paths.forEach(function(path) {
+                ThemeManager.loadDirectory(path.path).done(function() {
+                    var themes = Array.prototype.slice.call(arguments);
+                    if (themes.length) {
+                        MenuManager.loadThemes(themes, path.path);
+                    }
                 });
+            });
+        }
+
+
+        function setDocumentType(evt, doc) {
+            if (!doc) {
+                return;
             }
 
-            function initAll() {
-                SettingsManager.init();
-                ThemeManager.init();
-                MenuManager.init();
-                initMenu();
-            }
+            var cm      = doc._codeMirror;
+            var mode    = cm && cm.getDoc().getMode();
+            var docType = mode && (mode.helperType || mode.name);
+            $(cm.display.wrapper).attr("doctype", docType || cm.options.mode);
+        }
 
-            $(SettingsManager).on("imported", initMenu);
-            codeMirrorAddons.ready(initAll);
-        });
+
+        function initAll() {
+            MenuManager.init();
+            initMenu();
+        }
+
+
+        $(SettingsManager).on("imported", initMenu);
+        codeMirrorAddons.ready(initAll);
+
+        $(EditorManager).on("activeEditorChange.themes", setDocumentType);
+        setDocumentType(null, EditorManager.getActiveEditor());
     }
 
+
     // Init when app is ready
-    AppInit.appReady(init);
+    AppInit.htmlReady(function () {
+        require(["SettingsManager","ThemeManager","MenuManager","codeMirrorAddons"], init);
+    });
 });
 

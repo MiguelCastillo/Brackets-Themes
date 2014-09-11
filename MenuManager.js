@@ -8,16 +8,18 @@
 define(function (require, exports, module) {
     "use strict";
 
-    var _               = brackets.getModule("thirdparty/lodash"),
-        Menus           = brackets.getModule("command/Menus"),
-        CommandManager  = brackets.getModule("command/CommandManager"),
-        SettingsManager = require("SettingsManager");
+    var _                  = brackets.getModule("thirdparty/lodash"),
+        Menus              = brackets.getModule("command/Menus"),
+        CommandManager     = brackets.getModule("command/CommandManager"),
+        PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
+        prefs              = PreferencesManager.getExtensionPrefs("themes"),
+        SettingsManager    = require("SettingsManager");
 
-    var prefs = SettingsManager.getPreferences(),
-        menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU),
+    var menu = Menus.addMenu("Themes", "editortheme", Menus.BEFORE, Menus.AppMenuBar.HELP_MENU),
         SETTINGS_COMMAND_ID = "theme.settings",
+        allCommands = {},
         loadedThemes = {},
-        allCommands = {};
+        currentTheme = prefs.get("theme");
 
     // Register menu event...
     CommandManager.register("Settings", SETTINGS_COMMAND_ID, SettingsManager.openDialog);
@@ -27,8 +29,14 @@ define(function (require, exports, module) {
     function init() {
         // Add theme menu item
         menu.addMenuItem(SETTINGS_COMMAND_ID);
-        prefs.on("change", "themes", function() {
-            selectThemes(prefs.get("themes"));
+
+        prefs.on("change", "theme", function() {
+            var theme = prefs.get("theme");
+            if (currentTheme !== theme) {
+                syncMenuSelection(false, currentTheme);
+                syncMenuSelection(true, theme);
+                currentTheme = theme;
+            }
         });
     }
 
@@ -41,7 +49,7 @@ define(function (require, exports, module) {
             id: THEME_COMMAND_ID,
             name: theme.name,
             fn: function() {
-                prefs.set("themes", [theme.name]);
+                prefs.set("theme", theme.name);
             }
         };
 
@@ -52,13 +60,14 @@ define(function (require, exports, module) {
 
 
     /**
-    *  Create theme objects and add them to the global themes container.
-    */
+     * Create theme objects and add them to the global themes container.
+     */
     function loadThemes(themes, group) {
-        var currentThemes = prefs.get("themes");
-        var addDivider    = !allCommands[group];
-        var commands      = allCommands[group] || (allCommands[group] = {});
-        var lastEntry     = commands[_.keys(commands)[0]];
+        var addDivider   = !allCommands[group];
+        var commands     = allCommands[group] || (allCommands[group] = {});
+        var lastEntry    = commands[_.keys(commands)[0]];
+
+        currentTheme = prefs.get("theme");
 
         // Filter out themes that have already been loaded
         themes = _.filter(themes, function(theme) {
@@ -112,7 +121,6 @@ define(function (require, exports, module) {
                 menu.addMenuItem(command.id);
             }
 
-            loadedThemes[theme.name] = theme;
             commands[theme.name] = command;
 
             // Keep track of last menu entry to make sure we have the right place for
@@ -120,32 +128,24 @@ define(function (require, exports, module) {
             lastEntry = command;
 
             // Make sure to init the menu entry when loading the themes.
-            if (currentThemes.indexOf(theme.name) !== -1) {
-                syncMenuSelection(true, [theme.name]);
+            if (currentTheme === theme.name) {
+                syncMenuSelection(true, theme.name);
             }
         });
     }
 
 
-    function syncMenuSelection(val, themes) {
-        _.each(themes || Object.keys(loadedThemes), function (theme) {
-            var command = CommandManager.get("theme." + theme);
-            if (command) {
-                command.setChecked(val);
-            }
-        });
+    function syncMenuSelection(val, theme) {
+        var command = CommandManager.get("theme." + theme);
+        if (command) {
+            command.setChecked(val);
+        }
     }
 
 
     function clear() {
         Menus.removeMenu("editortheme");
         loadedThemes = {};
-    }
-
-
-    function selectThemes(themes) {
-        syncMenuSelection(false);
-        syncMenuSelection(true, themes);
     }
 
 
