@@ -16,6 +16,7 @@ Features
 * Auto reload themes upon saving changes made to theme files.
 * Configure custom folders to load themes from.  This is good if you want to have a folder to hold your custom themes that you want to persist after Brackets/Themes updates.  Read this <a href='https://github.com/MiguelCastillo/Brackets-Themes/issues/81'>issue</a> if you want to see why sometimes you need this feature.
 * Doctype specific styling.  See below for an example.
+* Auto detection of dark themes so that Brackets can do its dark theme specific styling.
 
 
 Screenshot
