@@ -8,7 +8,8 @@
 define(function (require, exports, module) {
     "use strict";
 
-    var ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
+    var EditorManager  = brackets.getModule("editor/EditorManager"),
+        ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
         AppInit        = brackets.getModule("utils/AppInit");
 
     // Load up reset.css to override brackground settings from brackets because
@@ -37,13 +38,30 @@ define(function (require, exports, module) {
                 });
             }
 
+
+            function setDocumentType(evt, doc) {
+                if (!doc) {
+                    return;
+                }
+
+                var cm      = doc._codeMirror;
+                var mode    = cm && cm.getDoc().getMode();
+                var docType = mode && (mode.helperType || mode.name);
+                $(cm.display.wrapper).attr("doctype", docType || cm.options.mode);
+            }
+
+
             function initAll() {
                 MenuManager.init();
                 initMenu();
             }
 
+
             $(SettingsManager).on("imported", initMenu);
             codeMirrorAddons.ready(initAll);
+
+            $(EditorManager).on("activeEditorChange.themes", setDocumentType);
+            setDocumentType(null, EditorManager.getActiveEditor());
         });
     }
 
