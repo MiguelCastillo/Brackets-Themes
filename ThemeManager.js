@@ -86,7 +86,11 @@ define(function (require, exports, module) {
         }
 
         FileSystem.getDirectoryForPath(path).getContents(getDirectoryContent);
-        return result.then(loadThemesFiles);
+        return result.then(loadThemesFiles).done(function() {
+            setTimeout(function() {
+                _ThemeManager.refresh(true);
+            }, 0);
+        });
     }
 
 

@@ -32,6 +32,13 @@
 * Overrides for CodeMirror themes.
 */
 
+.dark div.CodeMirror-cursor ,
+.dark div.CodeMirror-secondarycursor {
+    border-left: 1px solid #dedede !important;
+}
+
+
+
 .cm-s-light-table .CodeMirror-matchingtag {
     background: rgba(207, 234, 214, 0.3);
 }
