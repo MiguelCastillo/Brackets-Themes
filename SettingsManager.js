@@ -22,37 +22,8 @@ define(function (require, exports, module) {
         custom_path = user_path.substr(0, ExtensionLoader.getUserExtensionPath().lastIndexOf('/')) + "/themes";
 
     var defaults = {
-        fontSize: '12px',
-        lineHeight: '1.3em',
-        fontType: "'SourceCodePro-Medium', ＭＳ ゴシック, 'MS Gothic', monospace",
-        customScrollbars: true,
-        themes: ["default"],
         paths: [{path:custom_path}, {path:user_path}, {path:cm_path}]
     };
-
-
-    function init() {
-        var fontSize        = prefs.get("fontSize"),
-            fontSizeNumeric = Number(fontSize.replace(/px|em/, "")),
-            fontSizeOffset  = fontSizeNumeric - Number(defaults.fontSize.replace(/px|em/, ""));
-
-        if (!isNaN(fontSizeOffset)) {
-            PreferencesManager.setViewState("fontSizeAdjustment", fontSizeOffset);
-            PreferencesManager.setViewState("fontSizeStyle", fontSize);
-        }
-
-        $(ViewCommandHandlers).on("fontSizeChange", function(evt, adjustment, fontSize /*, lineHeight*/) {
-            prefs.set("fontSize", fontSize);
-        });
-
-        prefs.on("change", "fontSize", function() {
-            PreferencesManager.setViewState("fontSizeStyle", prefs.get("fontSize"));
-        });
-
-        $(SettingsDialog).on("imported", function(evt, imported) {
-            $(exports).triggerHandler("imported", [imported]);
-        });
-    }
 
 
     function openDialog() {
@@ -82,11 +53,6 @@ define(function (require, exports, module) {
     }
 
     function reset() {
-        prefs.set("themes", defaults.themes);
-        prefs.set("fontSize", defaults.fontSize);
-        prefs.set("lineHeight", defaults.lineHeight);
-        prefs.set("fontType", defaults.fontType);
-        prefs.set("customScrollbars", defaults.customScrollbars);
         prefs.set("paths", defaults.paths);
     }
 
@@ -96,15 +62,14 @@ define(function (require, exports, module) {
 
 
     // Define all default values
-    prefs.definePreference("themes", "array", defaults.themes);
-    prefs.definePreference("fontSize", "string", defaults.fontSize);
-    prefs.definePreference("lineHeight", "string", defaults.lineHeight);
-    prefs.definePreference("fontType", "string", defaults.fontType);
-    prefs.definePreference("customScrollbars", "boolean", defaults.customScrollbars);
     prefs.definePreference("paths", "array", defaults.paths);
 
 
-    exports.init           = init;
+    $(SettingsDialog).on("imported", function(evt, imported) {
+        $(exports).triggerHandler("imported", [imported]);
+    });
+
+
     exports.defaults       = defaults;
     exports.reset          = reset;
     exports.openDialog     = openDialog;

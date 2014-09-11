@@ -38,8 +38,6 @@ define(function (require, exports, module) {
             }
 
             function initAll() {
-                SettingsManager.init();
-                ThemeManager.init();
                 MenuManager.init();
                 initMenu();
             }

@@ -60,6 +60,8 @@
 /*CodeMirror does not add notation for css...  Which would be really nice. */
 /*.cm-s-visual-studio.CodeMirror .cm-property { color: red; }*/
 
+
+.cm-s-visual-studio.CodeMirror .cm-def { color: black; }
 .cm-s-visual-studio.CodeMirror .cm-keyword { color: blue; }
 .cm-s-visual-studio.CodeMirror .cm-comment { color: green; }
 .cm-s-visual-studio.CodeMirror .cm-string {color: #800000;}

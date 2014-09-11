@@ -20,7 +20,6 @@ define(function(require, exports, module) {
         packageInfo    = JSON.parse(require("text!package.json")),
         tmpl = {
             "main": require("text!views/settings.html"),
-            "general": require("text!views/general.html"),
             "paths": require("text!views/paths.html"),
             "import": require("text!views/import.html"),
             "schedule": require("text!views/schedule.html"),
@@ -33,7 +32,6 @@ define(function(require, exports, module) {
 
     // Setup all the templates so that we can easily render them with Mustache
     var $settings = $(tmpl.main).addClass("themeSettings");
-    $("#generalSettings", $settings).html(tmpl.general);
     $("#pathsSettings", $settings).html(tmpl.paths);
     $("#importSettings", $settings).html(tmpl.import);
     $("#scheduleSettings", $settings).html(tmpl.schedule);
