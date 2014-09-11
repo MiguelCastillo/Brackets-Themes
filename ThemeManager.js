@@ -13,6 +13,7 @@ define(function (require, exports, module) {
         FileUtils       = brackets.getModule("file/FileUtils"),
         _ThemeManager   = brackets.getModule("view/ThemeManager"),
         SettingsManager = require("SettingsManager"),
+        ColorProcessor  = require("ColorProcessor"),
         validExtensions = ["css", "less"];
 
 
@@ -45,7 +46,7 @@ define(function (require, exports, module) {
             });
         }
 
-        function readContent(err, entries) {
+        function getDirectoryContent(err, entries) {
             var i, files = [];
             entries = entries || [];
 
@@ -72,13 +73,19 @@ define(function (require, exports, module) {
         function loadThemesFiles(themes) {
             // Iterate through each name in the themes and make them theme objects
             var deferred = _.map(themes.files, function (themeFile) {
-                return _ThemeManager.loadFile(themes.path + "/" + themeFile);
+                return _ThemeManager.loadFile(themes.path + "/" + themeFile).done(function(theme) {
+                    theme.file.read(function( err, content /*, stat*/ ) {
+                        if (!err) {
+                            theme.dark = ColorProcessor.isDark(content);
+                        }
+                    });
+                });
             });
 
             return $.when.apply(undefined, deferred);
         }
 
-        FileSystem.getDirectoryForPath(path).getContents(readContent);
+        FileSystem.getDirectoryForPath(path).getContents(getDirectoryContent);
         return result.then(loadThemesFiles);
     }
 
