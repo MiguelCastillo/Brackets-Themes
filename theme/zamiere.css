@@ -100,7 +100,6 @@
 .cm-s-zamiere div.CodeMirror-gutters {
   background-color:#101010;
   box-shadow:0 0 10px hsla(0,0%,0%,.8);
-  padding:0 15px 20px 10px;
   border-right:0;
 }
 
