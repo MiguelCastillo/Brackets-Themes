@@ -37,15 +37,11 @@
     border-left: 1px solid #dedede !important;
 }
 
-.dark .CodeMirror-selectedtext {
-    color: black !important;
+.dark .CodeMirror-focused .CodeMirror-selected {
+    background: #0050a0 !important;
 }
 
-.dark .CodeMirror-selected {
-    background-color: rgba(255, 219, 120, 0.89) !important;
-}
-
-.dark .CodeMirror-matchingtag {
-    background-color: #ece47e !important;
-    color: #B32F71 !important;
+.dark .CodeMirror-matchingbracket, .CodeMirror-matchingtag {
+    background-color: #2e5c00 !important;
+    color: #ddd !important;
 }
