@@ -8,11 +8,7 @@
 }
 
 .cm-s-light-table .CodeMirror-scroll{
-	margin-right: 5px;
 	border-color: #202020;
-}
-.cm-s-light-table .CodeMirror-vscrollbar{
-	overflow-y: hidden;
 }
 .cm-s-light-table ::-webkit-scrollbar {
     width: 10px;
