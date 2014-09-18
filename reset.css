@@ -41,7 +41,8 @@
     background: #0050a0 !important;
 }
 
-.dark .CodeMirror-matchingbracket, .CodeMirror-matchingtag {
+.dark .CodeMirror-matchingbracket,
+.dark .CodeMirror-matchingtag {
     background-color: #2e5c00 !important;
     color: #ddd !important;
 }
