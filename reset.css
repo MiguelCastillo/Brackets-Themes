@@ -34,7 +34,7 @@
 
 .dark div.CodeMirror-cursor ,
 .dark div.CodeMirror-secondarycursor {
-    border-left: 1px solid #dedede !important;
+    border-left: 1px solid #dedede;
 }
 
 .dark .CodeMirror-focused .CodeMirror-selected {
