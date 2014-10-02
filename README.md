@@ -86,6 +86,9 @@ FAQ
 * Why disabling/enabling the scrollbars don't always take effect?
   - This due to the fact that CodeMirror builds "fake" scrollbars that only get created when the document is loaded.  So toggling the scrollbars with the document open might not take effect as expected.  To get around this behavior, reopen the document or restart Brackets.
 
+* How can I use Themes with Edge Code?
+  - You can install using this URL `https://github.com/MiguelCastillo/Brackets-Themes/archive/v1.0.4.zip`
+
 
 How to
 ===============
