@@ -29,8 +29,8 @@
 
 
 /**
-* Overrides for CodeMirror themes.
-*/
+ * Overrides for CodeMirror themes.
+ */
 
 .dark #editor-holder div.CodeMirror-cursor ,
 .dark #editor-holder div.CodeMirror-secondarycursor {
@@ -41,8 +41,8 @@
     background: #0050a0 !important;
 }
 
-.dark #editor-holder span.CodeMirror-matchingbracket,
-.dark #editor-holder span.CodeMirror-matchingtag {
+.dark #editor-holder .CodeMirror-matchingbracket,
+.dark #editor-holder .CodeMirror-matchingtag {
     background-color: #2e5c00 !important;
     color: #ddd !important;
 }
