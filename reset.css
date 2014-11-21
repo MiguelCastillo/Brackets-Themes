@@ -32,17 +32,17 @@
 * Overrides for CodeMirror themes.
 */
 
-.dark div.CodeMirror-cursor ,
-.dark div.CodeMirror-secondarycursor {
+.dark #editor-holder div.CodeMirror-cursor ,
+.dark #editor-holder div.CodeMirror-secondarycursor {
     border-left: 1px solid #dedede;
 }
 
-.dark .CodeMirror-focused .CodeMirror-selected {
+.dark #editor-holder .CodeMirror-focused .CodeMirror-selected {
     background: #0050a0 !important;
 }
 
-.dark .CodeMirror-matchingbracket,
-.dark .CodeMirror-matchingtag {
+.dark #editor-holder span.CodeMirror-matchingbracket,
+.dark #editor-holder span.CodeMirror-matchingtag {
     background-color: #2e5c00 !important;
     color: #ddd !important;
 }
