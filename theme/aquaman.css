@@ -112,12 +112,12 @@
 .cm-s-aquaman .cm-link             {color: #dd8440;}
 
 
-
     .cm-s-aquaman .CodeMirror-selected {
         background: #dd8440!important;
-        opacity:0.1;
+        opacity:0.2;
 
     }
+
 
     .cm-s-aquaman .cm-matchhighlight {
         background: #dd8440;

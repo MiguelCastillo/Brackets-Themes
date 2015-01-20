@@ -38,7 +38,8 @@
 }
 
 .dark #editor-holder .CodeMirror-focused .CodeMirror-selected {
-    background: #0050a0 !important;
+    background: blue;
+    opacity: 0.2;
 }
 
 .dark #editor-holder .CodeMirror-matchingbracket,
