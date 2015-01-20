@@ -41,6 +41,8 @@
 
 .cm-s-delkos .CodeMirror-activeline-background {background-color: rgba(0, 0, 0, 0.1) !important;}
 
+
+.cm-s-delkos .cm-tag.cm-bracket.CodeMirror-matchingtag,
 .cm-s-delkos .CodeMirror-matchingbracket {
   color: white !important;
     box-shadow: 0 0 1em #0AE0FF;
