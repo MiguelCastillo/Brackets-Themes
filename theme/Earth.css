@@ -1,6 +1,6 @@
 /**
 * Theme Earth Copyright (c) 2014 "Denisov21".
-*
+* v 2.5.0
 * Licensed under MIT
 *
 */
@@ -9,9 +9,8 @@
 .CodeMirror, .CodeMirror .CodeMirror-scroll {background: #2b2a27; color: #34a84f;}
 
 /************** Cursor e OVR cursor **************/
-.CodeMirror-cursor {border-left: 1px solid #ede0ce !important;}
-
-.CodeMirror .CodeMirror-overwrite .CodeMirror-cursor {border-left: none !important; border-bottom: 2px solid #ede0ce;}
+.CodeMirror-cursor {border-left: 1px solid #ede0ce;}
+.CodeMirror .CodeMirror-overwrite .CodeMirror-cursor {border-left: none; border-bottom: 2px solid #ede0ce;}
 
 .CodeMirror .CodeMirror-scroll .CodeMirror-gutters{background:#2b2a27; border-right:1px solid #000;}/*Left vertical bar with line count*/
 
@@ -101,16 +100,17 @@
     background-color: #00a8c6 !important;
 }
 
-/* Code Folding (https://github.com/thehogfather/brackets-code-folding)*/
-.CodeMirror-foldgutter,
+/* Code Folding (https://github.com/thehogfather/brackets-code-folding) and Brackets 1.3 (Code Folding)*/
 .CodeMirror-foldgutter,
 .CodeMirror-foldgutter-blank,
 .CodeMirror-foldgutter-folded,
-.CodeMirror-foldgutter-open {
+.CodeMirror-foldgutter-open,
+
+.CodeMirror-foldgutter-folded:after{
     color: #00a8c6;
 }
 
-.CodeMirror-foldgutter-open::after {content: "\25bd";}
+.CodeMirror-foldgutter-open:after {/*content: "\25bd";*/ color: #f00;}
 .CodeMirror-foldmarker {background-color: #00A8C6; border-color: #5C5C5C; color: #ede0ce; padding: 0 10px;}
 
 
@@ -119,3 +119,4 @@
 .CodeMirror-searching {background-color: #38b2ff; border-bottom: 2px solid #FF5D38; font-weight: bolder;}
 .searching-current-match {background-color: #ede0ce;}
 .quick-view-highlight{background-color: rgb(56, 178, 255); background-color: rgba(56, 178, 255, 0.26);border-bottom: 1px solid #FF5D38; }
+
