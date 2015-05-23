@@ -22,9 +22,9 @@ define(function (require, exports, module) {
         */
         return spromise(function(resolve) {
             brackets.getModule([
-                "thirdparty/CodeMirror2/lib/codemirror",
-                "thirdparty/CodeMirror2/addon/selection/mark-selection",
-                "thirdparty/CodeMirror2/addon/search/match-highlighter"
+                "thirdparty/CodeMirror/lib/codemirror",
+                "thirdparty/CodeMirror/addon/selection/mark-selection",
+                "thirdparty/CodeMirror/addon/search/match-highlighter"
             ], resolve);
         }).done(initAddons);
     }

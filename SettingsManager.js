@@ -17,7 +17,7 @@ define(function (require, exports, module) {
 
     var prefs = PreferencesManager.getExtensionPrefs("themes-brackets-extension");
 
-    var cm_path     = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror2/theme",
+    var cm_path     = FileUtils.getNativeBracketsDirectoryPath() + "/thirdparty/CodeMirror/theme",
         user_path   = ExtensionUtils.getModulePath(module, "theme"),
         custom_path = user_path.substr(0, ExtensionLoader.getUserExtensionPath().lastIndexOf('/')) + "/themes";
 
