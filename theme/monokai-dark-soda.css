@@ -56,3 +56,20 @@
 .CodeMirror-activeline .CodeMirror-gutter-elt {
     color: #eeeeee;
 }
+
+.cm-dk-whitespace-space:before, .cm-dk-whitespace-tab:before  {
+	background-color: rgba(255,255,255,0.05);
+}
+.cm-dk-whitespace-leading-space:before, .cm-dk-whitespace-leading-tab:before  {
+	background-color: rgba(255,255,255,0.05);
+}
+.cm-dk-whitespace-trailing-space:before, .cm-dk-whitespace-trailing-tab:before {
+	background-color: red;
+}
+.CodeMirror:not(.cm-s-default) .CodeMirror-activeline-background {
+	outline: 1px dotted rgba(255,255,255,0.3);
+}
+.CodeMirror-selectedtext {
+	background: rgba(255,255,255,0.1) !important;
+	color: white !important;
+}
