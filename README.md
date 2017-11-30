@@ -1,6 +1,8 @@
 Brackets-Themes
 ===============
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/MiguelCastillo/Brackets-Themes.svg)](https://greenkeeper.io/)
+
 Set CodeMirror and Custom themes in Brackets.
 
 
